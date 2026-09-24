@@ -68,4 +68,36 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasOne(MemberProfile::class);
     }
+
+    /**
+     * Sent interests relationship.
+     */
+    public function sentInterests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Interest::class, 'sender_id');
+    }
+
+    /**
+     * Received interests relationship.
+     */
+    public function receivedInterests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Interest::class, 'receiver_id');
+    }
+
+    /**
+     * Matches as User One.
+     */
+    public function matchesAsUserOne(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserMatch::class, 'user_one_id');
+    }
+
+    /**
+     * Matches as User Two.
+     */
+    public function matchesAsUserTwo(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserMatch::class, 'user_two_id');
+    }
 }

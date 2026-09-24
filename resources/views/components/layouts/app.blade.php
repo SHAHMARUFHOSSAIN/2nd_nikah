@@ -30,6 +30,8 @@
                     
                     @auth
                         <li><a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a></li>
+                        <li><a href="{{ route('member.interests.received') }}" class="nav-link">Interests</a></li>
+                        <li><a href="{{ route('member.connections') }}" class="nav-link">Connections</a></li>
                         @if(auth()->user()->is_admin)
                             <li><a href="/admin" class="nav-link" style="color: var(--primary); font-weight: 600;">Admin Panel</a></li>
                         @endif

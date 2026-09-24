@@ -29,6 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/member/profile', \App\Livewire\Member\Profile::class)->middleware('verified')->name('member.profile');
 
+    // Member Interests & Connections (Phase 4)
+    Route::middleware('verified')->group(function () {
+        Route::get('/member/interests/received', \App\Livewire\Member\Interests\Received::class)->name('member.interests.received');
+        Route::get('/member/interests/sent', \App\Livewire\Member\Interests\Sent::class)->name('member.interests.sent');
+        Route::get('/member/connections', \App\Livewire\Member\Connections\Index::class)->name('member.connections');
+    });
+
     // Email Verification Routes
     Route::get('/email/verify', VerifyEmail::class)->name('verification.notice');
 

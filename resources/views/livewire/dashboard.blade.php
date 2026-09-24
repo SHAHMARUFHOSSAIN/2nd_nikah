@@ -65,22 +65,46 @@
                 </div>
             </div>
 
-            {{-- Account Information Card --}}
-            <div class="card" style="border-radius: 1.5rem;">
-                <h3 style="margin-bottom: 1rem; font-size: 1.15rem; color: var(--bg-wine);">Account Information</h3>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem;">
-                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                        <span style="color: var(--text-muted);">Member ID:</span>
-                        <strong>#{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</strong>
+            {{-- Account & Matrimonial Activity Card --}}
+            <div class="card" style="border-radius: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.15rem; color: var(--bg-wine);">Proposals & Connections Overview</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <a href="{{ route('member.interests.received') }}" style="background: #FFF5F7; border: 1px solid var(--primary-light); padding: 1rem; border-radius: var(--radius-md); text-decoration: none; transition: transform 0.2s ease;">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Pending Received</div>
+                            <div style="font-size: 1.75rem; font-weight: 700; color: var(--primary); margin-top: 0.2rem;">{{ $pendingReceivedCount }}</div>
+                        </a>
+
+                        <a href="{{ route('member.connections') }}" style="background: #DEF7EC; border: 1px solid #BCF0DA; padding: 1rem; border-radius: var(--radius-md); text-decoration: none; transition: transform 0.2s ease;">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #03543F; text-transform: uppercase;">Connections</div>
+                            <div style="font-size: 1.75rem; font-weight: 700; color: #03543F; margin-top: 0.2rem;">{{ $connectionsCount }}</div>
+                        </a>
                     </div>
-                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                        <span style="color: var(--text-muted);">Registered On:</span>
-                        <strong>{{ $user->created_at->format('M d, Y') }}</strong>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem;">
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
+                            <span style="color: var(--text-muted);">Total Sent Proposals:</span>
+                            <a href="{{ route('member.interests.sent') }}" style="font-weight: 700; color: var(--primary);">{{ $sentInterestsCount }} Sent</a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
+                            <span style="color: var(--text-muted);">Total Received Proposals:</span>
+                            <a href="{{ route('member.interests.received') }}" style="font-weight: 700; color: var(--primary);">{{ $receivedInterestsCount }} Received</a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Member ID:</span>
+                            <strong>#{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</strong>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--text-muted);">Account Type:</span>
-                        <strong>Standard Matrimonial Member</strong>
-                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
+                    <a href="{{ route('member.interests.received') }}" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 0.5rem;">
+                        Received Interests
+                    </a>
+                    <a href="{{ route('member.connections') }}" class="btn btn-primary" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 0.5rem;">
+                        My Connections
+                    </a>
                 </div>
             </div>
         </div>

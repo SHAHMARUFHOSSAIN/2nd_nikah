@@ -8,6 +8,23 @@
             </a>
         </div>
 
+        {{-- Flash Notification Alerts --}}
+        @if (session()->has('message'))
+            <div class="alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+        @if (session()->has('info'))
+            <div class="alert-success" style="background-color: #E0F2FE; color: #0369A1; border-color: #BAE6FD;">
+                {{ session('info') }}
+            </div>
+        @endif
+        @if (session()->has('error'))
+            <div class="alert-error">
+                {{ session('error') }}
+            </div>
+        @endif
+
         {{-- Section A: Profile Header Card --}}
         <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%); overflow: hidden;">
             <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
@@ -39,10 +56,65 @@
 
                         <div>
                             @if ($profile->user && $profile->user->email_verified_at)
-                                <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; margin-bottom: 0.5rem;">
                                     ✓ Email Verified Member
                                 </span>
                             @endif
+
+                            {{-- Dynamic Interest / Connection Action State --}}
+                            <div style="margin-top: 0.5rem;">
+                                @guest
+                                    <a href="{{ route('login') }}" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem;">
+                                        Login to Send Interest
+                                    </a>
+                                @else
+                                    @if (! auth()->user()->hasVerifiedEmail())
+                                        <a href="{{ route('verification.notice') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--primary);">
+                                            Verify Your Email to Send Interest
+                                        </a>
+                                    @elseif (auth()->id() === $profile->user_id)
+                                        {{-- Own profile: Hide Interest button --}}
+                                    @elseif ($existingInterest)
+                                        @if ($existingInterest->status === 'accepted')
+                                            <span style="background: #DEF7EC; color: #03543F; padding: 0.45rem 1.1rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                                ✓ Connected
+                                            </span>
+                                        @elseif ($existingInterest->status === 'pending')
+                                            @if ($existingInterest->sender_id === auth()->id())
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <span style="background: #FFE4E6; color: var(--primary); padding: 0.45rem 0.9rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem;">
+                                                        Interest Sent (Pending)
+                                                    </span>
+                                                    <button wire:click="cancelInterest" type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; color: var(--text-muted);">
+                                                        Cancel Interest
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <button wire:click="acceptInterest" type="button" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                                                        ✓ Accept Interest
+                                                    </button>
+                                                    <button wire:click="rejectInterest" type="button" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem; color: var(--primary);">
+                                                        ✕ Reject
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        @elseif ($existingInterest->status === 'rejected')
+                                            <span style="background: #FDE8E8; color: #9B1C1C; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem;">
+                                                Interest Declined
+                                            </span>
+                                        @elseif ($existingInterest->status === 'cancelled')
+                                            <button wire:click="sendInterest" type="button" class="btn btn-primary" style="padding: 0.55rem 1.35rem; font-size: 0.95rem;">
+                                                Send Interest
+                                            </button>
+                                        @endif
+                                    @else
+                                        <button wire:click="sendInterest" type="button" class="btn btn-primary" style="padding: 0.55rem 1.35rem; font-size: 0.95rem;">
+                                            Send Interest
+                                        </button>
+                                    @endif
+                                @endguest
+                            </div>
                         </div>
                     </div>
 
