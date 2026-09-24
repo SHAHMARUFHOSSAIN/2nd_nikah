@@ -60,4 +60,12 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return (bool) $this->is_admin && (bool) $this->is_active;
     }
+
+    /**
+     * Relationship to MemberProfile.
+     */
+    public function memberProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(MemberProfile::class);
+    }
 }

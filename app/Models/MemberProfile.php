@@ -1,0 +1,131 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
+
+class MemberProfile extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'first_name',
+        'last_name',
+        'date_of_birth',
+        'gender',
+        'marital_status',
+        'religion',
+        'location',
+        'city',
+        'country',
+        'phone',
+        'height',
+        'education',
+        'occupation',
+        'about_me',
+        'children_count',
+        'profile_photo_path',
+        'is_profile_complete',
+        'is_profile_visible',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'date_of_birth' => 'date',
+            'height' => 'integer',
+            'children_count' => 'integer',
+            'is_profile_complete' => 'boolean',
+            'is_profile_visible' => 'boolean',
+        ];
+    }
+
+    /**
+     * Relationship to the owning User.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get full name helper attribute.
+     */
+    public function getFullNameAttribute(): string
+    {
+        $name = trim("{$this->first_name} {$this->last_name}");
+        return $name ?: ($this->user->name ?? 'Member');
+    }
+
+    /**
+     * Get photo URL helper.
+     */
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if ($this->profile_photo_path && Storage::disk('public')->exists($this->profile_photo_path)) {
+            return Storage::disk('public')->url($this->profile_photo_path);
+        }
+
+        return null;
+    }
+
+    /**
+     * List of required fields for 100% completion.
+     */
+    public static function getRequiredFields(): array
+    {
+        return [
+            'first_name',
+            'last_name',
+            'date_of_birth',
+            'gender',
+            'marital_status',
+            'religion',
+            'city',
+            'country',
+            'phone',
+            'height',
+            'education',
+            'occupation',
+            'about_me',
+        ];
+    }
+
+    /**
+     * Calculate profile completion percentage dynamically from database attributes.
+     */
+    public function calculateCompletionPercentage(): int
+    {
+        $requiredFields = static::getRequiredFields();
+        $filledCount = 0;
+
+        foreach ($requiredFields as $field) {
+            $val = $this->{$field};
+            if (! is_null($val) && trim((string) $val) !== '') {
+                $filledCount++;
+            }
+        }
+
+        $percentage = (int) round(($filledCount / count($requiredFields)) * 100);
+
+        return min(100, max(0, $percentage));
+    }
+
+    /**
+     * Update and persist completion status in database.
+     */
+    public function syncCompletionStatus(): void
+    {
+        $percentage = $this->calculateCompletionPercentage();
+        $isComplete = ($percentage >= 100);
+
+        if ($this->is_profile_complete !== $isComplete) {
+            $this->is_profile_complete = $isComplete;
+            $this->saveQuietly();
+        }
+    }
+}

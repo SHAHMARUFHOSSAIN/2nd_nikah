@@ -24,6 +24,7 @@ Route::middleware('guest')->group(function () {
 // Authenticated User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/member/profile', \App\Livewire\Member\Profile::class)->middleware('verified')->name('member.profile');
 
     // Email Verification Routes
     Route::get('/email/verify', VerifyEmail::class)->name('verification.notice');
