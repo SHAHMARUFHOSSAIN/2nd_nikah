@@ -13,9 +13,13 @@ class VerifyEmail extends Component
             return redirect()->route('dashboard');
         }
 
-        Auth::user()->sendEmailVerificationNotification();
-
-        session()->flash('status', 'verification-link-sent');
+        try {
+            Auth::user()->sendEmailVerificationNotification();
+            session()->flash('status', 'verification-link-sent');
+        } catch (\Throwable $e) {
+            logger()->error('Verification email delivery failed: ' . $e->getMessage());
+            session()->flash('error', 'Verification email sending failed: ' . $e->getMessage());
+        }
     }
 
     public function render()

@@ -42,7 +42,12 @@ class Register extends Component
             'is_active' => true,
         ]);
 
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Throwable $e) {
+            logger()->error('Verification email delivery failed: ' . $e->getMessage());
+            session()->flash('error', 'Account created, but verification email could not be sent. Please check your SMTP credentials in .env.');
+        }
 
         Auth::login($user);
 
