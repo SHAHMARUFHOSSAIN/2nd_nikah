@@ -100,4 +100,42 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(UserMatch::class, 'user_two_id');
     }
+
+    /**
+     * Subscriptions relationship.
+     */
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Payment transactions relationship.
+     */
+    public function paymentTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
+    /**
+     * Get current active subscription if any.
+     */
+    public function activeSubscription(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('status', 'active')
+            ->whereNotNull('starts_at')
+            ->whereNotNull('ends_at')
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>=', now())
+            ->latestOfMany('id');
+    }
+
+    /**
+     * Check if user currently has an active Premium membership.
+     */
+    public function isPremium(): bool
+    {
+        return $this->activeSubscription !== null;
+    }
 }

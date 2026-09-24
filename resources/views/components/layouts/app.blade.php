@@ -27,6 +27,7 @@
                     <li><a href="{{ route('home') }}" class="nav-link">Home</a></li>
                     <li><a href="{{ route('search.index') }}" class="nav-link">Search</a></li>
                     <li><a href="{{ route('members.index') }}" class="nav-link">Members</a></li>
+                    <li><a href="{{ route('membership.index') }}" class="nav-link">Membership</a></li>
                     
                     @auth
                         <li><a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a></li>

@@ -10,14 +10,27 @@
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Account Email: {{ $user->email }}</p>
             </div>
 
-            <div>
-                @if($user->email_verified_at)
-                    <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        ✓ Email Verified
+            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                @if ($isPremium && $activeSubscription)
+                    <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        👑 Premium Member ({{ $activeSubscription->membershipPlan->name }})
                     </span>
                 @else
-                    <a href="{{ route('verification.notice') }}" style="background: #FDF6B2; color: #723B10; border: 1px solid #FCE96A; padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        ⚠️ Email Pending Verification
+                    <span style="background: #F3ECE9; color: var(--text-muted); border: 1px solid var(--border-warm); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        ⚪ Free Member
+                    </span>
+                    <a href="{{ route('membership.index') }}" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                        Upgrade to Premium
+                    </a>
+                @endif
+
+                @if($user->email_verified_at)
+                    <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        ✓ Verified
+                    </span>
+                @else
+                    <a href="{{ route('verification.notice') }}" style="background: #FDF6B2; color: #723B10; border: 1px solid #FCE96A; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        ⚠️ Unverified
                     </a>
                 @endif
             </div>
