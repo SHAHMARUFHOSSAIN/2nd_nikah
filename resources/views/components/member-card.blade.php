@@ -38,22 +38,23 @@
                 @endif
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem;">
-                @if ($profile->marital_status)
-                    <span style="background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600;">
-                        {{ $profile->marital_status }}
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                @php
+                    $metaItems = array_filter([
+                        $profile->marital_status,
+                        $profile->religion,
+                        $profile->gender ? ucfirst(strtolower($profile->gender)) : null,
+                    ]);
+                @endphp
+
+                @foreach ($metaItems as $item)
+                    <span style="background: {{ $loop->first ? 'var(--primary-light)' : '#F3ECE9' }}; color: {{ $loop->first ? 'var(--primary)' : 'var(--text-main)' }}; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600; font-size: 0.82rem; display: inline-block;">
+                        {{ $item }}
                     </span>
-                @endif
-                @if ($profile->religion)
-                    <span style="background: #F3ECE9; color: var(--text-main); padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 600;">
-                        {{ $profile->religion }}
-                    </span>
-                @endif
-                @if ($profile->gender)
-                    <span style="background: #F3ECE9; color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 6px; text-transform: capitalize;">
-                        {{ $profile->gender }}
-                    </span>
-                @endif
+                    @if (! $loop->last)
+                        <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; padding: 0 0.1rem;">•</span>
+                    @endif
+                @endforeach
             </div>
 
             @if ($profile->city || $profile->country)
