@@ -2,16 +2,16 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
+use App\Models\MemberProfile;
 use Livewire\Component;
 
 class Home extends Component
 {
     public function render()
     {
-        // Real active members query
-        $recentMembers = User::where('is_admin', false)
-            ->whereNotNull('email_verified_at')
+        // Real discoverable active members query from MySQL
+        $recentMembers = MemberProfile::discoverable()
+            ->with('user')
             ->latest()
             ->take(6)
             ->get();

@@ -25,6 +25,7 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="{{ route('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ route('members.index') }}" class="nav-link">Members</a></li>
                     
                     @auth
                         <li><a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a></li>
@@ -64,6 +65,7 @@
                 <h4>Navigation</h4>
                 <ul>
                     <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('members.index') }}">Members Directory</a></li>
                     @auth
                         <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     @else

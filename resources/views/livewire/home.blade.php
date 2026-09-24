@@ -13,11 +13,11 @@
             </p>
             
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ route('members.index') }}" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">Browse Members</a>
                 @guest
-                    <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">Begin Your Journey</a>
-                    <a href="{{ route('login') }}" class="btn btn-outline" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); padding: 0.85rem 2rem; font-size: 1rem;">Log In to Account</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); padding: 0.85rem 2rem; font-size: 1rem;">Create Account</a>
                 @else
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">Go to Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); padding: 0.85rem 2rem; font-size: 1rem;">Go to Dashboard</a>
                 @endguest
             </div>
         </div>
@@ -31,7 +31,7 @@
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-            <div class="card" style="text-align: center;">
+            <div class="card" style="text-align: center; border-radius: 1.5rem;">
                 <div style="width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem; font-weight: bold;">
                     1
                 </div>
@@ -39,7 +39,7 @@
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Your privacy is paramount. Complete control over your information and interactions.</p>
             </div>
 
-            <div class="card" style="text-align: center;">
+            <div class="card" style="text-align: center; border-radius: 1.5rem;">
                 <div style="width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem; font-weight: bold;">
                     2
                 </div>
@@ -47,7 +47,7 @@
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">All registrations undergo verification to maintain a safe, high-integrity community.</p>
             </div>
 
-            <div class="card" style="text-align: center;">
+            <div class="card" style="text-align: center; border-radius: 1.5rem;">
                 <div style="width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem; font-weight: bold;">
                     3
                 </div>
@@ -59,15 +59,23 @@
 
     {{-- Members Listing Section (Real Data / Empty State) --}}
     <section class="container" style="padding-top: 0;">
-        <div style="margin-bottom: 2rem;">
-            <h2>Recent Members</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Verified members on our platform</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2>Recent Discoverable Members</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Verified members on our platform</p>
+            </div>
+
+            @if(!$recentMembers->isEmpty())
+                <a href="{{ route('members.index') }}" class="btn btn-outline" style="font-size: 0.9rem;">
+                    View All Members &rarr;
+                </a>
+            @endif
         </div>
 
         @if($recentMembers->isEmpty())
             <div class="empty-state">
                 <div class="empty-state-icon">👥</div>
-                <div class="empty-state-title">No members found.</div>
+                <div class="empty-state-title">No verified profiles are currently available.</div>
                 <div class="empty-state-desc">There are currently no verified public members listed. Be the first to join our growing community!</div>
                 @guest
                     <div style="margin-top: 1.5rem;">
@@ -77,11 +85,8 @@
             </div>
         @else
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
-                @foreach($recentMembers as $member)
-                    <div class="card">
-                        <div style="font-weight: 600; font-size: 1.1rem;">{{ $member->name }}</div>
-                        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Joined {{ $member->created_at->diffForHumans() }}</div>
-                    </div>
+                @foreach($recentMembers as $profile)
+                    <x-member-card :profile="$profile" />
                 @endforeach
             </div>
         @endif

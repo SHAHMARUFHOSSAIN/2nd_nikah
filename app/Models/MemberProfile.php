@@ -62,6 +62,43 @@ class MemberProfile extends Model
     }
 
     /**
+     * Scope query to only include discoverable member profiles.
+     */
+    public function scopeDiscoverable($query)
+    {
+        return $query->where('is_profile_visible', true)
+            ->whereHas('user', function ($q) {
+                $q->whereNotNull('email_verified_at')
+                  ->where('is_active', true)
+                  ->where('is_admin', false);
+            });
+    }
+
+    /**
+     * Get calculated age from date_of_birth.
+     */
+    public function getAgeAttribute(): ?int
+    {
+        return $this->date_of_birth ? $this->date_of_birth->age : null;
+    }
+
+    /**
+     * Get formatted height helper (e.g., 175 cm (5' 9")).
+     */
+    public function getFormattedHeightAttribute(): ?string
+    {
+        if (! $this->height) {
+            return null;
+        }
+
+        $totalInches = (int) round($this->height / 2.54);
+        $feet = (int) floor($totalInches / 12);
+        $inches = $totalInches % 12;
+
+        return "{$this->height} cm ({$feet}' {$inches}\")";
+    }
+
+    /**
      * Get photo URL helper.
      */
     public function getPhotoUrlAttribute(): ?string

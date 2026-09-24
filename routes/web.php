@@ -11,8 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Public Home Route
+// Public Home & Discovery Routes
 Route::get('/', Home::class)->name('home');
+Route::get('/members', \App\Livewire\Members\Index::class)->name('members.index');
+Route::get('/members/{memberProfile}', \App\Livewire\Members\Show::class)->name('members.show');
 
 // Guest Authentication Routes
 Route::middleware('guest')->group(function () {
