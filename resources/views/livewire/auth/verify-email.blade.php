@@ -13,14 +13,21 @@
         </p>
 
         @if (session('status') == 'verification-link-sent')
-            <div class="alert-success" style="text-align: left;">
+            <div class="alert-success" style="text-align: left; margin-bottom: 1rem;">
                 A new verification link has been sent to your email address.
             </div>
         @endif
 
+        @if (session()->has('error'))
+            <div class="alert-error" style="text-align: left; margin-bottom: 1rem;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
-            <button wire:click="resendNotification" class="btn btn-primary" style="width: 100%;">
-                Resend Verification Email
+            <button wire:click="resendNotification" wire:loading.attr="disabled" class="btn btn-primary" style="width: 100%;">
+                <span wire:loading.remove>Resend Verification Email</span>
+                <span wire:loading>Sending verification email...</span>
             </button>
 
             <form method="POST" action="{{ route('logout') }}">
