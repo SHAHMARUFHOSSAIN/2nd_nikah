@@ -25,6 +25,7 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="{{ route('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ route('search.index') }}" class="nav-link">Search</a></li>
                     <li><a href="{{ route('members.index') }}" class="nav-link">Members</a></li>
                     
                     @auth

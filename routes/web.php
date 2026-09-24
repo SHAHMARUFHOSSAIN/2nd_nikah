@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 // Public Home & Discovery Routes
 Route::get('/', Home::class)->name('home');
 Route::get('/members', \App\Livewire\Members\Index::class)->name('members.index');
+Route::get('/search', \App\Livewire\Members\Search::class)->name('search.index');
 Route::get('/members/{memberProfile}', \App\Livewire\Members\Show::class)->name('members.show');
 
 // Guest Authentication Routes
