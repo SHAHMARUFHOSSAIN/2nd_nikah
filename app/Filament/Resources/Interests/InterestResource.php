@@ -20,6 +20,8 @@ class InterestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CONNECTIONS';
+
     protected static ?string $recordTitleAttribute = 'id';
 
     public static function form(Schema $schema): Schema

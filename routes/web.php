@@ -35,14 +35,24 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/member/profile', \App\Livewire\Member\Profile::class)->middleware('verified')->name('member.profile');
+    Route::get('/member/profile/photos', \App\Livewire\Member\Profile\Photos::class)->middleware('verified')->name('member.profile.photos');
 
     // Member Interests, Connections & Membership (Phases 4 & 5)
     Route::middleware('verified')->group(function () {
         Route::get('/member/interests/received', \App\Livewire\Member\Interests\Received::class)->name('member.interests.received');
         Route::get('/member/interests/sent', \App\Livewire\Member\Interests\Sent::class)->name('member.interests.sent');
         Route::get('/member/connections', \App\Livewire\Member\Connections\Index::class)->name('member.connections');
+        Route::get('/member/messages', \App\Livewire\Member\Messages\Index::class)->name('member.messages.index');
+        Route::get('/member/messages/{conversation}', \App\Livewire\Member\Messages\Show::class)->name('member.messages.show');
+        Route::get('/member/messages/attachments/{message}', [\App\Http\Controllers\MemberMessageAttachmentController::class, 'show'])->name('member.messages.attachment');
         Route::get('/membership/checkout', \App\Livewire\Membership\Checkout::class)->name('membership.checkout');
         Route::get('/member/payments', \App\Livewire\Member\Payments::class)->name('member.payments');
+
+        // Phase 7 Member Feature Routes
+        Route::get('/member/notifications', \App\Livewire\Member\Notifications\Index::class)->name('member.notifications.index');
+        Route::get('/member/shortlists', \App\Livewire\Member\Shortlists\Index::class)->name('member.shortlists.index');
+        Route::get('/member/visitors', \App\Livewire\Member\Visitors\Index::class)->name('member.visitors.index');
+        Route::get('/member/settings', \App\Livewire\Member\Settings\Index::class)->name('member.settings.index');
     });
 
     // Email Verification Routes
@@ -61,3 +71,7 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('home');
     })->name('logout');
 });
+
+// Dynamic CMS Page Route (Must be last to prevent collision with static routes)
+Route::get('/{slug}', \App\Livewire\Cms\PageShow::class)->name('cms.page');
+

@@ -20,6 +20,8 @@ class UserMatchResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CONNECTIONS';
+
     protected static ?string $navigationLabel = 'Matches & Connections';
 
     protected static ?string $recordTitleAttribute = 'id';

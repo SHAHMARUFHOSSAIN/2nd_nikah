@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Members;
 
+use App\Livewire\Concerns\HandlesMemberCardActions;
 use App\Models\MemberProfile;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
@@ -11,6 +12,7 @@ use Livewire\WithPagination;
 class Search extends Component
 {
     use WithPagination;
+    use HandlesMemberCardActions;
 
     #[Url(except: '')]
     public string $gender = '';
@@ -59,6 +61,37 @@ class Search extends Component
     }
 
     /**
+     * Compute count of active filters.
+     */
+    public function getActiveFilterCountProperty(): int
+    {
+        $count = 0;
+        if ($this->gender !== '') $count++;
+        if ($this->min_age !== '') $count++;
+        if ($this->max_age !== '') $count++;
+        if ($this->religion !== '') $count++;
+        if ($this->marital_status !== '') $count++;
+        if ($this->city !== '') $count++;
+        if ($this->country !== '') $count++;
+        if ($this->education !== '') $count++;
+        if ($this->children !== '') $count++;
+        if ($this->min_height !== '') $count++;
+        if ($this->max_height !== '') $count++;
+        return $count;
+    }
+
+    /**
+     * Remove a single filter property.
+     */
+    public function removeFilter(string $property): void
+    {
+        if (property_exists($this, $property)) {
+            $this->{$property} = '';
+            $this->resetPage();
+        }
+    }
+
+    /**
      * Reset all search filters.
      */
     public function clearFilters(): void
@@ -83,6 +116,13 @@ class Search extends Component
         $query = MemberProfile::query()
             ->discoverable()
             ->with('user');
+
+        if (auth()->check()) {
+            $blockedIds = auth()->user()->getBlockedUserIds();
+            if (! empty($blockedIds)) {
+                $query->whereNotIn('user_id', $blockedIds);
+            }
+        }
 
         // Gender Filter
         if ($this->gender !== '') {

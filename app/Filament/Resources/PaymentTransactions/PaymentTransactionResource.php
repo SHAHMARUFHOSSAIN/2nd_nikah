@@ -20,6 +20,8 @@ class PaymentTransactionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'MEMBERSHIP & PAYMENTS';
+
     protected static ?string $navigationLabel = 'Payment Transactions';
 
     protected static ?string $recordTitleAttribute = 'transaction_id';

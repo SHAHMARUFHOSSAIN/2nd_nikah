@@ -1,136 +1,153 @@
-<div class="container">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6">
+    
     {{-- Header Banner --}}
-    <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%); border-color: var(--primary-light); border-radius: 1.5rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em;">
-                    {{ $user->is_admin ? 'Administrator Panel' : 'Member Account' }}
+    <x-ui.card padding="spacious" class="bg-gradient-to-br from-rose-50/80 via-pink-50/40 to-white border-rose-200/80">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+                <span class="text-[11px] font-black tracking-widest text-rose-600 uppercase block">
+                    {{ $user->is_admin ? 'Administrator Account' : 'Member Workspace' }}
                 </span>
-                <h1 style="font-size: 1.8rem; margin-top: 0.25rem;">Welcome, {{ $user->name }}</h1>
-                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Account Email: {{ $user->email }}</p>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Welcome back, {{ $user->name }}</h1>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">
+                    Account Email: <strong class="text-slate-800">{{ $user->email }}</strong> • Member ID: <strong class="text-slate-800">#{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</strong>
+                </p>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <div class="flex items-center gap-2 flex-wrap">
                 @if ($isPremium && $activeSubscription)
-                    <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <x-ui.badge variant="success" size="md">
                         👑 Premium Member ({{ $activeSubscription->membershipPlan->name }})
-                    </span>
+                    </x-ui.badge>
                 @else
-                    <span style="background: #F3ECE9; color: var(--text-muted); border: 1px solid var(--border-warm); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <x-ui.badge variant="default" size="md">
                         ⚪ Free Member
-                    </span>
-                    <a href="{{ route('membership.index') }}" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                    </x-ui.badge>
+                    <x-ui.button :href="route('membership.index')" variant="primary" size="sm">
                         Upgrade to Premium
-                    </a>
+                    </x-ui.button>
                 @endif
 
                 @if($user->email_verified_at)
-                    <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        ✓ Verified
-                    </span>
+                    <x-ui.verification-badge show-text />
                 @else
-                    <a href="{{ route('verification.notice') }}" style="background: #FDF6B2; color: #723B10; border: 1px solid #FCE96A; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        ⚠️ Unverified
-                    </a>
+                    <x-ui.button :href="route('verification.notice')" variant="soft" size="sm">
+                        ⚠️ Verify Email
+                    </x-ui.button>
                 @endif
             </div>
         </div>
-    </div>
+    </x-ui.card>
 
     @if(!$user->is_admin)
-        {{-- Normal Member Profile Status & Action Cards --}}
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        {{-- Stat Cards Overview Grid --}}
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <x-ui.stat-card title="Pending Proposals" :value="$pendingReceivedCount" :subtitle="$pendingReceivedCount . ' Received'" icon="📥" :href="route('member.interests.received')" />
+            <x-ui.stat-card title="Connections" :value="$connectionsCount" icon="🤝" :href="route('member.connections')" />
+            <x-ui.stat-card title="Unread Messages" :value="$unreadMessagesCount" icon="💬" :href="route('member.messages.index')" :badge="$unreadMessagesCount > 0 ? 'New' : null" />
+            <x-ui.stat-card title="Sent Proposals" :value="$sentInterestsCount" :subtitle="$sentInterestsCount . ' Sent'" icon="📤" :href="route('member.interests.sent')" />
+        </div>
+
+        {{-- Profile Completeness & Quick Actions --}}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            {{-- Profile Status Card --}}
-            <div class="card" style="border-radius: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="font-size: 1.15rem; color: var(--bg-wine);">Matrimonial Profile Status</h3>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">{{ $completionPercentage }}% Complete</span>
+            {{-- Profile Completeness Card --}}
+            <x-ui.card class="lg:col-span-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-base font-extrabold text-slate-900">Profile Completeness</h3>
+                    <span class="text-xs font-black text-rose-600">{{ $completionPercentage }}% Complete</span>
                 </div>
 
-                <div style="width: 100%; height: 10px; background: #E5E0DC; border-radius: 9999px; overflow: hidden; margin-bottom: 1.5rem;">
-                    <div style="width: {{ $completionPercentage }}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.4s ease;"></div>
+                {{-- Progress Bar --}}
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-rose-100">
+                    <div class="h-full bg-gradient-to-r from-rose-500 to-pink-600 transition-all duration-500" style="width: {{ $completionPercentage }}%;"></div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem;">
-                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                        <span style="color: var(--text-muted);">Profile Visibility:</span>
+                <div class="space-y-2 text-xs divide-y divide-slate-100 pt-1">
+                    <div class="flex justify-between py-1.5">
+                        <span class="text-slate-500">Profile Discoverability:</span>
                         @if($profile && $profile->is_profile_visible)
-                            <strong style="color: #03543F;">● Visible on Platform</strong>
+                            <span class="font-extrabold text-emerald-700">● Publicly Discoverable</span>
                         @else
-                            <strong style="color: #9B1C1C;">○ Hidden / Private</strong>
+                            <span class="font-extrabold text-red-600">○ Hidden / Private</span>
                         @endif
                     </div>
-                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                        <span style="color: var(--text-muted);">Profile Photo:</span>
-                        <strong>{{ ($profile && $profile->profile_photo_path) ? 'Uploaded' : 'Not Uploaded' }}</strong>
+                    <div class="flex justify-between py-1.5">
+                        <span class="text-slate-500">Profile Photo Gallery:</span>
+                        <span class="font-bold text-slate-800">📷 {{ $photoCount }} {{ Str::plural('Photo', $photoCount) }}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--text-muted);">Profile Completion Status:</span>
-                        <strong>{{ ($profile && $profile->is_profile_complete) ? '100% Complete' : 'Incomplete' }}</strong>
+                    <div class="flex justify-between py-1.5">
+                        <span class="text-slate-500">Completeness Status:</span>
+                        <span class="font-bold text-slate-800">{{ ($profile && $profile->is_profile_complete) ? 'Fully Complete' : 'Needs Details' }}</span>
                     </div>
                 </div>
 
-                <div style="margin-top: 1.5rem; text-align: right;">
-                    <a href="{{ route('member.profile') }}" class="btn btn-primary" style="width: 100%;">
-                        {{ $completionPercentage > 0 ? 'Edit Member Profile' : 'Complete Member Profile' }}
-                    </a>
+                <div class="pt-2 flex flex-col sm:flex-row gap-2">
+                    <x-ui.button :href="route('member.profile')" variant="primary" class="flex-1">
+                        Edit Profile
+                    </x-ui.button>
+                    <x-ui.button :href="route('member.profile.photos')" variant="outline" class="flex-1 text-rose-600 border-rose-300">
+                        📷 Photos ({{ $photoCount }})
+                    </x-ui.button>
+                    @if ($profile && $profile->id)
+                        <x-ui.button :href="route('members.show', $profile)" target="_blank" variant="soft" class="flex-1">
+                            👁️ View Public
+                        </x-ui.button>
+                    @endif
                 </div>
-            </div>
+            </x-ui.card>
 
-            {{-- Account & Matrimonial Activity Card --}}
-            <div class="card" style="border-radius: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            {{-- Activity & Quick Links Card --}}
+            <x-ui.card class="lg:col-span-6 space-y-4 flex flex-col justify-between">
                 <div>
-                    <h3 style="margin-bottom: 1rem; font-size: 1.15rem; color: var(--bg-wine);">Proposals & Connections Overview</h3>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-3">Quick Navigation</h3>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-                        <a href="{{ route('member.interests.received') }}" style="background: #FFF5F7; border: 1px solid var(--primary-light); padding: 1rem; border-radius: var(--radius-md); text-decoration: none; transition: transform 0.2s ease;">
-                            <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Pending Received</div>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: var(--primary); margin-top: 0.2rem;">{{ $pendingReceivedCount }}</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="{{ route('member.shortlists.index') }}" class="p-3 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-2xl transition space-y-1 group">
+                            <span class="text-lg block">⭐</span>
+                            <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Shortlists</h4>
+                            <p class="text-[10px] text-slate-500">Saved profiles</p>
                         </a>
-
-                        <a href="{{ route('member.connections') }}" style="background: #DEF7EC; border: 1px solid #BCF0DA; padding: 1rem; border-radius: var(--radius-md); text-decoration: none; transition: transform 0.2s ease;">
-                            <div style="font-size: 0.8rem; font-weight: 600; color: #03543F; text-transform: uppercase;">Connections</div>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: #03543F; margin-top: 0.2rem;">{{ $connectionsCount }}</div>
+                        <a href="{{ route('member.visitors.index') }}" class="p-3 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-2xl transition space-y-1 group">
+                            <span class="text-lg block">👀</span>
+                            <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Visitors</h4>
+                            <p class="text-[10px] text-slate-500">Profile viewers</p>
                         </a>
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem;">
-                        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                            <span style="color: var(--text-muted);">Total Sent Proposals:</span>
-                            <a href="{{ route('member.interests.sent') }}" style="font-weight: 700; color: var(--primary);">{{ $sentInterestsCount }} Sent</a>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-warm);">
-                            <span style="color: var(--text-muted);">Total Received Proposals:</span>
-                            <a href="{{ route('member.interests.received') }}" style="font-weight: 700; color: var(--primary);">{{ $receivedInterestsCount }} Received</a>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: var(--text-muted);">Member ID:</span>
-                            <strong>#{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</strong>
-                        </div>
+                        <a href="{{ route('member.notifications.index') }}" class="p-3 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-2xl transition space-y-1 group">
+                            <span class="text-lg block">🔔</span>
+                            <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Notifications</h4>
+                            <p class="text-[10px] text-slate-500">Real-time alerts</p>
+                        </a>
+                        <a href="{{ route('member.settings.index') }}" class="p-3 bg-slate-50 hover:bg-rose-50/60 border border-slate-200/80 hover:border-rose-200 rounded-2xl transition space-y-1 group">
+                            <span class="text-lg block">⚙️</span>
+                            <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Settings</h4>
+                            <p class="text-[10px] text-slate-500">Account & Privacy</p>
+                        </a>
                     </div>
                 </div>
 
-                <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
-                    <a href="{{ route('member.interests.received') }}" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 0.5rem;">
-                        Received Interests
-                    </a>
-                    <a href="{{ route('member.connections') }}" class="btn btn-primary" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 0.5rem;">
+                <div class="flex gap-2 pt-2">
+                    <x-ui.button :href="route('member.interests.received')" variant="outline" class="flex-1">
+                        Proposals
+                    </x-ui.button>
+                    <x-ui.button :href="route('member.connections')" variant="primary" class="flex-1">
                         My Connections
-                    </a>
+                    </x-ui.button>
                 </div>
-            </div>
+            </x-ui.card>
+
         </div>
     @else
         {{-- Admin User Banner --}}
-        <div class="card" style="border-radius: 1.5rem; text-align: center; padding: 3rem 1.5rem;">
-            <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Administrator Control Panel</h2>
-            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem;">
-                You are logged in with an Administrator account. Access system settings, member profile management, and database control from the Filament Admin area.
+        <x-ui.card padding="spacious" class="text-center space-y-4">
+            <h2 class="text-xl font-extrabold text-slate-900">Administrator Management Panel</h2>
+            <p class="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+                You are logged in with an Administrator account. Manage member profiles, proposals, payment transactions, system settings, and CMS content from the Filament Admin area.
             </p>
-            <a href="/admin" class="btn btn-primary" style="padding: 0.75rem 2rem;">
-                Go to Filament Admin Panel
-            </a>
-        </div>
+            <div>
+                <x-ui.button href="/admin" variant="primary" size="lg">
+                    Open Filament Admin Panel &rarr;
+                </x-ui.button>
+            </div>
+        </x-ui.card>
     @endif
 </div>

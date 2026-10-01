@@ -20,6 +20,8 @@ class SubscriptionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'MEMBERSHIP & PAYMENTS';
+
     protected static ?string $navigationLabel = 'Subscriptions';
 
     protected static ?string $recordTitleAttribute = 'id';

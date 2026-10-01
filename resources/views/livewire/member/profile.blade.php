@@ -1,23 +1,67 @@
 <div class="container">
     <div style="max-width: 900px; margin: 0 auto;">
         
-        {{-- Header & Progress Card --}}
+        {{-- My Profile Header Card --}}
         <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h1 style="font-size: 1.8rem; font-weight: 700;">Edit Member Profile</h1>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
-                        Manage your profile details for <strong>{{ \App\Models\Setting::get('site_name', '2nd Nikah') }}</strong>
-                    </p>
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                {{-- User Main Photo Avatar --}}
+                <div style="width: 90px; height: 90px; border-radius: 1.25rem; overflow: hidden; background: var(--bg-warm); border: 2px solid var(--primary-light); flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center;">
+                    @if ($profile && $profile->photo_url)
+                        <img src="{{ $profile->photo_url }}" alt="{{ $profile->full_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary);">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'M', 0, 1)) }}
+                        </div>
+                    @endif
                 </div>
 
-                <div style="text-align: right; min-width: 200px;">
-                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--bg-wine); margin-bottom: 0.4rem;">
-                        Profile Completion: <strong>{{ $completionPercentage }}%</strong>
+                {{-- Profile Info & Badges --}}
+                <div style="flex: 1; min-width: 250px;">
+                    <div style="display: flex; items-center: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.25rem;">
+                        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--bg-wine); margin: 0;">
+                            {{ $profile->full_name ?: auth()->user()->name }}
+                        </h1>
+                        @if (auth()->user()->email_verified_at)
+                            <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                                ✓ Email Verified
+                            </span>
+                        @endif
+                        @if ($is_profile_visible)
+                            <span style="background: #E0F2FE; color: #0369A1; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                                👁️ Public
+                            </span>
+                        @else
+                            <span style="background: #FEF3C7; color: #92400E; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                                🔒 Hidden
+                            </span>
+                        @endif
+                        <span style="background: #F3ECE9; color: var(--text-main); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                            📷 {{ $photoCount }} {{ Str::plural('Photo', $photoCount) }}
+                        </span>
                     </div>
-                    <div style="width: 100%; height: 10px; background: #E5E0DC; border-radius: 9999px; overflow: hidden;">
-                        <div style="width: {{ $completionPercentage }}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.4s ease;"></div>
+
+                    {{-- Completion Progress --}}
+                    <div style="margin-top: 0.75rem; max-width: 380px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--bg-wine); margin-bottom: 0.3rem;">
+                            <span>Profile Completion</span>
+                            <span>{{ $completionPercentage }}%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #E5E0DC; border-radius: 9999px; overflow: hidden;">
+                            <div style="width: {{ $completionPercentage }}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.4s ease;"></div>
+                        </div>
                     </div>
+                </div>
+
+                {{-- Action CTAs --}}
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; min-width: 180px;">
+                    <a href="{{ route('member.profile.photos') }}" class="btn btn-outline" style="width: 100%; text-align: center; padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--primary); border-color: var(--primary);">
+                        📷 Manage Photos ({{ $photoCount }})
+                    </a>
+                    @if ($profile && $profile->id)
+                        <a href="{{ route('members.show', $profile) }}" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--bg-wine);">
+                            👁️ View Public Profile
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

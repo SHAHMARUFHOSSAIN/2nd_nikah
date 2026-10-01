@@ -70,6 +70,7 @@ class MemberProfileForm
                     ->disk('public')
                     ->directory('profile-photos')
                     ->image()
+                    ->maxSize(10240)
                     ->label('Profile Photo'),
                 Toggle::make('is_profile_visible')
                     ->label('Visible on Platform')

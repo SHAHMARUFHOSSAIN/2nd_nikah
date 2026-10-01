@@ -2,11 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Concerns\HandlesMemberCardActions;
 use App\Models\MemberProfile;
 use Livewire\Component;
 
 class Home extends Component
 {
+    use HandlesMemberCardActions;
+
     public function render()
     {
         // Real discoverable active members query from MySQL

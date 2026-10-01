@@ -20,6 +20,8 @@ class MemberProfileResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'MEMBERS';
+
     protected static ?string $recordTitleAttribute = 'first_name';
 
     public static function form(Schema $schema): Schema

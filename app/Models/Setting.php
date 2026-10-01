@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class Setting extends Model
 {
@@ -45,7 +46,7 @@ class Setting extends Model
         $stringValue = match ($type) {
             'boolean', 'bool' => $value ? '1' : '0',
             'json', 'array' => is_string($value) ? $value : json_encode($value),
-            default => (string) $value,
+            default => (string) ($value ?? ''),
         };
 
         $setting = static::updateOrCreate(
@@ -61,5 +62,42 @@ class Setting extends Model
         Cache::forget("setting.{$key}");
 
         return $setting;
+    }
+
+    /**
+     * Get full public asset URL for a stored setting file path.
+     * Verifies physical file existence before returning the URL to prevent broken <img> tags.
+     */
+    public static function getAssetUrl(string $key, ?string $default = null): ?string
+    {
+        $path = static::get($key);
+
+        if (blank($path)) {
+            return $default;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        $cleanPath = ltrim(preg_replace('#^storage/#', '', ltrim((string) $path, '/')), '/');
+
+        if (Storage::disk('public')->exists($cleanPath)) {
+            return Storage::disk('public')->url($cleanPath);
+        }
+
+        if (file_exists(public_path('storage/' . $cleanPath))) {
+            return asset('storage/' . $cleanPath);
+        }
+
+        return $default;
+    }
+
+    /**
+     * Alias for getAssetUrl for backward compatibility.
+     */
+    public static function getUrl(string $key, ?string $default = null): ?string
+    {
+        return static::getAssetUrl($key, $default);
     }
 }

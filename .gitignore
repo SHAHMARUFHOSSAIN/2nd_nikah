@@ -26,3 +26,5 @@ powershell.exe
 Homestead.json
 Homestead.yaml
 Thumbs.db
+.env.local
+.env.*.local

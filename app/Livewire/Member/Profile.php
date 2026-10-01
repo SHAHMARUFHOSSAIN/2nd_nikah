@@ -52,7 +52,7 @@ class Profile extends Component
             'about_me' => ['nullable', 'string', 'max:2000'],
             'children_count' => ['nullable', 'integer', 'min:0', 'max:20'],
             'is_profile_visible' => ['boolean'],
-            'photo' => ['nullable', 'image', 'max:2048'],
+            'photo' => ['nullable', 'image', 'max:10240'],
         ];
     }
 
@@ -109,15 +109,21 @@ class Profile extends Component
         ];
 
         if ($this->photo) {
-            if ($profile->profile_photo_path && Storage::disk('public')->exists($profile->profile_photo_path)) {
-                Storage::disk('public')->delete($profile->profile_photo_path);
-            }
-
             $path = $this->photo->store('profile-photos', 'public');
             $data['profile_photo_path'] = $path;
+
+            // Sync with profile_photos table as primary photo
+            $user->profilePhotos()->update(['is_primary' => false]);
+            $user->profilePhotos()->create([
+                'path' => $path,
+                'is_primary' => true,
+                'sort_order' => 0,
+            ]);
         }
 
         $profile->update($data);
+        $user->syncPrimaryPhotoToMemberProfile();
+        $profile->refresh();
         $profile->syncCompletionStatus();
 
         session()->flash('status', 'Your member profile has been updated successfully!');
@@ -129,11 +135,19 @@ class Profile extends Component
         $user = Auth::user();
         $profile = MemberProfile::where('user_id', $user->id)->firstOrFail();
 
-        if ($profile->profile_photo_path && Storage::disk('public')->exists($profile->profile_photo_path)) {
+        // Delete primary ProfilePhoto record if exists
+        $primaryPhoto = $user->profilePhotos()->where('is_primary', true)->first();
+        if ($primaryPhoto) {
+            if (Storage::disk('public')->exists($primaryPhoto->path)) {
+                Storage::disk('public')->delete($primaryPhoto->path);
+            }
+            $primaryPhoto->delete();
+        } elseif ($profile->profile_photo_path && Storage::disk('public')->exists($profile->profile_photo_path)) {
             Storage::disk('public')->delete($profile->profile_photo_path);
         }
 
-        $profile->update(['profile_photo_path' => null]);
+        $user->syncPrimaryPhotoToMemberProfile();
+        $profile->refresh();
         $profile->syncCompletionStatus();
 
         session()->flash('status', 'Profile photo removed successfully.');
@@ -144,10 +158,12 @@ class Profile extends Component
         $user = Auth::user();
         $profile = MemberProfile::where('user_id', $user->id)->first();
         $completionPercentage = $profile ? $profile->calculateCompletionPercentage() : 0;
+        $photoCount = $user ? $user->profilePhotos()->count() : 0;
 
         return view('livewire.member.profile', [
             'profile' => $profile,
             'completionPercentage' => $completionPercentage,
+            'photoCount' => $photoCount,
         ])->layout('components.layouts.app', ['title' => 'My Member Profile']);
     }
 }

@@ -70,6 +70,48 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     }
 
     /**
+     * Profile photos gallery relationship.
+     */
+    public function profilePhotos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProfilePhoto::class)->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+    }
+
+    /**
+     * Primary profile photo relationship.
+     */
+    public function primaryProfilePhoto(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ProfilePhoto::class)->where('is_primary', true);
+    }
+
+    /**
+     * Ensure primary photo is synchronized to member_profiles.profile_photo_path.
+     */
+    public function syncPrimaryPhotoToMemberProfile(): void
+    {
+        $profile = $this->memberProfile;
+        if (! $profile) {
+            return;
+        }
+
+        $primary = $this->profilePhotos()->where('is_primary', true)->first();
+        if (! $primary) {
+            $primary = $this->profilePhotos()->orderBy('sort_order', 'asc')->orderBy('id', 'asc')->first();
+            if ($primary) {
+                $this->profilePhotos()->update(['is_primary' => false]);
+                $primary->update(['is_primary' => true]);
+            }
+        }
+
+        $newPath = $primary ? $primary->path : null;
+        if ($profile->profile_photo_path !== $newPath) {
+            $profile->update(['profile_photo_path' => $newPath]);
+            $profile->syncCompletionStatus();
+        }
+    }
+
+    /**
      * Sent interests relationship.
      */
     public function sentInterests(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -137,5 +179,96 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     public function isPremium(): bool
     {
         return $this->activeSubscription !== null;
+    }
+
+    /**
+     * Get total count of unread messages for this user across all conversations.
+     */
+    public function unreadMessagesCount(): int
+    {
+        return Message::whereHas('conversation', function ($q) {
+            $q->where('user_one_id', $this->id)
+              ->orWhere('user_two_id', $this->id);
+        })
+        ->where('sender_id', '!=', $this->id)
+        ->whereNull('read_at')
+        ->count();
+    }
+
+    public function blocks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Block::class, 'blocker_id');
+    }
+
+    public function blockedBy(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Block::class, 'blocked_id');
+    }
+
+    public function hasBlocked(int $userId): bool
+    {
+        return Block::where('blocker_id', $this->id)->where('blocked_id', $userId)->exists();
+    }
+
+    public function isBlockedBy(int $userId): bool
+    {
+        return Block::where('blocker_id', $userId)->where('blocked_id', $this->id)->exists();
+    }
+
+    public function hasBlockedOrIsBlockedBy(int $userId): bool
+    {
+        return Block::where(function ($q) use ($userId) {
+            $q->where('blocker_id', $this->id)->where('blocked_id', $userId);
+        })->orWhere(function ($q) use ($userId) {
+            $q->where('blocker_id', $userId)->where('blocked_id', $this->id);
+        })->exists();
+    }
+
+    public function getBlockedUserIds(): array
+    {
+        $blocked = Block::where('blocker_id', $this->id)->pluck('blocked_id')->toArray();
+        $blockedBy = Block::where('blocked_id', $this->id)->pluck('blocker_id')->toArray();
+
+        return array_unique(array_merge($blocked, $blockedBy));
+    }
+
+    public function shortlists(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Shortlist::class, 'user_id');
+    }
+
+    public function hasShortlisted(int $userId): bool
+    {
+        return Shortlist::where('user_id', $this->id)->where('shortlisted_user_id', $userId)->exists();
+    }
+
+    public function profileVisits(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProfileVisit::class, 'visitor_id');
+    }
+
+    public function receivedVisits(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProfileVisit::class, 'visited_user_id');
+    }
+
+    public function reportsSent(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Report::class, 'reporter_id');
+    }
+
+    public function reportsReceived(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Report::class, 'reported_user_id');
+    }
+
+    public function whatsappRequestsSent(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WhatsappShareRequest::class, 'requester_id');
+    }
+
+    public function whatsappRequestsReceived(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WhatsappShareRequest::class, 'receiver_id');
     }
 }

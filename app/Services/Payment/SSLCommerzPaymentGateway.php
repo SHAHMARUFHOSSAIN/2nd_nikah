@@ -33,6 +33,12 @@ class SSLCommerzPaymentGateway implements PaymentGatewayInterface
     public function initiatePayment(PaymentTransaction $transaction, User $user): array
     {
         if (empty($this->storeId) || empty($this->storePassword)) {
+            Log::warning('SSLCommerz initiation failed: Missing store credentials in server configuration.', [
+                'transaction_id' => $transaction->transaction_id,
+                'store_id_configured' => ! empty($this->storeId),
+                'store_password_configured' => ! empty($this->storePassword),
+            ]);
+
             return [
                 'status' => 'FAILED',
                 'message' => 'SSLCommerz gateway store credentials are missing from server configuration.',
@@ -61,6 +67,7 @@ class SSLCommerzPaymentGateway implements PaymentGatewayInterface
             'cus_email' => $user->email,
             'cus_add1' => $profile?->city ?: 'Dhaka',
             'cus_city' => $profile?->city ?: 'Dhaka',
+            'cus_postcode' => $profile?->postcode ?: '1000',
             'cus_country' => $profile?->country ?: 'Bangladesh',
             'cus_phone' => $profile?->phone ?: '01700000000',
             'shipping_method' => 'NO',
@@ -70,35 +77,85 @@ class SSLCommerzPaymentGateway implements PaymentGatewayInterface
         ];
 
         try {
-            $response = Http::asForm()->post($this->baseUrl, $postData);
+            $response = Http::timeout(15)
+                ->connectTimeout(10)
+                ->asForm()
+                ->post($this->baseUrl, $postData);
 
             if (! $response->successful()) {
+                Log::error('SSLCommerz initiation HTTP request failed', [
+                    'endpoint' => $this->baseUrl,
+                    'transaction_id' => $transaction->transaction_id,
+                    'amount' => $transaction->amount,
+                    'currency' => $transaction->currency,
+                    'http_status' => $response->status(),
+                ]);
+
                 return [
                     'status' => 'FAILED',
-                    'message' => 'HTTP request to SSLCommerz API failed.',
+                    'message' => 'Unable to initialize SSLCommerz payment gateway. HTTP request failed.',
                 ];
             }
 
             $data = $response->json();
 
-            if (isset($data['status']) && $data['status'] === 'SUCCESS' && ! empty($data['GatewayPageURL'])) {
+            if (! is_array($data)) {
+                Log::error('SSLCommerz initiation returned invalid non-JSON response', [
+                    'endpoint' => $this->baseUrl,
+                    'transaction_id' => $transaction->transaction_id,
+                    'http_status' => $response->status(),
+                ]);
+
+                return [
+                    'status' => 'FAILED',
+                    'message' => 'Unable to initialize SSLCommerz payment gateway. Invalid response format.',
+                ];
+            }
+
+            $status = $data['status'] ?? '';
+            $gatewayUrl = $data['GatewayPageURL'] ?? null;
+
+            if ($status === 'SUCCESS' && ! empty($gatewayUrl)) {
+                Log::info('SSLCommerz payment session created successfully', [
+                    'endpoint' => $this->baseUrl,
+                    'transaction_id' => $transaction->transaction_id,
+                    'amount' => $transaction->amount,
+                    'currency' => $transaction->currency,
+                    'response_status' => $status,
+                ]);
+
                 return [
                     'status' => 'SUCCESS',
-                    'gateway_url' => $data['GatewayPageURL'],
+                    'gateway_url' => $gatewayUrl,
                     'session_key' => $data['sessionkey'] ?? null,
                 ];
             }
 
-            return [
-                'status' => 'FAILED',
-                'message' => $data['failedreason'] ?? 'SSLCommerz initialization failed.',
-            ];
-        } catch (\Throwable $e) {
-            Log::error('SSLCommerz initiation exception: ' . $e->getMessage());
+            $failedReason = $data['failedreason'] ?? 'SSLCommerz initialization failed.';
+
+            Log::error('SSLCommerz initiation returned unsuccessful status', [
+                'endpoint' => $this->baseUrl,
+                'transaction_id' => $transaction->transaction_id,
+                'amount' => $transaction->amount,
+                'currency' => $transaction->currency,
+                'response_status' => $status,
+                'failed_reason' => $failedReason,
+            ]);
 
             return [
                 'status' => 'FAILED',
-                'message' => 'Gateway error: ' . $e->getMessage(),
+                'message' => 'SSLCommerz Gateway Error: ' . $failedReason,
+            ];
+        } catch (\Throwable $e) {
+            Log::error('SSLCommerz initiation exception occurred', [
+                'endpoint' => $this->baseUrl,
+                'transaction_id' => $transaction->transaction_id,
+                'error_message' => $e->getMessage(),
+            ]);
+
+            return [
+                'status' => 'FAILED',
+                'message' => 'Unable to initialize SSLCommerz payment. Please try again.',
             ];
         }
     }

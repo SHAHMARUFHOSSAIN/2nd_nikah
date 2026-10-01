@@ -20,6 +20,8 @@ class MembershipPlanResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'MEMBERSHIP & PAYMENTS';
+
     protected static ?string $navigationLabel = 'Membership Plans';
 
     protected static ?string $recordTitleAttribute = 'name';

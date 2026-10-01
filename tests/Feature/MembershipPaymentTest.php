@@ -346,4 +346,126 @@ class MembershipPaymentTest extends TestCase
             ->assertSee('TXN_USER_A_111')
             ->assertDontSee('TXN_USER_B_999');
     }
+
+    public function test_13_sslcommerz_initiation_success_redirects_and_creates_initiated_transaction(): void
+    {
+        $user = $this->createVerifiedUser();
+        $this->actingAs($user);
+
+        Http::fake([
+            'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' => function (\Illuminate\Http\Client\Request $request) {
+                $data = $request->data();
+                $this->assertEquals('test_store_id', $data['store_id']);
+                $this->assertEquals('test_store_password', $data['store_passwd']);
+                $this->assertEquals('100.00', $data['total_amount']);
+                $this->assertEquals('BDT', $data['currency']);
+                $this->assertNotEmpty($data['cus_postcode']);
+                $this->assertEquals('NO', $data['shipping_method']);
+
+                return Http::response([
+                    'status' => 'SUCCESS',
+                    'GatewayPageURL' => 'https://sandbox.sslcommerz.com/easycheckout/test_session_123',
+                    'sessionkey' => 'test_session_123',
+                ], 200);
+            },
+        ]);
+
+        Livewire::test(Checkout::class, ['planSlug' => 'weekly-bdt', 'country' => 'Bangladesh'])
+            ->call('initiatePayment')
+            ->assertRedirect('https://sandbox.sslcommerz.com/easycheckout/test_session_123');
+
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'amount' => 100.00,
+            'currency' => 'BDT',
+            'status' => 'initiated',
+        ]);
+        $this->assertFalse($user->fresh()->isPremium());
+    }
+
+    public function test_14_sslcommerz_initiation_failure_shows_error_and_transaction_remains_unpaid(): void
+    {
+        $user = $this->createVerifiedUser();
+        $this->actingAs($user);
+
+        Http::fake([
+            'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' => Http::response([
+                'status' => 'FAILED',
+                'failedreason' => 'Store Credential Error Or Store is De-active',
+            ], 200),
+        ]);
+
+        Livewire::test(Checkout::class, ['planSlug' => 'weekly-bdt', 'country' => 'Bangladesh'])
+            ->call('initiatePayment')
+            ->assertSee('SSLCommerz Gateway Error: Store Credential Error Or Store is De-active');
+
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'status' => 'failed',
+        ]);
+        $this->assertFalse($user->fresh()->isPremium());
+    }
+
+    public function test_15_sslcommerz_initiation_invalid_response_handled_safely(): void
+    {
+        $user = $this->createVerifiedUser();
+        $this->actingAs($user);
+
+        Http::fake([
+            'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' => Http::response('HTML response error', 200),
+        ]);
+
+        Livewire::test(Checkout::class, ['planSlug' => 'weekly-bdt', 'country' => 'Bangladesh'])
+            ->call('initiatePayment')
+            ->assertSee('Unable to initialize SSLCommerz payment gateway. Invalid response format.');
+
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'status' => 'failed',
+        ]);
+        $this->assertFalse($user->fresh()->isPremium());
+    }
+
+    public function test_16_sslcommerz_initiation_missing_gateway_url_handled_as_failure(): void
+    {
+        $user = $this->createVerifiedUser();
+        $this->actingAs($user);
+
+        Http::fake([
+            'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' => Http::response([
+                'status' => 'SUCCESS',
+                'GatewayPageURL' => '',
+            ], 200),
+        ]);
+
+        Livewire::test(Checkout::class, ['planSlug' => 'weekly-bdt', 'country' => 'Bangladesh'])
+            ->call('initiatePayment')
+            ->assertSee('SSLCommerz initialization failed');
+
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'status' => 'failed',
+        ]);
+        $this->assertFalse($user->fresh()->isPremium());
+    }
+
+    public function test_17_sslcommerz_initiation_timeout_or_http_error_handled_safely(): void
+    {
+        $user = $this->createVerifiedUser();
+        $this->actingAs($user);
+
+        Http::fake([
+            'https://sandbox.sslcommerz.com/gwprocess/v4/api.php' => Http::response(null, 500),
+        ]);
+
+        Livewire::test(Checkout::class, ['planSlug' => 'weekly-bdt', 'country' => 'Bangladesh'])
+            ->call('initiatePayment')
+            ->assertSee('Unable to initialize SSLCommerz payment gateway. HTTP request failed.');
+
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'status' => 'failed',
+        ]);
+        $this->assertFalse($user->fresh()->isPremium());
+    }
 }

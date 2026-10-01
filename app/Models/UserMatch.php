@@ -87,4 +87,19 @@ class UserMatch extends Model
             ]
         );
     }
+
+    /**
+     * Check if a mutual match exists between two users.
+     */
+    public static function hasMutualMatch(int $userAId, int $userBId): bool
+    {
+        if ($userAId === $userBId) {
+            return false;
+        }
+
+        $userOne = min($userAId, $userBId);
+        $userTwo = max($userAId, $userBId);
+
+        return static::where('user_one_id', $userOne)->where('user_two_id', $userTwo)->exists();
+    }
 }
