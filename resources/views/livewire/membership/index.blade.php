@@ -3,7 +3,8 @@
     {{-- Page Header --}}
     <div class="text-center max-w-2xl mx-auto space-y-3">
         <span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-600 border border-rose-200/80 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-2xs">
-            💎 PREMIUM MEMBERSHIP
+            <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>PREMIUM MEMBERSHIP</span>
         </span>
         <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Choose Your Matrimonial Plan
@@ -18,7 +19,7 @@
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div class="space-y-0.5">
                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                    <span>🌍</span>
+                    <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>Select Your Country of Residence</span>
                 </h3>
                 <p class="text-xs text-slate-500">
@@ -44,10 +45,10 @@
     {{-- Pricing Cards Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         @foreach ($plans as $plan)
-            <x-ui.card padding="spacious" :hover="true" class="relative flex flex-col justify-between border-2 {{ $plan->billing_interval === 'monthly' ? 'border-rose-500 shadow-lg' : 'border-rose-100/90 shadow-xs' }}">
+            <x-ui.card padding="spacious" overflow="visible" :hover="true" class="relative flex flex-col justify-between border-2 {{ $plan->billing_interval === 'monthly' ? 'border-rose-500 shadow-lg' : 'border-rose-100/90 shadow-xs' }}">
                 
                 @if ($plan->billing_interval === 'monthly')
-                    <span class="absolute -top-3 right-6 bg-rose-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-2xs">
+                    <span class="absolute -top-3.5 right-6 z-20 bg-gradient-to-r from-rose-600 to-pink-600 text-white text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-md">
                         Most Popular
                     </span>
                 @endif
@@ -77,16 +78,20 @@
 
                     <ul class="space-y-2.5 text-xs text-slate-700 font-medium">
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-600 font-extrabold">✓</span> Full access to send proposal interests
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>Full access to send proposal interests</span>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-600 font-extrabold">✓</span> Direct connections upon acceptance
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>Direct connections upon acceptance</span>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-600 font-extrabold">✓</span> Priority verified member badge
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>Priority verified member badge</span>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="text-emerald-600 font-extrabold">✓</span> SSLCommerz secure encrypted checkout
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>SSLCommerz secure encrypted checkout</span>
                         </li>
                     </ul>
                 </div>

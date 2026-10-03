@@ -2,6 +2,7 @@
     'padding' => 'normal', // none, compact, normal, spacious
     'hover' => false,
     'border' => true,
+    'overflow' => 'hidden', // hidden, visible
 ])
 
 @php
@@ -14,8 +15,9 @@
 
     $borderClasses = $border ? 'border border-rose-100/90' : '';
     $hoverClasses = $hover ? 'hover:shadow-md hover:border-rose-200 hover:-translate-y-0.5 transition-all duration-200' : '';
+    $overflowClass = $overflow === 'visible' ? 'overflow-visible' : 'overflow-hidden';
 @endphp
 
-<div {{ $attributes->merge(['class' => "bg-white rounded-2xl sm:rounded-3xl shadow-xs {$borderClasses} {$paddingClasses} {$hoverClasses} overflow-hidden"]) }}>
+<div {{ $attributes->merge(['class' => "bg-white rounded-2xl sm:rounded-3xl shadow-xs {$borderClasses} {$paddingClasses} {$hoverClasses} {$overflowClass}"]) }}>
     {{ $slot }}
 </div>

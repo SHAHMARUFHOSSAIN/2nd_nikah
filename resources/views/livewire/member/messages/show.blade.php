@@ -120,17 +120,25 @@
                                     {{ $partnerProfile?->full_name ?: $partner?->name }}
                                 </h2>
                                 @if ($partner && $partner->hasVerifiedEmail())
-                                    <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.2 rounded font-semibold shrink-0" title="Verified Profile">✓</span>
+                                    <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.5 rounded font-semibold shrink-0 inline-flex items-center" title="Verified Profile">
+                                        <svg class="w-2.5 h-2.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
                                 @endif
                             </div>
-                            <div class="flex items-center gap-1 text-[11px] text-slate-500 truncate mt-0.2">
+                            <div class="flex items-center gap-1.5 text-[11px] text-slate-500 truncate mt-0.5">
                                 @if ($partnerProfile)
                                     <span>{{ $partnerProfile->age ? $partnerProfile->age . ' yrs' : '' }}</span>
                                     @if ($partnerProfile->city)
-                                        <span>• {{ $partnerProfile->city }}</span>
+                                        <span class="inline-flex items-center gap-0.5">
+                                            <svg class="w-3 h-3 text-slate-400 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                            {{ $partnerProfile->city }}
+                                        </span>
                                     @endif
                                 @endif
-                                <span class="text-emerald-700 font-semibold">• Mutual Match</span>
+                                <span class="text-emerald-700 font-semibold inline-flex items-center gap-0.5">
+                                    <svg class="w-3 h-3 text-emerald-600 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    Mutual Match
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -149,14 +157,17 @@
                         <div x-show="open" x-transition x-cloak class="absolute right-3 top-12 w-48 bg-white border border-slate-200/90 rounded-xl shadow-xl py-1 z-50 divide-y divide-slate-100">
                             @if ($partnerProfile)
                                 <a href="{{ route('members.show', $partnerProfile->id) }}" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2">
-                                    👤 View Profile
+                                    <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    <span>View Profile</span>
                                 </a>
                             @endif
                             <button wire:click="confirmReport" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-50 flex items-center gap-2">
-                                ⚠️ Report Member
+                                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <span>Report Member</span>
                             </button>
                             <button wire:click="confirmBlock" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2">
-                                🚫 Block Member
+                                <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                <span>Block Member</span>
                             </button>
                         </div>
                     </div>
@@ -168,8 +179,8 @@
                     
                     @if ($messages->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400 space-y-2">
-                            <div class="w-14 h-14 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 text-3xl shadow-inner mx-auto">
-                                💌
+                            <div class="w-14 h-14 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 shadow-inner mx-auto">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             </div>
                             <h3 class="text-sm font-bold text-slate-800">Start Your Private Conversation</h3>
                             <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
@@ -209,7 +220,7 @@
                                                 @if ($msg->replyTo->isDeleted())
                                                     <span class="italic">This message was deleted.</span>
                                                 @elseif ($msg->replyTo->isImage())
-                                                    <span>📷 [Image message]</span>
+                                                    <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg> [Image message]</span>
                                                 @else
                                                     {{ $msg->replyTo->body }}
                                                 @endif
@@ -255,8 +266,9 @@
                                                             </button>
                                                         </div>
                                                     @else
-                                                        <p class="text-[11px] text-amber-800 leading-snug">
-                                                            ⏳ Contact request sent. Waiting for response...
+                                                        <p class="text-[11px] text-amber-800 leading-snug flex items-center gap-1">
+                                                            <svg class="w-3.5 h-3.5 text-amber-600 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                            <span>Contact request sent. Waiting for response...</span>
                                                         </p>
                                                         <button wire:click="cancelWhatsApp({{ $whatsappRequest->id }})" class="text-xs text-red-600 hover:text-red-800 underline font-semibold pt-0.5">
                                                             Cancel Request
@@ -296,12 +308,14 @@
                                         @if ($isMine)
                                             <div class="flex items-center gap-0.5 font-bold">
                                                 @if ($msg->read_at)
-                                                    <span class="text-emerald-200" title="Read at {{ $msg->read_at->format('M d, g:i A') }}">
-                                                        ✓✓ Read
+                                                    <span class="text-emerald-200 inline-flex items-center gap-0.5" title="Read at {{ $msg->read_at->format('M d, g:i A') }}">
+                                                        <svg class="w-3 h-3 inline text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                        <span>Read</span>
                                                     </span>
                                                 @else
-                                                    <span class="text-rose-200" title="Sent">
-                                                        ✓ Sent
+                                                    <span class="text-rose-200 inline-flex items-center gap-0.5" title="Sent">
+                                                        <svg class="w-2.5 h-2.5 inline text-rose-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                        <span>Sent</span>
                                                     </span>
                                                 @endif
                                             </div>
@@ -382,10 +396,12 @@
                                 <div x-show="composerMenuOpen" x-transition x-cloak class="absolute bottom-12 left-0 w-52 bg-white border border-slate-200/90 rounded-2xl shadow-xl p-1.5 z-40 space-y-1">
                                     <label class="cursor-pointer flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 rounded-xl transition">
                                         <input type="file" wire:model="attachment" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden" @change="composerMenuOpen = false">
-                                        <span>📷 Attach Image (Max 5MB)</span>
+                                        <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        <span>Attach Image (Max 5MB)</span>
                                     </label>
                                     <button type="button" wire:click="requestWhatsApp" @click="composerMenuOpen = false" class="w-full text-left flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 rounded-xl transition">
-                                        <span>📱 Request WhatsApp Details</span>
+                                        <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg>
+                                        <span>Request WhatsApp Details</span>
                                     </button>
                                 </div>
                             </div>
@@ -399,7 +415,7 @@
                             </div>
 
                             {{-- Send Button --}}
-                            <button type="submit" wire:loading.attr="disabled" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="bg-rose-600 hover:bg-rose-700 text-white p-2.5 sm:px-4 rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap inline-flex items-center justify-center disabled:opacity-50" title="Send message">
+                            <button type="submit" wire:loading.attr="disabled" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="btn btn-primary p-2.5 sm:px-4 rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap inline-flex items-center justify-center disabled:opacity-50" title="Send message">
                                 <span wire:loading.remove class="hidden sm:inline">Send</span>
                                 <svg wire:loading.remove class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                                 <span wire:loading class="text-[11px]">Sending...</span>
@@ -409,13 +425,13 @@
                         {{-- Standalone Premium Gate Card for Chat Room --}}
                         <div class="bg-gradient-to-br from-rose-600 via-rose-600 to-purple-700 text-white rounded-2xl p-3.5 sm:p-4 text-center space-y-2 shadow-sm">
                             <div class="flex items-center justify-center gap-1.5 font-black text-xs text-white">
-                                <span class="text-amber-300">✨</span>
+                                <svg class="w-4 h-4 text-amber-300 inline shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
                                 <span>Premium Messaging</span>
                             </div>
                             <p class="text-[11px] text-pink-100 max-w-sm mx-auto leading-tight">
                                 Upgrade to send messages, share images and exchange contact details.
                             </p>
-                            <a href="{{ route('membership.index') }}" style="white-space: nowrap !important;" class="inline-flex items-center justify-center bg-white hover:bg-rose-50 text-rose-700 font-extrabold text-xs px-4 py-2 rounded-xl shadow-2xs transition">
+                            <a href="{{ route('membership.index') }}" style="white-space: nowrap !important; color: #BE123C !important; background-color: #FFFFFF !important;" class="btn btn-sm font-black text-xs px-5 py-2 rounded-xl shadow-xs transition hover:bg-rose-50 inline-flex items-center justify-center">
                                 Upgrade to Premium
                             </a>
                         </div>

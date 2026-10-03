@@ -34,14 +34,14 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div class="space-y-0.5 min-w-0 flex-1">
                                 <h3 class="text-xs sm:text-sm font-black flex items-center gap-1.5 text-white">
-                                    <span class="text-amber-300">✨</span>
+                                    <svg class="w-4 h-4 text-amber-300 inline shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
                                     <span>Premium Messaging</span>
                                 </h3>
                                 <p class="text-[11px] text-pink-100 leading-snug">
                                     Upgrade to send messages, share images and exchange contact details securely.
                                 </p>
                             </div>
-                            <a href="{{ route('membership.index') }}" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="bg-white hover:bg-rose-50 text-rose-700 font-extrabold text-xs px-3.5 py-1.5 rounded-xl transition shadow-2xs shrink-0 whitespace-nowrap inline-flex items-center justify-center self-start sm:self-center mt-1 sm:mt-0">
+                            <a href="{{ route('membership.index') }}" style="white-space: nowrap !important; flex-shrink: 0 !important; color: #BE123C !important; background-color: #FFFFFF !important;" class="btn btn-sm font-black text-xs px-4 py-2 rounded-xl transition shadow-xs hover:bg-rose-50 shrink-0 whitespace-nowrap inline-flex items-center justify-center self-start sm:self-center mt-1 sm:mt-0">
                                 Upgrade Now
                             </a>
                         </div>
@@ -73,14 +73,14 @@
                     {{-- Conversation List --}}
                     @if ($conversations->isEmpty())
                         <div class="py-6 text-center text-slate-400 space-y-2">
-                            <div class="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-xl text-rose-500 mx-auto shadow-inner">
-                                💬
+                            <div class="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 mx-auto shadow-inner">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                             </div>
                             <h3 class="text-xs font-bold text-slate-800">No conversations yet</h3>
                             <p class="text-[11px] text-slate-500 max-w-xs mx-auto leading-relaxed">
                                 Once you connect with a mutual match, your private conversations will appear here.
                             </p>
-                            <a href="{{ route('members.index') }}" class="inline-flex items-center gap-1 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-2xs mt-1">
+                            <a href="{{ route('members.index') }}" class="btn btn-primary text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-xs mt-1 inline-flex items-center gap-1">
                                 <span>Browse Members</span>
                             </a>
                         </div>
@@ -113,7 +113,9 @@
                                                     {{ $partnerProfile?->full_name ?: $partner?->name }}
                                                 </h3>
                                                 @if ($partner && $partner->hasVerifiedEmail())
-                                                    <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.2 rounded font-semibold shrink-0" title="Verified Profile">✓</span>
+                                                    <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.5 rounded font-semibold shrink-0 inline-flex items-center" title="Verified Profile">
+                                                        <svg class="w-2.5 h-2.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                    </span>
                                                 @endif
                                                 @if ($unreadCount > 0)
                                                     <span class="bg-rose-600 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full shadow-2xs shrink-0 ml-auto">
@@ -130,9 +132,9 @@
                                                     @if ($lastMsg->isDeleted())
                                                         <span class="italic text-slate-400">This message was deleted</span>
                                                     @elseif ($lastMsg->isImage())
-                                                        <span>📷 Image message</span>
+                                                        <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Image message</span>
                                                     @elseif ($lastMsg->isWhatsAppRequest())
-                                                        <span>📱 WhatsApp Request</span>
+                                                        <span class="inline-flex items-center gap-1 text-emerald-700 font-medium"><svg class="w-3 h-3 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg> WhatsApp Request</span>
                                                     @else
                                                         {{ Str::limit($lastMsg->body, 25) }}
                                                     @endif
@@ -194,14 +196,17 @@
                                                         {{ $partnerProfile?->full_name ?: $partner->name }}
                                                     </h4>
                                                     @if ($partner->hasVerifiedEmail())
-                                                        <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.2 rounded font-semibold shrink-0" title="Verified Profile">✓</span>
+                                                        <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.5 rounded font-semibold shrink-0 inline-flex items-center" title="Verified Profile">
+                                                            <svg class="w-2.5 h-2.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                        </span>
                                                     @endif
                                                 </div>
                                                 <span class="text-[10px] text-slate-400 block truncate">Matched {{ $match->matched_at ? $match->matched_at->format('M d') : '' }}</span>
                                             </div>
                                         </div>
-                                        <button wire:click="startConversation({{ $partner->id }})" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition shadow-2xs shrink-0 whitespace-nowrap inline-flex items-center justify-center">
-                                            Message
+                                        <button wire:click="startConversation({{ $partner->id }})" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="btn btn-primary text-xs font-bold px-3 py-1.5 rounded-xl transition shadow-xs shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                            <span>Message</span>
                                         </button>
                                     </div>
                                 @endif
@@ -215,8 +220,8 @@
             {{-- Right Pane: Enterprise Desktop Chat Workspace Showcase (Hidden on Mobile, Flex Fill on Desktop) --}}
             <div class="hidden lg:flex flex-1 bg-white flex-col items-center justify-center p-8 text-center space-y-6">
                 
-                <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 text-4xl shadow-inner mx-auto">
-                    💌
+                <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 shadow-inner mx-auto">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
 
                 <div class="max-w-md space-y-2">
@@ -231,17 +236,17 @@
                 {{-- Feature Pills --}}
                 <div class="grid grid-cols-3 gap-3 w-full max-w-lg pt-4 border-t border-slate-100 text-left">
                     <div class="p-3 bg-slate-50/80 rounded-xl space-y-1">
-                        <span class="text-lg block">🔒</span>
+                        <svg class="w-5 h-5 text-rose-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         <h4 class="text-xs font-bold text-slate-900">Mutual Privacy</h4>
                         <p class="text-[10px] text-slate-500">Only connected matches can message.</p>
                     </div>
                     <div class="p-3 bg-slate-50/80 rounded-xl space-y-1">
-                        <span class="text-lg block">📱</span>
+                        <svg class="w-5 h-5 text-emerald-600 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg>
                         <h4 class="text-xs font-bold text-slate-900">WhatsApp Sharing</h4>
                         <p class="text-[10px] text-slate-500">Contact details shared upon mutual consent.</p>
                     </div>
                     <div class="p-3 bg-slate-50/80 rounded-xl space-y-1">
-                        <span class="text-lg block">🖼️</span>
+                        <svg class="w-5 h-5 text-indigo-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         <h4 class="text-xs font-bold text-slate-900">Private Storage</h4>
                         <p class="text-[10px] text-slate-500">Chat attachments stream securely.</p>
                     </div>

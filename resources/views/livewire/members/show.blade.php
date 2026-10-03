@@ -49,8 +49,9 @@
                         </template>
 
                         @if ($profilePhotos->count() > 0)
-                            <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-                                🔍 Click to view
+                            <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                <span>Click to view</span>
                             </div>
                         @endif
                     </div>
@@ -75,14 +76,16 @@
                                 {{ $profile->full_name }}
                             </h1>
                             <p style="color: var(--text-muted); font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                📍 <span>{{ implode(', ', array_filter([$profile->city, $profile->country])) ?: 'Location Not Specified' }}</span>
+                                <svg class="w-4 h-4 text-rose-500 shrink-0 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>{{ implode(', ', array_filter([$profile->city, $profile->country])) ?: 'Location Not Specified' }}</span>
                             </p>
                         </div>
 
                         <div>
                             @if ($profile->user && $profile->user->email_verified_at)
                                 <span style="background: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; margin-bottom: 0.5rem;">
-                                    ✓ Email Verified Member
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 inline shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <span>Email Verified Member</span>
                                 </span>
                             @endif
 
@@ -99,18 +102,21 @@
                                         </a>
                                     @elseif (auth()->id() === $profile->user_id)
                                         {{-- Own profile action buttons --}}
-                                        <a href="{{ route('member.profile') }}" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">
-                                            ✏️ Edit Profile
+                                        <a href="{{ route('member.profile') }}" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                            <svg class="w-3.5 h-3.5 inline shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                            <span>Edit Profile</span>
                                         </a>
-                                        <a href="{{ route('member.profile.photos') }}" class="btn btn-outline" style="padding: 0.5rem 1.1rem; font-size: 0.85rem; color: var(--primary); border-color: var(--primary);">
-                                            📷 Manage Photos
+                                        <a href="{{ route('member.profile.photos') }}" class="btn btn-outline" style="padding: 0.5rem 1.1rem; font-size: 0.85rem; color: var(--primary); border-color: var(--primary); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                            <svg class="w-3.5 h-3.5 inline shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                            <span>Manage Photos</span>
                                         </a>
                                     @else
                                         {{-- Interest Action --}}
                                         @if ($existingInterest)
                                             @if ($existingInterest->status === 'accepted')
                                                 <span style="background: #DEF7EC; color: #03543F; padding: 0.45rem 1.1rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem;">
-                                                    ✓ Connected
+                                                    <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                    <span>Connected</span>
                                                 </span>
                                             @elseif ($existingInterest->status === 'pending')
                                                 @if ($existingInterest->sender_id === auth()->id())
@@ -121,11 +127,13 @@
                                                         Cancel Interest
                                                     </button>
                                                 @else
-                                                    <button wire:click="acceptInterest" type="button" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
-                                                        ✓ Accept Interest
+                                                    <button wire:click="acceptInterest" type="button" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                        <span>Accept Interest</span>
                                                     </button>
-                                                    <button wire:click="rejectInterest" type="button" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem; color: var(--primary);">
-                                                        ✕ Reject
+                                                    <button wire:click="rejectInterest" type="button" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem; color: var(--primary); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                        <span>Reject</span>
                                                     </button>
                                                 @endif
                                             @elseif ($existingInterest->status === 'rejected')
@@ -146,29 +154,34 @@
                                         {{-- Message Action Button (Visible on Mutual Match) --}}
                                         @if ($isMutualMatch)
                                             @if (auth()->user()->isPremium())
-                                                <a href="{{ $messageUrl ?: route('member.messages.index') }}" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem; background: #059669; border-color: #059669;">
-                                                    💬 Message Member
+                                                <a href="{{ $messageUrl ?: route('member.messages.index') }}" class="btn btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700; gap: 0.5rem; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35); display: inline-flex; align-items: center;">
+                                                    <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                                    <span>Message Member</span>
                                                 </a>
                                             @else
-                                                <a href="{{ route('membership.index') }}" class="btn btn-outline" style="padding: 0.5rem 1.1rem; font-size: 0.85rem; color: #059669; border-color: #059669;" title="Upgrade to Premium to send direct messages">
-                                                    💬 Message (Upgrade)
+                                                <a href="{{ route('membership.index') }}" class="btn btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700; gap: 0.5rem; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35); display: inline-flex; align-items: center;" title="Upgrade to Premium to send direct messages">
+                                                    <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                                    <span>Message Member (Upgrade to VIP)</span>
                                                 </a>
                                             @endif
                                         @endif
 
                                         {{-- Shortlist Toggle Button --}}
-                                        <button wire:click="toggleShortlist" type="button" class="btn {{ $isShortlisted ? 'btn-primary' : 'btn-outline' }}" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;" title="{{ $isShortlisted ? 'Remove from shortlist' : 'Add to shortlist' }}">
-                                            {{ $isShortlisted ? '★ Shortlisted' : '☆ Shortlist' }}
+                                        <button wire:click="toggleShortlist" type="button" class="btn {{ $isShortlisted ? 'btn-primary' : 'btn-outline' }}" style="padding: 0.45rem 0.9rem; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;" title="{{ $isShortlisted ? 'Remove from shortlist' : 'Add to shortlist' }}">
+                                            <svg class="w-3.5 h-3.5 shrink-0 {{ $isShortlisted ? 'fill-white text-white' : 'fill-none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                                            <span>{{ $isShortlisted ? 'Shortlisted' : 'Shortlist' }}</span>
                                         </button>
 
                                         {{-- Block / Unblock Button --}}
-                                        <button wire:click="toggleBlock" wire:confirm="Are you sure you want to {{ $isBlocked ? 'unblock' : 'block' }} this member?" type="button" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem; color: #9B1C1C; border-color: #F87171;">
-                                            {{ $isBlocked ? 'Unblock Member' : '🚫 Block' }}
+                                        <button wire:click="toggleBlock" wire:confirm="Are you sure you want to {{ $isBlocked ? 'unblock' : 'block' }} this member?" type="button" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem; color: #9B1C1C; border-color: #F87171; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                            <span>{{ $isBlocked ? 'Unblock Member' : 'Block' }}</span>
                                         </button>
 
                                         {{-- Report Button --}}
-                                        <button wire:click="openReportModal" type="button" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem; color: #D97706; border-color: #FBBF24;">
-                                            🚩 Report
+                                        <button wire:click="openReportModal" type="button" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem; color: #D97706; border-color: #FBBF24; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                            <svg class="w-3.5 h-3.5 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+                                            <span>Report</span>
                                         </button>
                                     @endif
                                 @endguest
@@ -318,8 +331,9 @@
         <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 1rem;">
             <div class="card" style="width: 100%; max-width: 500px; border-radius: 1.25rem; background: #FFFFFF; padding: 2rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--bg-wine); margin: 0;">
-                        🚩 Report Profile
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--bg-wine); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+                        <span>Report Profile</span>
                     </h3>
                     <button wire:click="closeReportModal" type="button" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
                 </div>
