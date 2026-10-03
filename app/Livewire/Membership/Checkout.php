@@ -20,6 +20,8 @@ class Checkout extends Component
 
     public ?string $errorMessage = null;
 
+    public bool $agreeTerms = false;
+
     public function mount(): void
     {
         if (! Auth::check()) {
@@ -39,6 +41,11 @@ class Checkout extends Component
 
         if (! $user || ! $user->hasVerifiedEmail()) {
             $this->errorMessage = 'You must be logged in and email verified to purchase a membership.';
+            return;
+        }
+
+        if (! $this->agreeTerms) {
+            $this->errorMessage = 'You must read and agree to our Terms & Conditions, Privacy Policy, and Return & Refund Policy to proceed with payment.';
             return;
         }
 

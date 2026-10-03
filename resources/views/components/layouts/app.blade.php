@@ -271,10 +271,10 @@
     {{-- Enterprise Footer --}}
     @unless (request()->routeIs('member.messages.*'))
     <footer class="site-footer bg-slate-950 text-slate-400 pt-16 pb-12 mt-auto border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-12 border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-slate-800/80">
                 
-                {{-- Column 1: Brand & Tagline --}}
+                {{-- Column 1: Brand & Registered Company Info --}}
                 <div class="lg:col-span-2 space-y-4">
                     @php
                         $footerLogoUrl = \App\Models\Setting::getAssetUrl('footer_logo_path') 
@@ -289,11 +289,19 @@
                     <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
                         {{ \App\Models\Setting::get('footer_description', 'A dignified, trustworthy matrimonial platform designed with privacy, integrity, and respect.') }}
                     </p>
+
+                    {{-- Mandatory Merchant & Trade License Details --}}
+                    <div class="pt-2 text-xs text-slate-400 space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/90 max-w-sm">
+                        <p><strong class="text-slate-200">Organization:</strong> {{ \App\Models\Setting::get('company_name', '2ndnikah') }}</p>
+                        <p><strong class="text-slate-200">Trade License:</strong> {{ \App\Models\Setting::get('trade_license_number', 'TRAD/DNCC/025984/2024') }}</p>
+                        <p><strong class="text-slate-200">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', 'Dhaka-1100, Bangladesh') }}</p>
+                        <p><strong class="text-slate-200">Support Desk:</strong> 2ndnikahsupport@gmail.com | +880 1613591741</p>
+                    </div>
                 </div>
 
                 {{-- Column 2: Navigation --}}
                 <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Navigation</h4>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Quick Links</h4>
                     <ul class="space-y-2 text-xs">
                         <li><a href="{{ route('home') }}" class="hover:text-rose-400 transition">Home</a></li>
                         <li><a href="{{ route('members.index') }}" class="hover:text-rose-400 transition">Members Directory</a></li>
@@ -308,27 +316,20 @@
                     </ul>
                 </div>
 
-                {{-- Column 3: Legal & Support --}}
+                {{-- Column 3: Legal & Compliance (MANDATORY SSLCommerz requirements) --}}
                 <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Legal & Support</h4>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Legal & Compliance</h4>
                     <ul class="space-y-2 text-xs">
-                        @php
-                            $cmsPages = \App\Models\CmsPage::where('is_published', true)->get();
-                        @endphp
-                        @foreach($cmsPages as $page)
-                            <li><a href="/{{ $page->slug }}" class="hover:text-rose-400 transition">{{ $page->title }}</a></li>
-                        @endforeach
-                        @if($cmsPages->isEmpty())
-                            <li><a href="/privacy-policy" class="hover:text-rose-400 transition">Privacy Policy</a></li>
-                            <li><a href="/terms-of-service" class="hover:text-rose-400 transition">Terms of Service</a></li>
-                            <li><a href="/contact-us" class="hover:text-rose-400 transition">Contact Us</a></li>
-                        @endif
+                        <li><a href="/about-us" class="hover:text-rose-400 transition font-medium">About Us & Management</a></li>
+                        <li><a href="/terms-and-conditions" class="hover:text-rose-400 transition font-medium">Terms and Conditions</a></li>
+                        <li><a href="/privacy-policy" class="hover:text-rose-400 transition font-medium">Privacy Policy</a></li>
+                        <li><a href="/refund-policy" class="hover:text-rose-400 transition font-medium text-amber-300 hover:text-amber-200">Return and Refund Policy</a></li>
                     </ul>
                 </div>
 
-                {{-- Column 4: App Download & Social --}}
+                {{-- Column 4: App Download & Security --}}
                 <div class="space-y-4">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Official Mobile App</h4>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Mobile App & Trust</h4>
                     
                     {{-- App Badges --}}
                     <div class="flex flex-col gap-2">
@@ -362,9 +363,33 @@
 
             </div>
 
+            {{-- SSLCommerz Official Payment Methods Banner Section (Mandatory Gateway Requirement) --}}
+            <div class="pt-2 pb-6 border-b border-slate-800/80 text-center space-y-3">
+                <span class="text-[11px] font-black uppercase tracking-widest text-slate-400 block">
+                    100% SECURE & ENCRYPTED PAYMENTS VIA SSLCOMMERZ
+                </span>
+                <div class="flex justify-center items-center px-2">
+                    <img src="{{ asset('images/sslcommerz-banner.png') }}" alt="SSLCommerz Verified Payment Methods - Visa, Mastercard, AMEX, bKash, Nagad, Rocket, Upay, Bank Transfer" class="max-w-full h-auto max-h-12 sm:max-h-14 object-contain rounded-xl bg-white p-1.5 shadow-md">
+                </div>
+                <p class="text-[11px] text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    We accept Visa, Mastercard, American Express, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. All transactions are protected with bank-grade 256-bit SSL encryption.
+                </p>
+            </div>
+
             {{-- Footer Bottom Bar --}}
-            <div class="pt-8 text-center text-xs text-slate-500">
-                &copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', '2nd Nikah') }}. {{ \App\Models\Setting::get('footer_copyright', 'All rights reserved.') }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 pt-2">
+                <div>
+                    &copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', '2nd Nikah') }}. {{ \App\Models\Setting::get('footer_copyright', 'All rights reserved.') }}
+                </div>
+                <div class="flex items-center gap-4 flex-wrap justify-center">
+                    <a href="/terms-and-conditions" class="hover:text-rose-400 transition">Terms & Conditions</a>
+                    <span>•</span>
+                    <a href="/privacy-policy" class="hover:text-rose-400 transition">Privacy Policy</a>
+                    <span>•</span>
+                    <a href="/refund-policy" class="hover:text-rose-400 transition">Return & Refund Policy</a>
+                    <span>•</span>
+                    <a href="/about-us" class="hover:text-rose-400 transition">About Us</a>
+                </div>
             </div>
         </div>
     </footer>

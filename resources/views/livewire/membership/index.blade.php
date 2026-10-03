@@ -63,13 +63,21 @@
                         </span>
                     </div>
 
-                    <div class="space-y-1">
-                        <span class="text-3xl sm:text-4xl font-black text-rose-600 tracking-tight leading-none">
-                            {{ $plan->formatted_price }}
-                        </span>
-                        <span class="text-slate-500 text-xs font-medium">
-                            / {{ $plan->billing_interval }}
-                        </span>
+                    <div class="space-y-2">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-3xl sm:text-4xl font-black text-rose-600 tracking-tight leading-none">
+                                {{ $plan->formatted_price }}
+                            </span>
+                            <span class="text-slate-500 text-xs font-medium">
+                                / {{ $plan->billing_interval }}
+                            </span>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                <span>In Stock • Instant Digital Activation</span>
+                            </span>
+                        </div>
                     </div>
 
                     <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">

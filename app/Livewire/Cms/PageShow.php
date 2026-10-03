@@ -11,7 +11,21 @@ class PageShow extends Component
 
     public function mount(string $slug): void
     {
-        $cmsPage = CmsPage::where('slug', $slug)
+        $aliases = [
+            'terms' => 'terms-and-conditions',
+            'terms-and-condition' => 'terms-and-conditions',
+            'terms-of-service' => 'terms-and-conditions',
+            'privacy' => 'privacy-policy',
+            'refund' => 'refund-policy',
+            'return-and-refund' => 'refund-policy',
+            'return-and-refund-policy' => 'refund-policy',
+            'refund-and-return-policy' => 'refund-policy',
+            'about' => 'about-us',
+        ];
+
+        $targetSlug = $aliases[strtolower(trim($slug))] ?? $slug;
+
+        $cmsPage = CmsPage::where('slug', $targetSlug)
             ->where('is_published', true)
             ->first();
 

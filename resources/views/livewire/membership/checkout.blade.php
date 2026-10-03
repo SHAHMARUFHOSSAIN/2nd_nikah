@@ -55,8 +55,21 @@
                     </div>
 
                     <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-pink);">
-                        <span style="color: var(--text-muted);">Membership Plan:</span>
-                        <strong>{{ $plan->name }} ({{ $plan->duration_days }} Days)</strong>
+                        <span style="color: var(--text-muted);">Service Product:</span>
+                        <strong style="color: var(--text-dark);">{{ $plan->name }} Digital Membership</strong>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-pink);">
+                        <span style="color: var(--text-muted);">Stock & Availability:</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.4rem; color: #065F46; font-weight: 700; font-size: 0.85rem; background: #DEF7EC; padding: 0.2rem 0.65rem; border-radius: 9999px;">
+                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #059669;"></span>
+                            Available / In Stock (Instant Digital Access)
+                        </span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-pink);">
+                        <span style="color: var(--text-muted);">Quantity:</span>
+                        <strong>1 License ({{ $plan->duration_days }} Days Access)</strong>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-pink);">
@@ -66,7 +79,10 @@
 
                     <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-pink);">
                         <span style="color: var(--text-muted);">Payment Gateway:</span>
-                        <strong style="color: #065F46;">🔒 SSLCommerz Gateway</strong>
+                        <strong style="color: #065F46; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <svg class="w-4 h-4 text-emerald-600 inline shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span>SSLCommerz Encrypted Gateway</span>
+                        </strong>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; font-size: 1.3rem; font-weight: 800; color: var(--primary);">
@@ -75,18 +91,38 @@
                     </div>
                 </div>
 
-                {{-- Checkout Note & Button --}}
-                <div style="background: var(--primary-light); border: 1px solid var(--border-pink); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.75rem; font-size: 0.875rem; color: var(--text-main); line-height: 1.5;">
-                    🛡️ <strong>Security Guarantee:</strong> Your transaction is encrypted and processed via SSLCommerz. We never store credit card numbers, CVV, PIN, or banking passwords.
+                {{-- Security Guarantee Banner --}}
+                <div style="background: var(--primary-light); border: 1px solid var(--border-pink); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-size: 0.875rem; color: var(--text-main); line-height: 1.5; display: flex; align-items: center; gap: 0.6rem;">
+                    <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <span><strong>Security Guarantee:</strong> Your transaction is encrypted and processed via SSLCommerz. We never store credit card numbers, CVV, PIN, or banking passwords.</span>
+                </div>
+
+                {{-- MANDATORY Compliance Checkbox (Terms, Privacy, Return & Refund Policy) --}}
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1rem 1.15rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.5; user-select: none;">
+                        <input type="checkbox" wire:model.live="agreeTerms" style="margin-top: 0.2rem; width: 1.15rem; height: 1.15rem; accent-color: #E11D48; cursor: pointer; flex-shrink: 0;">
+                        <span>
+                            I have read, understood and agree to the 
+                            <a href="/terms-and-conditions" target="_blank" style="color: #E11D48; font-weight: 700; text-decoration: underline;">Terms & Conditions</a>, 
+                            <a href="/privacy-policy" target="_blank" style="color: #E11D48; font-weight: 700; text-decoration: underline;">Privacy Policy</a>, and 
+                            <a href="/refund-policy" target="_blank" style="color: #E11D48; font-weight: 700; text-decoration: underline;">Return and Refund Policy</a> (7 to 10 working days settlement timeline).
+                        </span>
+                    </label>
+                    @if (! $agreeTerms)
+                        <div style="font-size: 0.75rem; color: #B45309; font-weight: 600; margin-top: 0.5rem; padding-left: 1.9rem; display: flex; align-items: center; gap: 0.35rem;">
+                            <span>⚠️</span> You must check this box to confirm agreement before placing your order.
+                        </div>
+                    @endif
                 </div>
 
                 <div>
-                    <button wire:click="initiatePayment" wire:loading.attr="disabled" type="button" class="btn btn-primary" style="width: 100%; padding: 0.9rem 1.5rem; font-size: 1.05rem; box-shadow: var(--shadow-md); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <span wire:loading.remove>
-                            🔒 Proceed to SSLCommerz Payment ({{ $plan->formatted_price }})
+                    <button wire:click="initiatePayment" wire:loading.attr="disabled" type="button" class="btn btn-primary" style="width: 100%; padding: 0.95rem 1.5rem; font-size: 1.05rem; box-shadow: var(--shadow-md); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; opacity: {{ $agreeTerms ? '1' : '0.6' }}; cursor: {{ $agreeTerms ? 'pointer' : 'not-allowed' }};">
+                        <span wire:loading.remove style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span>Proceed to SSLCommerz Payment ({{ $plan->formatted_price }})</span>
                         </span>
-                        <span wire:loading style="display: none;">
-                            ⏳ Connecting to SSLCommerz...
+                        <span wire:loading style="display: none; align-items: center; gap: 0.5rem;">
+                            <span>Connecting to SSLCommerz...</span>
                         </span>
                     </button>
                 </div>
