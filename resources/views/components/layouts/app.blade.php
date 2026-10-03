@@ -366,33 +366,210 @@
             </div>
 
             {{-- SSLCommerz Official Payment Methods & Security Assurance Panel (Enterprise Grade) --}}
-            <div class="bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl text-center space-y-6">
+            <div class="bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl space-y-7">
                 
-                {{-- Header Badge & Title --}}
-                <div class="space-y-2">
-                    <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        <span>100% SECURE & ENCRYPTED PAYMENTS VIA SSLCOMMERZ</span>
+                {{-- Header with SSLCommerz Brand & Security Title --}}
+                <div class="flex flex-col md:flex-row items-center justify-between gap-5 border-b border-slate-800/80 pb-6 text-center md:text-left">
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="bg-white px-4 py-2.5 rounded-2xl shadow-lg border border-white/90 shrink-0">
+                            <img src="{{ asset('images/sslcommerz-logo.png') }}" 
+                                 alt="SSLCommerz Certified Payment Gateway" 
+                                 class="h-7 sm:h-8 w-auto object-contain">
+                        </div>
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm mb-1">
+                                <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                <span>100% SECURE & ENCRYPTED PAYMENTS VIA SSLCOMMERZ</span>
+                            </div>
+                            <h3 class="text-base sm:text-xl font-black text-white tracking-tight">
+                                SSLCommerz Verified Payment Methods
+                            </h3>
+                        </div>
                     </div>
-                    <h3 class="text-base sm:text-xl font-black text-white tracking-tight">
-                        SSLCommerz Verified Payment Methods
-                    </h3>
-                    <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        We accept Visa, Mastercard, American Express, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. All transactions are protected with bank-grade 256-bit SSL encryption.
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-md md:text-right leading-relaxed">
+                        We accept Visa, Mastercard, AMEX, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. Protected with bank-grade 256-bit SSL encryption.
                     </p>
                 </div>
 
-                {{-- Prominent Payment Banner --}}
-                <div class="flex justify-center items-center">
-                    <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-xl border border-white/90 max-w-4xl w-full flex items-center justify-center transition-transform hover:scale-[1.01]">
+                {{-- Large, Crisp & High-Visibility Payment Method Cards (Categorized) --}}
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    
+                    {{-- 1. Mobile Banking / MFS (Large Icons) --}}
+                    <div class="bg-slate-900/90 rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                                <h4 class="text-xs font-black uppercase tracking-wider text-rose-400">Mobile Banking (MFS)</h4>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-semibold">Instant Pay</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+                            {{-- bKash --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/bkash.png') }}" alt="bKash" class="max-h-9 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-rose-600 transition">bKash</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Personal / App</span>
+                                </div>
+                            </div>
+                            {{-- Nagad --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/nagad.png') }}" alt="Nagad" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-amber-600 transition">Nagad</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Postal Cash</span>
+                                </div>
+                            </div>
+                            {{-- Rocket --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/rocket.png') }}" alt="Rocket" class="max-h-9 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-purple-600 transition">Rocket</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">DBBL MFS</span>
+                                </div>
+                            </div>
+                            {{-- Upay --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/upay.png') }}" alt="Upay" class="max-h-9 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-blue-600 transition">Upay</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">UCB Digital</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 2. Cards & International (Large Icons) --}}
+                    <div class="bg-slate-900/90 rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                                <h4 class="text-xs font-black uppercase tracking-wider text-blue-400">Debit / Credit Cards</h4>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-semibold">Local & Global</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+                            {{-- Visa --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/visa.png') }}" alt="Visa" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-blue-600 transition">Visa</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Debit / Credit</span>
+                                </div>
+                            </div>
+                            {{-- Mastercard --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/mastercard.png') }}" alt="Mastercard" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-amber-600 transition">Mastercard</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Worldwide</span>
+                                </div>
+                            </div>
+                            {{-- American Express --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/amex.png') }}" alt="American Express" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-cyan-600 transition">AMEX</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">American Express</span>
+                                </div>
+                            </div>
+                            {{-- DBBL Nexus --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/nexus.png') }}" alt="DBBL Nexus" class="max-h-7 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-emerald-600 transition">Nexus</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">DBBL Cards</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 3. Net & Islamic Banking (Large Icons) --}}
+                    <div class="bg-slate-900/90 rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                <h4 class="text-xs font-black uppercase tracking-wider text-emerald-400">Net & Islamic Banking</h4>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-semibold">Direct Debit</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+                            {{-- Islami Bank --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/ibbl.png') }}" alt="Islami Bank Bangladesh" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-emerald-700 transition">IBBL</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Islami Bank</span>
+                                </div>
+                            </div>
+                            {{-- City Bank --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/citybank.png') }}" alt="City Bank Citytouch" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-rose-600 transition">City Bank</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Citytouch Net</span>
+                                </div>
+                            </div>
+                            {{-- Bank Asia --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/bankasia.png') }}" alt="Bank Asia" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-blue-600 transition">Bank Asia</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Internet Banking</span>
+                                </div>
+                            </div>
+                            {{-- MTB --}}
+                            <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-[1.02] transition-all group">
+                                <div class="w-12 h-10 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('images/gateways/mtbl.png') }}" alt="Mutual Trust Bank" class="max-h-8 max-w-full object-contain">
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-black text-slate-900 block leading-tight group-hover:text-blue-700 transition">MTB</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">Mutual Trust</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- Official SSLCommerz Compliance Banner Container --}}
+                <div class="bg-slate-900/60 rounded-2xl p-4 sm:p-5 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="text-left space-y-1">
+                        <span class="text-xs font-extrabold text-white block">Official SSLCommerz Multi-Channel Payment Engine</span>
+                        <span class="text-[11px] text-slate-400 block">Seamless 3D-Secure payment redirection with instant automated activation</span>
+                    </div>
+                    <div class="bg-white rounded-xl px-4 py-2 shadow-sm border border-white/80 max-w-md w-full flex items-center justify-center">
                         <img src="{{ asset('images/sslcommerz-banner.png') }}" 
                              alt="SSLCommerz Verified Payment Methods - Visa, Mastercard, AMEX, bKash, Nagad, Rocket, Upay, Bank Transfer" 
-                             class="w-full h-auto max-h-24 sm:max-h-28 md:max-h-32 object-contain">
+                             class="w-full h-auto max-h-7 sm:max-h-8 object-contain">
                     </div>
                 </div>
 
                 {{-- Security Trust Highlights Bar --}}
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 max-w-4xl mx-auto text-left">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1 text-left">
                     <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3 rounded-xl">
                         <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         <div>

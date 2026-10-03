@@ -91,6 +91,24 @@
                     </div>
                 </div>
 
+                {{-- Supported Payment Methods Visual Logos --}}
+                <div style="background: #FFFFFF; border: 1px solid var(--border-pink); padding: 0.85rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Accepted Payment Methods</span>
+                        <span style="color: #059669; font-weight: 800;">Instant Digital Activation</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;">
+                        <span title="bKash" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/bkash.png') }}" alt="bKash" style="height: 24px; width: auto; object-fit: contain;"></span>
+                        <span title="Nagad" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/nagad.png') }}" alt="Nagad" style="height: 22px; width: auto; object-fit: contain;"></span>
+                        <span title="Rocket" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/rocket.png') }}" alt="Rocket" style="height: 24px; width: auto; object-fit: contain;"></span>
+                        <span title="Upay" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/upay.png') }}" alt="Upay" style="height: 24px; width: auto; object-fit: contain;"></span>
+                        <span title="Visa" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/visa.png') }}" alt="Visa" style="height: 22px; width: auto; object-fit: contain;"></span>
+                        <span title="Mastercard" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/mastercard.png') }}" alt="Mastercard" style="height: 22px; width: auto; object-fit: contain;"></span>
+                        <span title="AMEX" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/amex.png') }}" alt="AMEX" style="height: 22px; width: auto; object-fit: contain;"></span>
+                        <span title="DBBL Nexus" style="background: #FFF; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.25rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; height: 34px;"><img src="{{ asset('images/gateways/nexus.png') }}" alt="Nexus" style="height: 20px; width: auto; object-fit: contain;"></span>
+                    </div>
+                </div>
+
                 {{-- Security Guarantee Banner --}}
                 <div style="background: var(--primary-light); border: 1px solid var(--border-pink); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-size: 0.875rem; color: var(--text-main); line-height: 1.5; display: flex; align-items: center; gap: 0.6rem;">
                     <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
