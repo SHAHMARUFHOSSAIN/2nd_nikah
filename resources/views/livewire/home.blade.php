@@ -1,86 +1,245 @@
 <div>
-    {{-- Hero Section --}}
+    {{-- Hero Section (Ultra Premium Matrimonial Experience) --}}
     @if (\App\Models\Setting::get('hero_enabled', true))
         @php
             $heroImageUrl = \App\Models\Setting::getAssetUrl('hero_image') ?: \App\Models\Setting::getAssetUrl('hero_image_path');
         @endphp
-        <section class="relative bg-gradient-to-br from-rose-50/70 via-pink-50/40 to-white py-12 md:py-20 border-b border-rose-100/80 overflow-hidden">
-            <div class="container px-4 mx-auto max-w-7xl">
-                @if ($heroImageUrl)
-                    {{-- 2-Column Hero Layout when Image is Uploaded --}}
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
-                        <div class="lg:col-span-7 text-center lg:text-left">
-                            <span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-600 border border-rose-200/80 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-4 shadow-2xs">
-                                <span>✨ {{ \App\Models\Setting::get('hero_eyebrow', 'MATRIMONIAL PLATFORM') }}</span>
-                            </span>
-                            
-                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight mb-4 tracking-tight">
-                                {!! \App\Models\Setting::get('hero_heading', 'Every Heart Deserves a <span class="text-rose-600">2nd Chance</span>') !!}
-                            </h1>
-                            
-                            <p class="text-slate-600 text-sm md:text-lg mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
-                                {{ \App\Models\Setting::get('hero_subtitle', 'Welcome to 2nd Nikah — a dignified, trusted, and respectful environment tailored for individuals looking to embark on their second chapter of life with sincerity, dignity, and faith.') }}
-                            </p>
-                            
-                            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                                <x-ui.button :href="\App\Models\Setting::get('hero_cta_primary_url', '/members')" variant="primary" size="lg">
-                                    {{ \App\Models\Setting::get('hero_cta_primary_text', 'Browse Verified Members') }}
-                                </x-ui.button>
-                                @guest
-                                    <x-ui.button :href="\App\Models\Setting::get('hero_cta_secondary_url', '/register')" variant="outline" size="lg">
-                                        {{ \App\Models\Setting::get('hero_cta_secondary_text', 'Create Your Account') }}
-                                    </x-ui.button>
-                                @else
-                                    <x-ui.button :href="route('dashboard')" variant="outline" size="lg">
-                                        Go to Dashboard
-                                    </x-ui.button>
-                                @endguest
-                            </div>
-                        </div>
+        <section class="relative bg-gradient-to-br from-rose-50/80 via-pink-50/40 to-slate-50/80 pt-14 pb-16 md:pt-20 md:pb-24 border-b border-rose-100/80 overflow-hidden">
+            {{-- Ambient Glow Blobs --}}
+            <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[850px] h-[480px] bg-gradient-to-tr from-rose-300/30 via-pink-200/25 to-amber-100/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(#e11d480d_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
 
-                        {{-- Uploaded Hero Image Display --}}
-                        <div class="lg:col-span-5 relative">
-                            <div class="relative mx-auto max-w-md lg:max-w-none">
-                                <div class="absolute -inset-2 bg-gradient-to-r from-rose-400 to-pink-500 rounded-3xl blur-lg opacity-25"></div>
-                                <div class="relative bg-white p-2 rounded-3xl border border-rose-100 shadow-xl overflow-hidden">
-                                    <img src="{{ $heroImageUrl }}" alt="{{ \App\Models\Setting::get('site_name', '2nd Nikah') }} Hero" class="w-full h-auto max-h-[460px] object-cover rounded-2xl">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    {{-- Clean Centered Hero Layout when No Image Uploaded --}}
-                    <div class="max-w-3xl mx-auto text-center">
-                        <span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-600 border border-rose-200/80 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-4 shadow-2xs">
-                            <span>✨ {{ \App\Models\Setting::get('hero_eyebrow', 'MATRIMONIAL PLATFORM') }}</span>
-                        </span>
+            <div class="container px-4 mx-auto max-w-7xl relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-center">
+                    
+                    {{-- Left Column: Copy, CTAs, and Trust Proof --}}
+                    <div class="lg:col-span-7 text-center lg:text-left space-y-6">
                         
-                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-4 tracking-tight">
-                            {!! \App\Models\Setting::get('hero_heading', 'Every Heart Deserves a <span class="text-rose-600">2nd Chance</span>') !!}
+                        {{-- Eyebrow Badge --}}
+                        <div>
+                            <span class="inline-flex items-center gap-2 bg-white/95 backdrop-blur-md text-rose-700 border border-rose-200/90 text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-full shadow-sm">
+                                <span class="flex h-2 w-2 rounded-full bg-rose-600 animate-ping"></span>
+                                <span>✨ {{ \App\Models\Setting::get('hero_eyebrow', 'BANGLADESH\'S #1 TRUSTED 2ND MARRIAGE PLATFORM') }}</span>
+                            </span>
+                        </div>
+                        
+                        {{-- Heading --}}
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.15] tracking-tight">
+                            {!! \App\Models\Setting::get('hero_heading', 'Every Heart Deserves a <span class="bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 bg-clip-text text-transparent">Blessed 2nd Chance</span>') !!}
                         </h1>
                         
-                        <p class="text-slate-600 text-sm md:text-lg mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
+                        {{-- Subtitle --}}
+                        <p class="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
                             {{ \App\Models\Setting::get('hero_subtitle', 'Welcome to 2nd Nikah — a dignified, trusted, and respectful environment tailored for individuals looking to embark on their second chapter of life with sincerity, dignity, and faith.') }}
                         </p>
                         
-                        <div class="flex flex-wrap items-center justify-center gap-3">
-                            <x-ui.button :href="\App\Models\Setting::get('hero_cta_primary_url', '/members')" variant="primary" size="lg">
-                                {{ \App\Models\Setting::get('hero_cta_primary_text', 'Browse Verified Members') }}
-                            </x-ui.button>
+                        {{-- Action Buttons --}}
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-1">
+                            <a href="{{ \App\Models\Setting::get('hero_cta_primary_url', '/members') }}" class="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-rose-500/25 hover:shadow-2xl hover:shadow-rose-500/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group">
+                                <span>{{ \App\Models\Setting::get('hero_cta_primary_text', 'Browse Verified Members') }}</span>
+                                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
                             @guest
-                                <x-ui.button :href="\App\Models\Setting::get('hero_cta_secondary_url', '/register')" variant="outline" size="lg">
-                                    {{ \App\Models\Setting::get('hero_cta_secondary_text', 'Create Your Account') }}
-                                </x-ui.button>
+                                <a href="{{ \App\Models\Setting::get('hero_cta_secondary_url', '/register') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/95 hover:bg-white text-slate-800 font-extrabold text-sm sm:text-base border border-slate-200/90 shadow-md hover:border-rose-300 hover:text-rose-600 hover:-translate-y-0.5 transition-all duration-200">
+                                    <span>{{ \App\Models\Setting::get('hero_cta_secondary_text', 'Create Free Account') }}</span>
+                                </a>
                             @else
-                                <x-ui.button :href="route('dashboard')" variant="outline" size="lg">
-                                    Go to Dashboard
-                                </x-ui.button>
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/95 hover:bg-white text-slate-800 font-extrabold text-sm sm:text-base border border-slate-200/90 shadow-md hover:border-rose-300 hover:text-rose-600 hover:-translate-y-0.5 transition-all duration-200">
+                                    <span>Go to Dashboard</span>
+                                </a>
                             @endguest
                         </div>
+
+                        {{-- Micro Trust Indicators --}}
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs text-slate-600 font-bold pt-4 border-t border-rose-200/60">
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-black">✓</span>
+                                <span>100% NID Verified</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">🔒</span>
+                                <span>Photo Privacy Control</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs">💍</span>
+                                <span>Islamic Values & Dignity</span>
+                            </div>
+                        </div>
+
                     </div>
-                @endif
+
+                    {{-- Right Column: Showcase Card (Uploaded Image OR Interactive Quick Match Finder) --}}
+                    <div class="lg:col-span-5 relative">
+                        @if ($heroImageUrl)
+                            {{-- Uploaded Hero Image Showcase with Floating Trust Badges --}}
+                            <div class="relative mx-auto max-w-md lg:max-w-none">
+                                <div class="absolute -inset-3 bg-gradient-to-tr from-rose-500/25 via-pink-400/20 to-amber-300/20 rounded-3xl blur-xl opacity-75"></div>
+                                <div class="relative bg-white/90 backdrop-blur-md p-3 rounded-3xl border border-white shadow-2xl overflow-hidden group">
+                                    <img src="{{ $heroImageUrl }}" alt="{{ \App\Models\Setting::get('site_name', '2nd Nikah') }} Hero" class="w-full h-auto max-h-[440px] object-cover rounded-2xl group-hover:scale-[1.01] transition-transform duration-300">
+                                    <div class="absolute top-6 right-6 bg-slate-900/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-black px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>Verified Matches</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            {{-- Interactive Matrimonial Search & Quick Discovery Card --}}
+                            <div class="relative mx-auto max-w-md lg:max-w-none">
+                                <div class="absolute -inset-3 bg-gradient-to-tr from-rose-500/25 via-pink-400/20 to-purple-500/20 rounded-3xl blur-xl opacity-75"></div>
+                                <div class="relative bg-white/95 backdrop-blur-md p-6 sm:p-7 rounded-3xl border border-white shadow-2xl space-y-5">
+                                    
+                                    {{-- Card Header --}}
+                                    <div class="flex items-center justify-between pb-3 border-b border-rose-100/80">
+                                        <div>
+                                            <span class="text-xs font-black uppercase tracking-wider text-rose-600 block">QUICK MATCH DISCOVERY</span>
+                                            <h3 class="text-base sm:text-lg font-black text-slate-900">Find Your Life Partner</h3>
+                                        </div>
+                                        <span class="text-2xl">💍</span>
+                                    </div>
+
+                                    {{-- Quick Match Form Leading to /members --}}
+                                    <form action="{{ route('members.index') }}" method="GET" class="space-y-3.5">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1.5">I am looking for</label>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-50 cursor-pointer font-bold text-xs text-rose-700 transition">
+                                                    <input type="radio" name="gender" value="female" class="text-rose-600 focus:ring-rose-500 accent-rose-600" checked>
+                                                    <span>A Bride (পাত্রী)</span>
+                                                </label>
+                                                <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-100 cursor-pointer font-bold text-xs text-slate-700 transition">
+                                                    <input type="radio" name="gender" value="male" class="text-rose-600 focus:ring-rose-500 accent-rose-600">
+                                                    <span>A Groom (পাত্র)</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-2.5">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1">Marital Status</label>
+                                                <select name="marital_status" class="w-full text-xs font-semibold rounded-xl border-slate-200 bg-slate-50/70 p-2.5 focus:border-rose-400 focus:ring-rose-400">
+                                                    <option value="">Any Status</option>
+                                                    <option value="divorced">Divorced (তালাকপ্রাপ্ত)</option>
+                                                    <option value="widowed">Widowed (বিধবা/বিপত্নীক)</option>
+                                                    <option value="single">Single (অবিবাহিত)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1">Division</label>
+                                                <select name="division" class="w-full text-xs font-semibold rounded-xl border-slate-200 bg-slate-50/70 p-2.5 focus:border-rose-400 focus:ring-rose-400">
+                                                    <option value="">All Divisions</option>
+                                                    <option value="Dhaka">Dhaka</option>
+                                                    <option value="Chittagong">Chittagong</option>
+                                                    <option value="Sylhet">Sylhet</option>
+                                                    <option value="Rajshahi">Rajshahi</option>
+                                                    <option value="Khulna">Khulna</option>
+                                                    <option value="Barisal">Barisal</option>
+                                                    <option value="Rangpur">Rangpur</option>
+                                                    <option value="Mymensingh">Mymensingh</option>
+                                                    <option value="Abroad">Abroad (প্রবাসী)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group">
+                                            <span>Search Verified Profiles</span>
+                                            <svg class="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                        </button>
+                                    </form>
+
+                                    {{-- Mini Social Proof --}}
+                                    <div class="pt-2 flex items-center justify-between text-[11px] text-slate-500 font-semibold border-t border-slate-100">
+                                        <span class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                            <span>Active Members Online</span>
+                                        </span>
+                                        <span class="text-rose-600 font-bold">100% Privacy Shield</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                </div>
             </div>
         </section>
+    @endif
+
+    {{-- Hero App Download Bar (Manageable via Admin Panel: Active/Inactive & URLs) --}}
+    @php
+        $heroAppEnabled = (bool) \App\Models\Setting::get('hero_app_download_enabled', true);
+        $playEnabled = (bool) \App\Models\Setting::get('app_download_google_play_enabled', true);
+        $appleEnabled = (bool) \App\Models\Setting::get('app_download_apple_store_enabled', true);
+        $playUrl = \App\Models\Setting::get('app_download_google_play_url') ?: (\App\Models\Setting::get('play_store_url') ?: 'https://play.google.com/store/apps');
+        $appleUrl = \App\Models\Setting::get('app_download_apple_store_url') ?: (\App\Models\Setting::get('app_store_url') ?: 'https://apps.apple.com');
+    @endphp
+
+    @if ($heroAppEnabled && ($playEnabled || $appleEnabled))
+        <div class="container px-4 mx-auto max-w-7xl relative z-20 -mt-6 sm:-mt-8 md:-mt-10 mb-8 sm:mb-12">
+            <div class="bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-slate-800/90 relative overflow-hidden group">
+                {{-- Ambient Light Accent --}}
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-20 -top-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+                    
+                    {{-- Left Title & Info --}}
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 max-w-2xl">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-0.5 shadow-lg shadow-rose-500/25 shrink-0 flex items-center justify-center">
+                            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                                <svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 text-rose-400 text-xs font-black uppercase tracking-wider mb-1">
+                                <span>📱 OFFICIAL 2ND NIKAH APPS</span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight">
+                                {{ \App\Models\Setting::get('hero_app_download_title', 'Download The 2nd Nikah Mobile App') }}
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+                                {{ \App\Models\Setting::get('hero_app_download_subtitle', 'Stay connected anywhere with instant real-time notifications, private biometric chat & secure match alerts.') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Right: The 2 App Download Options (Google Play & App Store) --}}
+                    <div class="flex flex-wrap sm:flex-nowrap items-center justify-center gap-3.5 shrink-0 w-full sm:w-auto">
+                        
+                        {{-- Option 1: Google Play Store Button (Controlled by Admin Panel) --}}
+                        @if ($playEnabled)
+                            <a href="{{ $playUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3.5 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl border border-slate-700/80 hover:border-emerald-400/80 transition-all duration-200 shadow-lg hover:shadow-emerald-500/10 hover:-translate-y-0.5 group w-full sm:w-auto justify-center">
+                                <svg class="w-7 h-7 shrink-0" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M47.2 22.3C44.7 24.8 43.3 28.7 43.3 33.9v444.2c0 5.2 1.4 9.1 3.9 11.6l1.3 1.2 248.6-248.6v-5.8L48.5 21.1l-1.3 1.2z" fill="#00D2FF"/>
+                                    <path d="M379.2 324.4l-82.1-82.1v-5.8l82.1-82.1 1.8 1 97.4 55.3c27.8 15.8 27.8 41.7 0 57.5l-97.2 55.2-2 1z" fill="#FFCF00"/>
+                                    <path d="M381.2 323.4L297.1 239.3 48.5 487.9c9.2 9.7 24.4 10.9 41.5 1.3l291.2-165.8" fill="#FF3A44"/>
+                                    <path d="M381.2 188.6L90 22.8C72.9 13.1 57.7 14.4 48.5 24.1L297.1 272.7l84.1-84.1z" fill="#00E676"/>
+                                </svg>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold leading-tight">GET IT ON</span>
+                                    <span class="text-sm font-black text-white group-hover:text-emerald-400 transition leading-tight">Google Play</span>
+                                </div>
+                            </a>
+                        @endif
+
+                        {{-- Option 2: Apple App Store Button (Controlled by Admin Panel) --}}
+                        @if ($appleEnabled)
+                            <a href="{{ $appleUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3.5 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl border border-slate-700/80 hover:border-rose-400/80 transition-all duration-200 shadow-lg hover:shadow-rose-500/10 hover:-translate-y-0.5 group w-full sm:w-auto justify-center">
+                                <svg class="w-7 h-7 shrink-0 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.13.64-2.81 1.44-.61.71-1.14 1.85-1 2.95 1.08.08 2.17-.55 2.82-1.35z"/>
+                                </svg>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold leading-tight">DOWNLOAD ON THE</span>
+                                    <span class="text-sm font-black text-white group-hover:text-rose-400 transition leading-tight">App Store</span>
+                                </div>
+                            </a>
+                        @endif
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     @endif
 
     {{-- Value Pillars Section --}}

@@ -53,6 +53,23 @@ class WebsiteManagement extends Page implements HasForms
             $settings['app_download_apple_store_url'] = $settings['app_store_url'];
         }
 
+        // Set defaults for Hero App Download options if not set
+        if (! isset($settings['hero_app_download_enabled'])) {
+            $settings['hero_app_download_enabled'] = true;
+        }
+        if (! isset($settings['hero_app_download_title'])) {
+            $settings['hero_app_download_title'] = 'Get The Official Mobile App';
+        }
+        if (! isset($settings['hero_app_download_subtitle'])) {
+            $settings['hero_app_download_subtitle'] = 'Instant match notifications, private biometric chat & real-time updates on Android & iOS.';
+        }
+        if (! isset($settings['app_download_google_play_enabled'])) {
+            $settings['app_download_google_play_enabled'] = true;
+        }
+        if (! isset($settings['app_download_apple_store_enabled'])) {
+            $settings['app_download_apple_store_enabled'] = true;
+        }
+
         $this->form->fill($settings);
     }
 
@@ -149,6 +166,49 @@ class WebsiteManagement extends Page implements HasForms
                                             ->maxSize(10240)
                                             ->columnSpanFull()
                                             ->helperText('Direct file upload for Desktop Hero banner image. Max: 10MB. Overrides default gradient.'),
+                                    ]),
+
+                                Section::make('Hero App Download Bar (Under Hero Section)')
+                                    ->description('Manage the Google Play and Apple App Store buttons displayed right beneath the Hero section. Activate, inactivate, or customize links anytime.')
+                                    ->schema([
+                                        Toggle::make('hero_app_download_enabled')
+                                            ->label('Show App Download Bar below Hero')
+                                            ->helperText('Master Switch: Toggle ON to show or OFF to hide the app download option below the hero section.')
+                                            ->default(true),
+
+                                        TextInput::make('hero_app_download_title')
+                                            ->label('App Bar Heading')
+                                            ->default('Get The Official Mobile App')
+                                            ->placeholder('e.g. Get The Official Mobile App'),
+
+                                        TextInput::make('hero_app_download_subtitle')
+                                            ->label('App Bar Subtitle')
+                                            ->default('Instant match notifications, private biometric chat & real-time updates on Android & iOS.')
+                                            ->columnSpanFull(),
+
+                                        Grid::make(2)->schema([
+                                            Section::make('Google Play Store Option')
+                                                ->schema([
+                                                    Toggle::make('app_download_google_play_enabled')
+                                                        ->label('Google Play Button Active')
+                                                        ->helperText('Activate or Inactivate Google Play Store button')
+                                                        ->default(true),
+                                                    TextInput::make('app_download_google_play_url')
+                                                        ->label('Google Play Store URL')
+                                                        ->placeholder('https://play.google.com/store/apps/details?id=...'),
+                                                ]),
+
+                                            Section::make('Apple App Store Option')
+                                                ->schema([
+                                                    Toggle::make('app_download_apple_store_enabled')
+                                                        ->label('Apple App Store Button Active')
+                                                        ->helperText('Activate or Inactivate Apple App Store button')
+                                                        ->default(true),
+                                                    TextInput::make('app_download_apple_store_url')
+                                                        ->label('Apple App Store URL')
+                                                        ->placeholder('https://apps.apple.com/app/...'),
+                                                ]),
+                                        ]),
                                     ]),
 
                                 Section::make('Homepage Content Sections')

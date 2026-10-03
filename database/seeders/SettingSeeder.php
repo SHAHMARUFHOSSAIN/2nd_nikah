@@ -32,6 +32,9 @@ class SettingSeeder extends Seeder
             ['group' => 'hero', 'key' => 'hero_cta_secondary_text', 'value' => 'Browse Directory', 'type' => 'string', 'description' => 'Hero secondary CTA text.'],
             ['group' => 'hero', 'key' => 'hero_cta_secondary_url', 'value' => '/members', 'type' => 'string', 'description' => 'Hero secondary CTA URL.'],
             ['group' => 'hero', 'key' => 'hero_image', 'value' => '', 'type' => 'string', 'description' => 'Hero background/banner image.'],
+            ['group' => 'hero', 'key' => 'hero_app_download_enabled', 'value' => '1', 'type' => 'boolean', 'description' => 'Enable Hero app download bar.'],
+            ['group' => 'hero', 'key' => 'hero_app_download_title', 'value' => 'Download The 2nd Nikah Mobile App', 'type' => 'string', 'description' => 'Hero app download bar title.'],
+            ['group' => 'hero', 'key' => 'hero_app_download_subtitle', 'value' => 'Stay connected anywhere with instant real-time notifications, private biometric chat & secure match alerts.', 'type' => 'string', 'description' => 'Hero app download bar subtitle.'],
 
             // Homepage Sections Controls
             ['group' => 'homepage', 'key' => 'section_how_it_works_enabled', 'value' => '1', 'type' => 'boolean', 'description' => 'Enable How It Works section.'],
