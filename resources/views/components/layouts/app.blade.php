@@ -331,49 +331,98 @@
                 <div class="space-y-4">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider">Mobile App & Trust</h4>
                     
-                    {{-- App Badges --}}
-                    <div class="flex flex-col gap-2">
-                        @if ($playStoreUrl = \App\Models\Setting::get('app_play_store_url'))
-                            <a href="{{ $playStoreUrl }}" target="_blank" class="inline-flex items-center gap-2.5 bg-slate-900 border border-slate-800 hover:border-rose-500/50 px-3.5 py-2 rounded-xl text-white transition shadow-xs group">
-                                <svg class="w-5 h-5 shrink-0" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M47.2 22.3C44.7 24.8 43.3 28.7 43.3 33.9v444.2c0 5.2 1.4 9.1 3.9 11.6l1.3 1.2 248.6-248.6v-5.8L48.5 21.1l-1.3 1.2z" fill="#00D2FF"/>
-                                    <path d="M379.2 324.4l-82.1-82.1v-5.8l82.1-82.1 1.8 1 97.4 55.3c27.8 15.8 27.8 41.7 0 57.5l-97.2 55.2-2 1z" fill="#FFCF00"/>
-                                    <path d="M381.2 323.4L297.1 239.3 48.5 487.9c9.2 9.7 24.4 10.9 41.5 1.3l291.2-165.8" fill="#FF3A44"/>
-                                    <path d="M381.2 188.6L90 22.8C72.9 13.1 57.7 14.4 48.5 24.1L297.1 272.7l84.1-84.1z" fill="#00E676"/>
-                                </svg>
-                                <div class="flex flex-col text-left">
-                                    <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">GET IT ON</span>
-                                    <span class="text-xs font-black text-white group-hover:text-rose-400 transition">Google Play</span>
-                                </div>
-                            </a>
-                        @endif
-                        @if ($appStoreUrl = \App\Models\Setting::get('app_store_url'))
-                            <a href="{{ $appStoreUrl }}" target="_blank" class="inline-flex items-center gap-2.5 bg-slate-900 border border-slate-800 hover:border-rose-500/50 px-3.5 py-2 rounded-xl text-white transition shadow-xs group">
-                                <svg class="w-5 h-5 shrink-0 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.13.64-2.81 1.44-.61.71-1.14 1.85-1 2.95 1.08.08 2.17-.55 2.82-1.35z"/>
-                                </svg>
-                                <div class="flex flex-col text-left">
-                                    <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">DOWNLOAD ON THE</span>
-                                    <span class="text-xs font-black text-white group-hover:text-rose-400 transition">App Store</span>
-                                </div>
-                            </a>
-                        @endif
+                    @php
+                        $playStoreUrl = \App\Models\Setting::get('app_play_store_url') ?: 'https://play.google.com/store/apps';
+                        $appStoreUrl = \App\Models\Setting::get('app_store_url') ?: 'https://apps.apple.com';
+                    @endphp
+
+                    {{-- App Badges (Both Google Play and App Store ALWAYS displayed) --}}
+                    <div class="flex flex-col gap-2.5">
+                        <a href="{{ $playStoreUrl }}" target="_blank" class="inline-flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-emerald-500/70 hover:bg-slate-800/90 px-4 py-2.5 rounded-2xl text-white transition-all shadow-md group">
+                            <svg class="w-6 h-6 shrink-0" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M47.2 22.3C44.7 24.8 43.3 28.7 43.3 33.9v444.2c0 5.2 1.4 9.1 3.9 11.6l1.3 1.2 248.6-248.6v-5.8L48.5 21.1l-1.3 1.2z" fill="#00D2FF"/>
+                                <path d="M379.2 324.4l-82.1-82.1v-5.8l82.1-82.1 1.8 1 97.4 55.3c27.8 15.8 27.8 41.7 0 57.5l-97.2 55.2-2 1z" fill="#FFCF00"/>
+                                <path d="M381.2 323.4L297.1 239.3 48.5 487.9c9.2 9.7 24.4 10.9 41.5 1.3l291.2-165.8" fill="#FF3A44"/>
+                                <path d="M381.2 188.6L90 22.8C72.9 13.1 57.7 14.4 48.5 24.1L297.1 272.7l84.1-84.1z" fill="#00E676"/>
+                            </svg>
+                            <div class="flex flex-col text-left">
+                                <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-tight">GET IT ON</span>
+                                <span class="text-xs font-black text-white group-hover:text-emerald-400 transition leading-tight">Google Play</span>
+                            </div>
+                        </a>
+
+                        <a href="{{ $appStoreUrl }}" target="_blank" class="inline-flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-rose-500/70 hover:bg-slate-800/90 px-4 py-2.5 rounded-2xl text-white transition-all shadow-md group">
+                            <svg class="w-6 h-6 shrink-0 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.13.64-2.81 1.44-.61.71-1.14 1.85-1 2.95 1.08.08 2.17-.55 2.82-1.35z"/>
+                            </svg>
+                            <div class="flex flex-col text-left">
+                                <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-tight">DOWNLOAD ON THE</span>
+                                <span class="text-xs font-black text-white group-hover:text-rose-400 transition leading-tight">App Store</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
             </div>
 
-            {{-- SSLCommerz Official Payment Methods Banner Section (Mandatory Gateway Requirement) --}}
-            <div class="pt-2 pb-6 border-b border-slate-800/80 text-center space-y-3">
-                <span class="text-[11px] font-black uppercase tracking-widest text-slate-400 block">
-                    100% SECURE & ENCRYPTED PAYMENTS VIA SSLCOMMERZ
-                </span>
-                <div class="flex justify-center items-center px-2">
-                    <img src="{{ asset('images/sslcommerz-banner.png') }}" alt="SSLCommerz Verified Payment Methods - Visa, Mastercard, AMEX, bKash, Nagad, Rocket, Upay, Bank Transfer" class="max-w-full h-auto max-h-12 sm:max-h-14 object-contain rounded-xl bg-white p-1.5 shadow-md">
+            {{-- SSLCommerz Official Payment Methods & Security Assurance Panel (Enterprise Grade) --}}
+            <div class="bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl border border-slate-800/90 p-6 sm:p-8 shadow-2xl text-center space-y-6">
+                
+                {{-- Header Badge & Title --}}
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <span>100% SECURE & ENCRYPTED PAYMENTS VIA SSLCOMMERZ</span>
+                    </div>
+                    <h3 class="text-base sm:text-xl font-black text-white tracking-tight">
+                        SSLCommerz Verified Payment Methods
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                        We accept Visa, Mastercard, American Express, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. All transactions are protected with bank-grade 256-bit SSL encryption.
+                    </p>
                 </div>
-                <p class="text-[11px] text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    We accept Visa, Mastercard, American Express, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. All transactions are protected with bank-grade 256-bit SSL encryption.
-                </p>
+
+                {{-- Prominent Payment Banner --}}
+                <div class="flex justify-center items-center">
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-xl border border-white/90 max-w-4xl w-full flex items-center justify-center transition-transform hover:scale-[1.01]">
+                        <img src="{{ asset('images/sslcommerz-banner.png') }}" 
+                             alt="SSLCommerz Verified Payment Methods - Visa, Mastercard, AMEX, bKash, Nagad, Rocket, Upay, Bank Transfer" 
+                             class="w-full h-auto max-h-24 sm:max-h-28 md:max-h-32 object-contain">
+                    </div>
+                </div>
+
+                {{-- Security Trust Highlights Bar --}}
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 max-w-4xl mx-auto text-left">
+                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3 rounded-xl">
+                        <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <div>
+                            <span class="text-xs font-bold text-white block">256-Bit SSL</span>
+                            <span class="text-[10px] text-slate-400">Encrypted Transactions</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3 rounded-xl">
+                        <svg class="w-5 h-5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <div>
+                            <span class="text-xs font-bold text-white block">PCI-DSS Level 1</span>
+                            <span class="text-[10px] text-slate-400">Certified Compliance</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3 rounded-xl">
+                        <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Instant Activation</span>
+                            <span class="text-[10px] text-slate-400">Immediate Digital License</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3 rounded-xl">
+                        <svg class="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        <div>
+                            <span class="text-xs font-bold text-white block">All Payment Modes</span>
+                            <span class="text-[10px] text-slate-400">Cards, bKash & Nagad</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             {{-- Footer Bottom Bar --}}
