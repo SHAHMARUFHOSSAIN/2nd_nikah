@@ -45,7 +45,10 @@ class Checkout extends Component
         }
 
         if (! $this->agreeTerms) {
-            $this->errorMessage = 'You must read and agree to our Terms & Conditions, Privacy Policy, and Return & Refund Policy to proceed with payment.';
+            $isBdScope = ($this->country === 'Bangladesh' || str_ends_with($this->planSlug, '-bdt'));
+            $this->errorMessage = $isBdScope
+                ? 'পেমেন্ট সম্পন্ন করার পূর্বে আপনাকে অবশ্যই উপরোক্ত গুরুত্বপূর্ণ ঘোষণা, ইসলামী সতর্কতা, নো-রিফান্ড নীতিমালা ও ব্যবহারকারীর সম্মতিতে সম্মতি প্রদান করতে হবে।'
+                : 'You must read and agree to the Important Notice, Islamic Warning, Strict No-Refund Policy, and User Consent before proceeding with payment.';
             return;
         }
 

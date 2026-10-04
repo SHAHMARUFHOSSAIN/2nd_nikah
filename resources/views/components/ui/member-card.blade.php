@@ -140,8 +140,8 @@
         @if ($showActions)
             <div class="pt-3 border-t border-slate-100 flex items-center gap-2 mt-auto shrink-0 w-full">
                 {{-- View Profile Button --}}
-                <a href="{{ route('members.show', $profile->id) }}" class="btn btn-outline text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1 min-w-0" title="View Member Profile" aria-label="View {{ $profile->full_name }}'s profile">
-                    <span class="truncate">View Profile</span>
+                <a href="{{ route('members.show', $profile->id) }}" class="btn btn-outline text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 min-w-0" title="View Member Profile" aria-label="View {{ $profile->full_name }}'s profile">
+                    <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">View Profile</span>
                     <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
 
@@ -149,41 +149,41 @@
                     @if ($canMessage)
                         @if ($isPremium)
                             {{-- Active Message Action - Prominent Primary Highlight --}}
-                            <a href="{{ $messageRoute }}" class="btn btn-primary text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1.5 min-w-0 shadow-sm" title="Send Message" aria-label="Message {{ $profile->full_name }}">
+                            <a href="{{ $messageRoute }}" class="btn btn-primary text-xs font-bold py-2 px-2 flex-1 justify-center gap-1.5 min-w-0 shadow-sm" title="Send Message" aria-label="Message {{ $profile->full_name }}">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                                <span class="truncate">Message</span>
+                                <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Message</span>
                             </a>
                         @else
                             {{-- Premium Protected Message Action - Prominent Highlight with VIP badge --}}
-                            <a href="{{ route('membership.index') }}" class="btn btn-primary text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 min-w-0 shadow-sm" title="Upgrade to Premium to Message" aria-label="Message {{ $profile->full_name }} (VIP Required)">
+                            <a href="{{ route('membership.index') }}" class="btn btn-primary text-xs font-bold py-2 px-1.5 flex-1 justify-center gap-1 min-w-0 shadow-sm" title="Upgrade to Premium to Message" aria-label="Message {{ $profile->full_name }} (VIP Required)">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                                <span class="truncate">Message</span>
+                                <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Message</span>
                                 <span class="text-[9px] bg-amber-400 text-slate-900 font-extrabold px-1 py-0.2 rounded-full uppercase leading-none shrink-0">VIP</span>
                             </a>
                         @endif
                     @elseif ($hasSentInterest)
                         {{-- Interest Sent State --}}
-                        <span class="btn bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1 cursor-default min-w-0" title="Interest Request Sent" aria-label="Interest sent to {{ $profile->full_name }}">
+                        <span class="btn bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 cursor-default min-w-0" title="Interest Request Sent" aria-label="Interest sent to {{ $profile->full_name }}">
                             <svg class="w-3.5 h-3.5 text-emerald-600 fill-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                            <span class="truncate">Sent</span>
+                            <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Sent</span>
                         </span>
                     @elseif ($hasReceivedInterest)
                         {{-- Interest Received State --}}
-                        <a href="{{ route('members.show', $profile->id) }}" class="btn btn-primary text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1 min-w-0" title="View Interest Request" aria-label="Respond to {{ $profile->full_name }}'s interest">
+                        <a href="{{ route('members.show', $profile->id) }}" class="btn btn-primary text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 min-w-0" title="View Interest Request" aria-label="Respond to {{ $profile->full_name }}'s interest">
                             <svg class="w-3.5 h-3.5 text-white fill-white shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                            <span class="truncate">Respond</span>
+                            <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Respond</span>
                         </a>
                     @elseif ($isGuest)
                         {{-- Guest Interest Action --}}
-                        <a href="{{ route('login') }}" class="btn btn-primary text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1 min-w-0" title="Log in to send interest" aria-label="Send Interest to {{ $profile->full_name }}">
+                        <a href="{{ route('login') }}" class="btn btn-primary text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 min-w-0" title="Log in to send interest" aria-label="Send Interest to {{ $profile->full_name }}">
                             <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                            <span class="truncate">Interest</span>
+                            <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Interest</span>
                         </a>
                     @else
                         {{-- Authenticated Interest Action --}}
-                        <button type="button" wire:click="sendInterest({{ $targetUserId }})" wire:loading.attr="disabled" class="btn btn-primary text-xs font-bold py-2 px-2.5 flex-1 justify-center gap-1 min-w-0" title="Send Interest Proposal" aria-label="Send Interest to {{ $profile->full_name }}">
+                        <button type="button" wire:click="sendInterest({{ $targetUserId }})" wire:loading.attr="disabled" class="btn btn-primary text-xs font-bold py-2 px-2 flex-1 justify-center gap-1 min-w-0" title="Send Interest Proposal" aria-label="Send Interest to {{ $profile->full_name }}">
                             <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                            <span class="truncate">Interest</span>
+                            <span class="whitespace-nowrap text-[11px] sm:text-xs font-bold">Interest</span>
                         </button>
                     @endif
                 @endif

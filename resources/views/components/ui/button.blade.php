@@ -9,7 +9,7 @@
 ])
 
 @php
-    $baseClasses = 'btn inline-flex items-center justify-center font-extrabold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shrink-0 select-none whitespace-nowrap cursor-pointer text-decoration-none';
+    $baseClasses = 'btn inline-flex items-center justify-center font-extrabold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 select-none whitespace-normal sm:whitespace-nowrap text-center max-w-full cursor-pointer text-decoration-none';
 
     $sizeClasses = match($size) {
         'sm' => 'px-3 py-1.5 text-xs rounded-xl gap-1.5 min-h-[32px]',

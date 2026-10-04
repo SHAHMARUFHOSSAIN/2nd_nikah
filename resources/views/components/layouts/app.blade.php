@@ -270,7 +270,7 @@
 
     {{-- Enterprise Footer --}}
     @unless (request()->routeIs('member.messages.*'))
-    <footer class="site-footer bg-slate-950 text-slate-400 pt-16 pb-12 mt-auto border-t border-slate-800">
+    <footer class="site-footer bg-slate-950 text-slate-300 pt-16 pb-12 mt-auto border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-slate-800/80">
                 
@@ -286,23 +286,23 @@
                         <h3 class="text-2xl font-black text-white tracking-tight">{{ \App\Models\Setting::get('site_name', '2nd Nikah') }}</h3>
                     @endif
                     <p class="text-sm font-semibold text-rose-400">{{ \App\Models\Setting::get('site_tagline', 'Every Heart Deserves a 2nd Chance') }}</p>
-                    <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+                    <p class="text-xs text-slate-300 max-w-sm leading-relaxed">
                         {{ \App\Models\Setting::get('footer_description', 'A dignified, trustworthy matrimonial platform designed with privacy, integrity, and respect.') }}
                     </p>
 
                     {{-- Mandatory Merchant & Trade License Details --}}
-                    <div class="pt-2 text-xs text-slate-400 space-y-1 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/90 max-w-sm">
-                        <p><strong class="text-slate-200">Organization:</strong> {{ \App\Models\Setting::get('company_name', '2ndnikah') }}</p>
-                        <p><strong class="text-slate-200">Trade License:</strong> {{ \App\Models\Setting::get('trade_license_number', 'TRAD/DNCC/025984/2024') }}</p>
-                        <p><strong class="text-slate-200">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', 'Dhaka-1100, Bangladesh') }}</p>
-                        <p><strong class="text-slate-200">Support Desk:</strong> 2ndnikahsupport@gmail.com | +880 1613591741</p>
+                    <div class="pt-2 text-xs text-slate-300 space-y-1.5 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 max-w-sm">
+                        <p><strong class="text-white font-bold">Organization:</strong> {{ \App\Models\Setting::get('company_name', '2ndnikah') }}</p>
+                        <p><strong class="text-white font-bold">Trade License:</strong> {{ \App\Models\Setting::get('trade_license_number', 'TRAD/DNCC/025984/2024') }}</p>
+                        <p><strong class="text-white font-bold">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', 'Dhaka-1100, Bangladesh') }}</p>
+                        <p><strong class="text-white font-bold">Support Desk:</strong> 2ndnikahsupport@gmail.com | +880 1613591741</p>
                     </div>
                 </div>
 
                 {{-- Column 2: Navigation --}}
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider">Quick Links</h4>
-                    <ul class="space-y-2 text-xs">
+                    <ul class="space-y-2 text-xs text-slate-300">
                         <li><a href="{{ route('home') }}" class="hover:text-rose-400 transition">Home</a></li>
                         <li><a href="{{ route('members.index') }}" class="hover:text-rose-400 transition">Members Directory</a></li>
                         <li><a href="{{ route('membership.index') }}" class="hover:text-rose-400 transition">Membership Plans</a></li>
@@ -319,7 +319,7 @@
                 {{-- Column 3: Legal & Compliance (MANDATORY SSLCommerz requirements) --}}
                 <div class="space-y-3">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider">Legal & Compliance</h4>
-                    <ul class="space-y-2 text-xs">
+                    <ul class="space-y-2 text-xs text-slate-300">
                         <li><a href="/about-us" class="hover:text-rose-400 transition font-medium">About Us & Management</a></li>
                         <li><a href="/terms-and-conditions" class="hover:text-rose-400 transition font-medium">Terms and Conditions</a></li>
                         <li><a href="/privacy-policy" class="hover:text-rose-400 transition font-medium">Privacy Policy</a></li>
@@ -349,7 +349,7 @@
                                     <path d="M381.2 188.6L90 22.8C72.9 13.1 57.7 14.4 48.5 24.1L297.1 272.7l84.1-84.1z" fill="#00E676"/>
                                 </svg>
                                 <div class="flex flex-col text-left">
-                                    <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-tight">GET IT ON</span>
+                                    <span class="text-[9px] uppercase tracking-wider text-slate-300 font-bold leading-tight">GET IT ON</span>
                                     <span class="text-xs font-black text-white group-hover:text-emerald-400 transition leading-tight">Google Play</span>
                                 </div>
                             </a>
@@ -361,7 +361,7 @@
                                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.13.64-2.81 1.44-.61.71-1.14 1.85-1 2.95 1.08.08 2.17-.55 2.82-1.35z"/>
                                 </svg>
                                 <div class="flex flex-col text-left">
-                                    <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-tight">DOWNLOAD ON THE</span>
+                                    <span class="text-[9px] uppercase tracking-wider text-slate-300 font-bold leading-tight">DOWNLOAD ON THE</span>
                                     <span class="text-xs font-black text-white group-hover:text-rose-400 transition leading-tight">App Store</span>
                                 </div>
                             </a>
@@ -383,7 +383,7 @@
                     <h3 class="text-lg sm:text-2xl font-black text-white tracking-tight">
                         SSLCommerz Verified Payment Methods
                     </h3>
-                    <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                    <p class="text-xs sm:text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed font-medium">
                         We accept Visa, Mastercard, American Express, bKash, Nagad, Rocket, Upay, and major Islamic & Net Banking gateways. All transactions are protected with bank-grade 256-bit SSL encryption.
                     </p>
                 </div>
@@ -401,32 +401,32 @@
 
                 {{-- Security Trust Highlights Bar --}}
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1 max-w-5xl mx-auto text-left">
-                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3.5 rounded-xl">
+                    <div class="flex items-center gap-2.5 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-xl">
                         <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         <div>
                             <span class="text-xs font-bold text-white block">256-Bit SSL</span>
-                            <span class="text-[10px] text-slate-400">Encrypted Transactions</span>
+                            <span class="text-[10px] text-slate-300 font-medium">Encrypted Transactions</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3.5 rounded-xl">
+                    <div class="flex items-center gap-2.5 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-xl">
                         <svg class="w-5 h-5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         <div>
                             <span class="text-xs font-bold text-white block">PCI-DSS Level 1</span>
-                            <span class="text-[10px] text-slate-400">Certified Compliance</span>
+                            <span class="text-[10px] text-slate-300 font-medium">Certified Compliance</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3.5 rounded-xl">
+                    <div class="flex items-center gap-2.5 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-xl">
                         <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         <div>
                             <span class="text-xs font-bold text-white block">Instant Activation</span>
-                            <span class="text-[10px] text-slate-400">Immediate Digital License</span>
+                            <span class="text-[10px] text-slate-300 font-medium">Immediate Digital License</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 p-3.5 rounded-xl">
+                    <div class="flex items-center gap-2.5 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-xl">
                         <svg class="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         <div>
                             <span class="text-xs font-bold text-white block">All Payment Modes</span>
-                            <span class="text-[10px] text-slate-400">Cards, bKash & Nagad</span>
+                            <span class="text-[10px] text-slate-300 font-medium">Cards, bKash & Nagad</span>
                         </div>
                     </div>
                 </div>
@@ -434,7 +434,7 @@
             </div>
 
             {{-- Footer Bottom Bar --}}
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 pt-2">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-300 font-medium pt-2">
                 <div>
                     &copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', '2nd Nikah') }}. {{ \App\Models\Setting::get('footer_copyright', 'All rights reserved.') }}
                 </div>
