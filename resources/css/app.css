@@ -54,9 +54,29 @@ body {
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    color: var(--text-dark);
     font-weight: 700;
     line-height: 1.25;
+}
+
+h1:not([class*="text-"]):not([style*="color"]),
+h2:not([class*="text-"]):not([style*="color"]),
+h3:not([class*="text-"]):not([style*="color"]),
+h4:not([class*="text-"]):not([style*="color"]),
+h5:not([class*="text-"]):not([style*="color"]),
+h6:not([class*="text-"]):not([style*="color"]) {
+    color: var(--text-dark);
+}
+
+.text-white {
+    color: #FFFFFF !important;
+}
+
+/* Ensure all headings and text inside dark footers, cards, app download sections are pure white */
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
+.site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4, .site-footer h5, .site-footer h6,
+[class*="bg-slate-900"] h1, [class*="bg-slate-900"] h2, [class*="bg-slate-900"] h3, [class*="bg-slate-900"] h4, [class*="bg-slate-900"] h5, [class*="bg-slate-900"] h6,
+[class*="bg-slate-950"] h1, [class*="bg-slate-950"] h2, [class*="bg-slate-950"] h3, [class*="bg-slate-950"] h4, [class*="bg-slate-950"] h5, [class*="bg-slate-950"] h6 {
+    color: #FFFFFF !important;
 }
 
 /* Controlled Base Link Styling (Does not override buttons, badges or custom components) */

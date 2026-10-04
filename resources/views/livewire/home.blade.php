@@ -194,7 +194,7 @@
                             <div class="inline-flex items-center gap-1.5 text-rose-400 text-xs font-black uppercase tracking-wider mb-1">
                                 <span>📱 OFFICIAL 2ND NIKAH APPS</span>
                             </div>
-                            <h3 class="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight">
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight" style="color: #FFFFFF !important;">
                                 {{ \App\Models\Setting::get('hero_app_download_title', 'Download The 2nd Nikah Mobile App') }}
                             </h3>
                             <p class="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed font-medium">

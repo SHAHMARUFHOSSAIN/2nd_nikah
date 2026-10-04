@@ -294,14 +294,14 @@
                     <div class="pt-2 text-xs text-slate-300 space-y-1.5 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 max-w-sm">
                         <p><strong class="text-white font-bold">Organization:</strong> {{ \App\Models\Setting::get('company_name', '2ndnikah') }}</p>
                         <p><strong class="text-white font-bold">Trade License:</strong> {{ \App\Models\Setting::get('trade_license_number', 'TRAD/DNCC/025984/2024') }}</p>
-                        <p><strong class="text-white font-bold">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', 'Dhaka-1100, Bangladesh') }}</p>
-                        <p><strong class="text-white font-bold">Support Desk:</strong> 2ndnikahsupport@gmail.com | +880 1613591741</p>
+                        <p><strong class="text-white font-bold">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', \App\Models\Setting::get('company_address', 'Dhaka-1100, Bangladesh')) }}</p>
+                        <p><strong class="text-white font-bold">Support Desk:</strong> {{ \App\Models\Setting::get('company_email', \App\Models\Setting::get('support_email', '2ndnikahsupport@gmail.com')) }} | {{ \App\Models\Setting::get('company_phone', \App\Models\Setting::get('support_phone', '+880 1613591741')) }}</p>
                     </div>
                 </div>
 
                 {{-- Column 2: Navigation --}}
                 <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Quick Links</h4>
+                    <h4 class="text-sm font-black uppercase tracking-wider" style="color: #FFFFFF !important;">Quick Links</h4>
                     <ul class="space-y-2 text-xs text-slate-300">
                         <li><a href="{{ route('home') }}" class="hover:text-rose-400 transition">Home</a></li>
                         <li><a href="{{ route('members.index') }}" class="hover:text-rose-400 transition">Members Directory</a></li>
@@ -318,7 +318,7 @@
 
                 {{-- Column 3: Legal & Compliance (MANDATORY SSLCommerz requirements) --}}
                 <div class="space-y-3">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Legal & Compliance</h4>
+                    <h4 class="text-sm font-black uppercase tracking-wider" style="color: #FFFFFF !important;">Legal & Compliance</h4>
                     <ul class="space-y-2 text-xs text-slate-300">
                         <li><a href="/about-us" class="hover:text-rose-400 transition font-medium">About Us & Management</a></li>
                         <li><a href="/terms-and-conditions" class="hover:text-rose-400 transition font-medium">Terms and Conditions</a></li>
@@ -329,7 +329,7 @@
 
                 {{-- Column 4: App Download & Security --}}
                 <div class="space-y-4">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Mobile App & Trust</h4>
+                    <h4 class="text-sm font-black uppercase tracking-wider" style="color: #FFFFFF !important;">Mobile App & Trust</h4>
                     
                     @php
                         $playStoreUrl = \App\Models\Setting::get('app_download_google_play_url') ?: (\App\Models\Setting::get('play_store_url') ?: 'https://play.google.com/store/apps');

@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="pt-8">
-                    <x-ui.button wire:click="selectPlan('{{ $plan->slug }}')" type="button" :variant="$plan->billing_interval === 'monthly' ? 'primary' : 'outline'" size="lg" class="w-full">
+                    <x-ui.button wire:click="selectPlan('{{ $plan->slug }}')" type="button" variant="primary" size="lg" class="w-full btn-primary text-white font-extrabold shadow-md hover:shadow-lg">
                         Select {{ $plan->name }} Plan
                     </x-ui.button>
                 </div>
