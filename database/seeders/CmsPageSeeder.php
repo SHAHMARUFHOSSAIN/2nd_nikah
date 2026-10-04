@@ -29,7 +29,6 @@ class CmsPageSeeder extends Seeder
                                 <div><strong class="text-slate-900">Trade License Number:</strong> TRAD/DNCC/025984/2024</div>
                                 <div><strong class="text-slate-900">Registered Office Address:</strong> Dhaka-1100, Bangladesh</div>
                                 <div><strong class="text-slate-900">Operational Jurisdiction:</strong> Bangladesh & Global Expatriate Diaspora</div>
-                                <div><strong class="text-slate-900">Official Helpline:</strong> +880 1613591741</div>
                                 <div><strong class="text-slate-900">Official Support Email:</strong> 2ndnikahsupport@gmail.com</div>
                                 <div><strong class="text-slate-900">Website:</strong> https://www.2ndnikah.com</div>
                                 <div><strong class="text-slate-900">Payment Gateway Partner:</strong> SSLCommerz (Authorized Gateway)</div>
@@ -169,7 +168,7 @@ class CmsPageSeeder extends Seeder
                         <section>
                             <h3 class="text-lg font-bold text-slate-900 mb-2">5. Contact Our Privacy Officer</h3>
                             <p class="text-slate-600 leading-relaxed">
-                                For inquiries regarding data protection, please contact us at <strong>2ndnikahsupport@gmail.com</strong> or call <strong>+880 1613591741</strong>.
+                                For inquiries regarding data protection, please contact us at <strong>2ndnikahsupport@gmail.com</strong>.
                             </p>
                         </section>
                     </div>
@@ -245,7 +244,6 @@ class CmsPageSeeder extends Seeder
                             <p><strong>Trade License Number:</strong> TRAD/DNCC/025984/2024</p>
                             <p><strong>Registered Office Address:</strong> Dhaka-1100, Bangladesh</p>
                             <p><strong>Customer Support Email:</strong> 2ndnikahsupport@gmail.com</p>
-                            <p><strong>Helpline / WhatsApp:</strong> +880 1613591741</p>
                             <p><strong>Website:</strong> https://www.2ndnikah.com</p>
                         </section>
                     </div>

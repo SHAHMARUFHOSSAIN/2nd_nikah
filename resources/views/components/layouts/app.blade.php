@@ -294,8 +294,11 @@
                     <div class="pt-2 text-xs text-slate-300 space-y-1.5 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 max-w-sm">
                         <p><strong class="text-white font-bold">Organization:</strong> {{ \App\Models\Setting::get('company_name', '2ndnikah') }}</p>
                         <p><strong class="text-white font-bold">Trade License:</strong> {{ \App\Models\Setting::get('trade_license_number', 'TRAD/DNCC/025984/2024') }}</p>
-                        <p><strong class="text-white font-bold">Registered Address:</strong> {{ \App\Models\Setting::get('registered_address', \App\Models\Setting::get('company_address', 'Dhaka-1100, Bangladesh')) }}</p>
-                        <p><strong class="text-white font-bold">Support Desk:</strong> {{ \App\Models\Setting::get('company_email', \App\Models\Setting::get('support_email', '2ndnikahsupport@gmail.com')) }} | {{ \App\Models\Setting::get('company_phone', \App\Models\Setting::get('support_phone', '+880 1613591741')) }}</p>
+                        @php
+                            $supportEmail = \App\Models\Setting::get('company_email', \App\Models\Setting::get('support_email', '2ndnikahsupport@gmail.com'));
+                            $supportPhone = trim((string) \App\Models\Setting::get('company_phone', \App\Models\Setting::get('support_phone', '')));
+                        @endphp
+                        <p><strong class="text-white font-bold">Support Desk:</strong> {{ $supportEmail }}{{ $supportPhone !== '' ? ' | ' . $supportPhone : '' }}</p>
                     </div>
                 </div>
 
