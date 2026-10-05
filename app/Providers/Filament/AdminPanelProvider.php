@@ -8,6 +8,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
+use Filament\Navigation\MenuItem;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
@@ -28,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
             ->brandName(fn () => \App\Models\Setting::get('site_name', '2nd Nikah') . ' Admin')
             ->brandLogo(fn () => \App\Models\Setting::getUrl('logo_path'))
             ->brandLogoHeight('2.5rem')
@@ -63,6 +65,12 @@ class AdminPanelProvider extends PanelProvider
                 'MEMBERSHIP & PAYMENTS',
                 'CONTENT',
                 'SYSTEM',
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Admin Password & Email')
+                    ->url(fn (): string => \App\Filament\Pages\AdminSecurity::getUrl())
+                    ->icon('heroicon-o-key'),
             ])
             ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_END,

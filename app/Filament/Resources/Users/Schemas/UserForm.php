@@ -22,7 +22,10 @@ class UserForm
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->revealable()
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->helperText('Leave blank to keep existing password'),
                 Toggle::make('is_admin')
                     ->required(),
                 Toggle::make('is_active')
