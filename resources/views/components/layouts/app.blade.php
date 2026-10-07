@@ -172,6 +172,9 @@
                         <a href="{{ route('member.settings.index') }}" @click="mobileMenuOpen = false" class="mobile-drawer-link flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition {{ request()->routeIs('member.settings.*') ? 'active text-rose-600 bg-rose-50 font-bold' : '' }}">
                             <span>⚙️</span> <span>Account Settings</span>
                         </a>
+                        <a href="{{ route('member.blocked.index') }}" @click="mobileMenuOpen = false" class="mobile-drawer-link flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition {{ request()->routeIs('member.blocked.*') ? 'active text-rose-600 bg-rose-50 font-bold' : '' }}">
+                            <span>🚫</span> <span>Blocked Members</span>
+                        </a>
                         @if(auth()->user()->is_admin)
                             <a href="/admin" @click="mobileMenuOpen = false" class="mobile-drawer-link flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-xs sm:text-sm text-rose-600 font-extrabold hover:bg-rose-50 transition">
                                 <span>👑</span> <span>Admin Panel</span>

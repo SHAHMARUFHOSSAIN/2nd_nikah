@@ -65,6 +65,28 @@
         </div>
     </div>
 
+    {{-- Section: Blocked Members --}}
+    <div class="card" style="border-radius: 1.25rem; margin-bottom: 2rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--bg-wine); margin-bottom: 1rem; border-bottom: 1px solid var(--border-warm); padding-bottom: 0.75rem;">
+            Blocked Members (ব্লক করা সদস্যবৃন্দ)
+        </h3>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <div>
+                <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">
+                    Manage Blocked Profiles
+                </strong>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0; max-width: 500px;">
+                    Review all members you have blocked. You can unblock them at any time to resume communication or view past messages.
+                </p>
+            </div>
+
+            <a href="{{ route('member.blocked.index') }}" class="btn btn-outline" style="padding: 0.5rem 1.25rem; min-width: 140px; text-decoration: none; text-align: center;">
+                🚫 View Blocked List
+            </a>
+        </div>
+    </div>
+
     {{-- Section 3: Password Change --}}
     <div class="card" style="border-radius: 1.25rem;">
         <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--bg-wine); margin-bottom: 1rem; border-bottom: 1px solid var(--border-warm); padding-bottom: 0.75rem;">

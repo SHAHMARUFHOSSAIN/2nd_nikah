@@ -38,12 +38,14 @@ class Show extends Component
 
         // Block check
         if (Auth::check()) {
-            if (Auth::user()->hasBlockedOrIsBlockedBy($memberProfile->user_id)) {
+            if (Auth::user()->isBlockedBy($memberProfile->user_id)) {
                 abort(404);
             }
 
-            // Record profile visit
-            ProfileVisit::recordVisit(Auth::id(), $memberProfile->user_id);
+            // Record profile visit if not blocked
+            if (! Auth::user()->hasBlocked($memberProfile->user_id)) {
+                ProfileVisit::recordVisit(Auth::id(), $memberProfile->user_id);
+            }
             $this->isShortlisted = Auth::user()->hasShortlisted($memberProfile->user_id);
             $this->isBlocked = Auth::user()->hasBlocked($memberProfile->user_id);
         }

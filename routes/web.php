@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/member/shortlists', \App\Livewire\Member\Shortlists\Index::class)->name('member.shortlists.index');
         Route::get('/member/visitors', \App\Livewire\Member\Visitors\Index::class)->name('member.visitors.index');
         Route::get('/member/settings', \App\Livewire\Member\Settings\Index::class)->name('member.settings.index');
+        Route::get('/member/blocked-users', \App\Livewire\Member\BlockedUsers\Index::class)->name('member.blocked.index');
     });
 
     // Email Verification Routes

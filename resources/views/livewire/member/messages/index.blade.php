@@ -68,7 +68,31 @@
                                 {{ $conversations->count() }}
                             </span>
                         </h2>
+
+                        <a href="{{ route('member.blocked.index') }}" class="text-[11px] font-bold text-slate-600 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 border border-slate-200/80 px-2 py-1 rounded-xl transition inline-flex items-center gap-1 shrink-0" title="Manage Blocked Members">
+                            <span>🚫 Block List</span>
+                            @if ($totalBlockedUsers > 0)
+                                <span class="bg-slate-200 text-slate-700 text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                                    {{ $totalBlockedUsers }}
+                                </span>
+                            @endif
+                        </a>
                     </div>
+
+                    {{-- Conversation Filter Tabs (All / Active / Blocked) --}}
+                    @if ($blockedCount > 0)
+                        <div class="flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl text-xs font-bold text-slate-600">
+                            <button type="button" wire:click="setFilter('all')" class="flex-1 py-1 px-2 rounded-lg transition text-center text-[11px] {{ $filter === 'all' ? 'bg-white text-rose-600 shadow-2xs font-extrabold' : 'hover:text-slate-900' }}">
+                                All ({{ $rawTotalCount }})
+                            </button>
+                            <button type="button" wire:click="setFilter('active')" class="flex-1 py-1 px-2 rounded-lg transition text-center text-[11px] {{ $filter === 'active' ? 'bg-white text-rose-600 shadow-2xs font-extrabold' : 'hover:text-slate-900' }}">
+                                Active ({{ $activeCount }})
+                            </button>
+                            <button type="button" wire:click="setFilter('blocked')" class="flex-1 py-1 px-2 rounded-lg transition text-center text-[11px] {{ $filter === 'blocked' ? 'bg-white text-rose-600 shadow-2xs font-extrabold' : 'hover:text-slate-900' }}">
+                                Blocked ({{ $blockedCount }})
+                            </button>
+                        </div>
+                    @endif
 
                     {{-- Conversation List --}}
                     @if ($conversations->isEmpty())
@@ -76,13 +100,25 @@
                             <div class="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 mx-auto shadow-inner">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                             </div>
-                            <h3 class="text-xs font-bold text-slate-800">No conversations yet</h3>
+                            <h3 class="text-xs font-bold text-slate-800">
+                                @if ($filter === 'blocked')
+                                    No blocked conversations found
+                                @else
+                                    No conversations yet
+                                @endif
+                            </h3>
                             <p class="text-[11px] text-slate-500 max-w-xs mx-auto leading-relaxed">
-                                Once you connect with a mutual match, your private conversations will appear here.
+                                @if ($filter === 'blocked')
+                                    You have no blocked conversations matching this search.
+                                @else
+                                    Once you connect with a mutual match, your private conversations will appear here.
+                                @endif
                             </p>
-                            <a href="{{ route('members.index') }}" class="btn btn-primary text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-xs mt-1 inline-flex items-center gap-1">
-                                <span>Browse Members</span>
-                            </a>
+                            @if ($filter !== 'blocked')
+                                <a href="{{ route('members.index') }}" class="btn btn-primary text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-xs mt-1 inline-flex items-center gap-1">
+                                    <span>Browse Members</span>
+                                </a>
+                            @endif
                         </div>
                     @else
                         <div class="divide-y divide-slate-100 max-h-[380px] overflow-y-auto pr-0.5">
@@ -92,18 +128,21 @@
                                     $partnerProfile = $partner?->memberProfile;
                                     $unreadCount = $conv->unreadCountFor(auth()->id());
                                     $lastMsg = $conv->lastMessage;
+                                    $isBlockedByMe = $partner && auth()->user()->hasBlocked($partner->id);
+                                    $isBlockedByPartner = $partner && auth()->user()->isBlockedBy($partner->id);
+                                    $isBlockedEither = $isBlockedByMe || $isBlockedByPartner;
                                 @endphp
-                                <a href="{{ route('member.messages.show', $conv->id) }}" class="group flex items-center justify-between py-2 px-1.5 rounded-xl transition-all duration-150 gap-2 min-w-0 {{ $unreadCount > 0 ? 'bg-rose-50/60 font-semibold' : 'hover:bg-slate-50' }}">
+                                <a href="{{ route('member.messages.show', $conv->id) }}" class="group flex items-center justify-between py-2 px-1.5 rounded-xl transition-all duration-150 gap-2 min-w-0 {{ $unreadCount > 0 ? 'bg-rose-50/60 font-semibold' : 'hover:bg-slate-50' }} {{ $isBlockedEither ? 'opacity-85 bg-slate-50/50' : '' }}">
                                     <div class="flex items-center gap-2 min-w-0 flex-1">
                                         
                                         {{-- 40px Avatar --}}
-                                        <div class="relative w-10 h-10 rounded-full ring-2 ring-rose-100 overflow-hidden bg-slate-100 shrink-0 flex items-center justify-center font-bold text-rose-600">
+                                        <div class="relative w-10 h-10 rounded-full ring-2 {{ $isBlockedEither ? 'ring-slate-200' : 'ring-rose-100' }} overflow-hidden bg-slate-100 shrink-0 flex items-center justify-center font-bold text-rose-600">
                                             @if ($partnerProfile && $partnerProfile->profile_photo_path)
                                                 <img src="{{ Storage::url($partnerProfile->profile_photo_path) }}" alt="{{ $partnerProfile->full_name }}" class="w-full h-full object-cover">
                                             @else
-                                                <span class="text-xs">{{ mb_substr($partnerProfile?->first_name ?: $partner?->name, 0, 1) }}</span>
+                                                <span class="text-xs">{{ mb_substr($partnerProfile?->first_name ?: ($partner?->name ?: 'U'), 0, 1) }}</span>
                                             @endif
-                                            @if ($partner && $partner->isOnline())
+                                            @if (! $isBlockedEither && $partner && $partner->isOnline())
                                                 <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full" title="Online now"></span>
                                             @else
                                                 <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-slate-300 ring-2 ring-white rounded-full" title="Offline"></span>
@@ -114,9 +153,17 @@
                                         <div class="min-w-0 flex-1 pr-1">
                                             <div class="flex items-center gap-1 min-w-0">
                                                 <h3 class="text-xs font-bold text-slate-900 truncate group-hover:text-rose-600 transition">
-                                                    {{ $partnerProfile?->full_name ?: $partner?->name }}
+                                                    {{ $partnerProfile?->full_name ?: ($partner?->name ?: 'Member') }}
                                                 </h3>
-                                                @if ($partner && $partner->hasVerifiedEmail())
+                                                @if ($isBlockedByMe)
+                                                    <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold shrink-0">
+                                                        Blocked
+                                                    </span>
+                                                @elseif ($isBlockedByPartner)
+                                                    <span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.2 rounded font-semibold shrink-0">
+                                                        Restricted
+                                                    </span>
+                                                @elseif ($partner && $partner->hasVerifiedEmail())
                                                     <span class="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.5 rounded font-semibold shrink-0 inline-flex items-center" title="Verified Profile">
                                                         <svg class="w-2.5 h-2.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                                     </span>
@@ -128,7 +175,11 @@
                                                 @endif
                                             </div>
                                             <p class="text-[11px] text-slate-500 truncate mt-0.5">
-                                                @if ($lastMsg)
+                                                @if ($isBlockedByMe)
+                                                    <span class="italic text-slate-400">🚫 You blocked this member</span>
+                                                @elseif ($isBlockedByPartner)
+                                                    <span class="italic text-slate-400">Communication restricted</span>
+                                                @elseif ($lastMsg)
                                                     @if ($lastMsg->sender_id === auth()->id())
                                                         <span class="text-slate-700 font-medium">You: </span>
                                                     @endif

@@ -209,10 +209,17 @@
                                 <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                 <span>Report Member</span>
                             </button>
-                            <button wire:click="confirmBlock" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
-                                <span>Block Member</span>
-                            </button>
+                            @if ($isBlockedByMe)
+                                <button wire:click="unblockPartner" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>Unblock Member</span>
+                                </button>
+                            @else
+                                <button wire:click="confirmBlock" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                    <span>Block Member</span>
+                                </button>
+                            @endif
                         </div>
                     </div>
 
@@ -460,7 +467,28 @@
                         </div>
                     @endif
 
-                    @if ($isPremium)
+                    @if ($isBlockedByMe)
+                        {{-- Blocked by Current User Banner & Unblock Button --}}
+                        <div class="bg-slate-100 border border-slate-300 rounded-2xl p-4 text-center space-y-2">
+                            <div class="flex items-center justify-center gap-2 text-slate-800 font-bold text-xs sm:text-sm">
+                                <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                <span>You have blocked {{ $partnerProfile?->full_name ?: ($partner?->name ?: 'this member') }}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto">
+                                You cannot send or receive messages while this member is blocked. You can unblock them at any time to resume communication.
+                            </p>
+                            <button wire:click="unblockPartner" type="button" class="btn btn-primary text-xs font-bold px-4 py-2 rounded-xl shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Unblock Member</span>
+                            </button>
+                        </div>
+                    @elseif ($isBlockedByPartner)
+                        {{-- Blocked by Partner Banner --}}
+                        <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-center space-y-1">
+                            <p class="text-xs font-bold text-slate-700">Communication Restricted</p>
+                            <p class="text-[11px] text-slate-500">You cannot send messages to this conversation at this time.</p>
+                        </div>
+                    @elseif ($isPremium)
                         <form wire:submit.prevent="sendMessage" class="flex items-center gap-2">
                             
                             {{-- Mobile & Desktop Action Trigger [ + ] Menu --}}

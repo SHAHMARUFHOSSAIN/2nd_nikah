@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Member\Messages;
 
+use App\Models\Block;
 use App\Models\Conversation;
 use App\Models\UserMatch;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,12 @@ use Livewire\Component;
 class Index extends Component
 {
     public string $search = '';
+    public string $filter = 'all'; // 'all', 'active', 'blocked'
+
+    public function setFilter(string $filter): void
+    {
+        $this->filter = in_array($filter, ['all', 'active', 'blocked']) ? $filter : 'all';
+    }
 
     public function mount(): void
     {
@@ -38,8 +45,8 @@ class Index extends Component
             return;
         }
 
-        if ($user->hasBlockedOrIsBlockedBy($partnerId)) {
-            session()->flash('error', 'You cannot communicate with this user due to privacy blocking.');
+        if ($user->isBlockedBy($partnerId)) {
+            session()->flash('error', 'You cannot communicate with this user.');
             return;
         }
 
@@ -67,31 +74,52 @@ class Index extends Component
     {
         $user = Auth::user();
 
-        // Fetch conversations
-        $query = Conversation::with(['userOne.memberProfile', 'userTwo.memberProfile', 'lastMessage'])
-            ->forUser($user->id);
-
-        $conversations = $query->orderByDesc('last_message_at')
+        // Fetch all conversations
+        $rawConversations = Conversation::with(['userOne.memberProfile', 'userTwo.memberProfile', 'lastMessage'])
+            ->forUser($user->id)
+            ->orderByDesc('last_message_at')
             ->orderByDesc('updated_at')
             ->get();
 
-        // Filter out conversations where partner is blocked or matches search
-        $conversations = $conversations->reject(function ($conv) use ($user) {
+        $activeCount = 0;
+        $blockedCount = 0;
+
+        foreach ($rawConversations as $conv) {
             $partner = $conv->getPartnerUser($user->id);
-            if (! $partner || $user->hasBlockedOrIsBlockedBy($partner->id)) {
-                return true;
+            if ($partner && $user->hasBlockedOrIsBlockedBy($partner->id)) {
+                $blockedCount++;
+            } else {
+                $activeCount++;
+            }
+        }
+
+        // Filter conversations based on search & tab
+        $conversations = $rawConversations->filter(function ($conv) use ($user) {
+            $partner = $conv->getPartnerUser($user->id);
+            if (! $partner) {
+                return false;
+            }
+
+            $isBlocked = $user->hasBlockedOrIsBlockedBy($partner->id);
+
+            if ($this->filter === 'active' && $isBlocked) {
+                return false;
+            }
+
+            if ($this->filter === 'blocked' && ! $isBlocked) {
+                return false;
             }
 
             if (! empty(trim($this->search))) {
                 $term = mb_strtolower(trim($this->search));
                 $partnerName = mb_strtolower($partner->memberProfile?->full_name ?: $partner->name);
-                return strpos($partnerName, $term) === false;
+                return strpos($partnerName, $term) !== false;
             }
 
-            return false;
+            return true;
         });
 
-        // Find all active mutual matches for starting new chat
+        // Find all active mutual matches for starting new chat (excluding blocked)
         $matches = UserMatch::with(['userOne.memberProfile', 'userTwo.memberProfile'])
             ->forUser($user->id)
             ->get()
@@ -100,10 +128,16 @@ class Index extends Component
                 return ! $partner || $user->hasBlockedOrIsBlockedBy($partner->id);
             });
 
+        $totalBlockedUsers = Block::where('blocker_id', $user->id)->count();
+
         return view('livewire.member.messages.index', [
             'conversations' => $conversations,
             'matches' => $matches,
             'isPremium' => $user->isPremium(),
+            'activeCount' => $activeCount,
+            'blockedCount' => $blockedCount,
+            'totalBlockedUsers' => $totalBlockedUsers,
+            'rawTotalCount' => $rawConversations->count(),
         ])->layout('components.layouts.app', ['title' => 'Messages & Conversations']);
     }
 }

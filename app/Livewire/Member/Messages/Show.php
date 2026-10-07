@@ -24,6 +24,10 @@ class Show extends Component
     public ?string $errorMessage = null;
     public ?string $successMessage = null;
 
+    // Block state flags
+    public bool $isBlockedByMe = false;
+    public bool $isBlockedByPartner = false;
+
     // Block & Report Modal states
     public bool $showBlockModal = false;
     public bool $showReportModal = false;
@@ -60,10 +64,9 @@ class Show extends Component
             abort(404, 'Conversation partner not found.');
         }
 
-        // 2. Block Check
-        if ($user->hasBlockedOrIsBlockedBy($partner->id)) {
-            abort(403, 'Communication is restricted due to blocking.');
-        }
+        // 2. Block Check - record states without 403 so blocked user can be viewed and unblocked
+        $this->isBlockedByMe = $user->hasBlocked($partner->id);
+        $this->isBlockedByPartner = $user->isBlockedBy($partner->id);
 
         // 3. Mutual Match Check
         $isMatched = UserMatch::where('user_one_id', min($conversation->user_one_id, $conversation->user_two_id))
@@ -117,8 +120,13 @@ class Show extends Component
         }
 
         $partner = $this->conversation->getPartnerUser($user->id);
-        if ($user->hasBlockedOrIsBlockedBy($partner->id)) {
-            $this->errorMessage = 'Cannot send message because one of the users has blocked the other.';
+        if ($this->isBlockedByMe) {
+            $this->errorMessage = 'You have blocked this member. Please unblock them to send messages.';
+            return;
+        }
+
+        if ($this->isBlockedByPartner) {
+            $this->errorMessage = 'Cannot send message because communication has been restricted.';
             return;
         }
 
@@ -386,8 +394,24 @@ class Show extends Component
             'blocked_id' => $partner->id,
         ]);
 
-        session()->flash('status', 'User has been blocked.');
-        $this->redirect(route('member.messages.index'));
+        $this->isBlockedByMe = true;
+        $this->showBlockModal = false;
+        $this->successMessage = ($partner->memberProfile?->full_name ?: $partner->name) . ' has been blocked. You can unblock them at any time.';
+    }
+
+    public function unblockPartner(): void
+    {
+        $user = Auth::user();
+        $partner = $this->conversation->getPartnerUser($user->id);
+
+        if (! $partner) {
+            return;
+        }
+
+        Block::unblockUser($user->id, $partner->id);
+
+        $this->isBlockedByMe = false;
+        $this->successMessage = ($partner->memberProfile?->full_name ?: $partner->name) . ' has been unblocked successfully.';
     }
 
     public function confirmReport(): void
