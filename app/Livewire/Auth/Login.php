@@ -34,7 +34,7 @@ class Login extends Component
                 return;
             }
 
-            if ($user->is_admin) {
+            if ($user->is_admin || $user->hasAnyRole(['Super Admin', 'Admin', 'Moderator', 'Support Manager'])) {
                 return redirect()->intended('/admin');
             }
 

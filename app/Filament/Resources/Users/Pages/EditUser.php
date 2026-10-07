@@ -16,4 +16,18 @@ class EditUser extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function afterSave(): void
+    {
+        /** @var \App\Models\User $user */
+        $user = $this->record;
+        if ($user->hasAnyRole(['Super Admin', 'Admin', 'Moderator', 'Support Manager'])) {
+            $user->updateQuietly(['is_admin' => true]);
+        }
+    }
 }
