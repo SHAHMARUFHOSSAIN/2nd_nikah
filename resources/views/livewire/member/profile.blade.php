@@ -119,10 +119,11 @@
                         <label for="marital_status" class="form-label">Marital Status <span style="color: var(--primary);">*</span></label>
                         <select id="marital_status" wire:model.defer="marital_status" class="form-input" required>
                             <option value="">Select Status</option>
-                            <option value="Never Married">Never Married</option>
-                            <option value="Divorced">Divorced</option>
-                            <option value="Widowed">Widowed</option>
-                            <option value="Single Parent">Single Parent</option>
+                            <option value="Unmarried">Unmarried (অবিবাহিত)</option>
+                            <option value="Married (Seeking 2nd Marriage)">Married - Seeking 2nd Marriage (বিবাহিত - ২য় বিবাহ করতে চান)</option>
+                            <option value="Divorced">Divorced (ডিভোর্সড)</option>
+                            <option value="Widowed">Widowed (বিধবা / বিপত্নীক)</option>
+                            <option value="Single Parent">Single Parent (সন্তানসহ অবিবাহিত/ডিভোর্সড)</option>
                         </select>
                         @error('marital_status') <span class="form-error">{{ $message }}</span> @enderror
                     </div>
@@ -174,8 +175,42 @@
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
                     <div class="form-group">
-                        <label for="height" class="form-label">Height (cm)</label>
-                        <input type="number" id="height" wire:model.defer="height" class="form-input" placeholder="e.g. 175" min="50" max="250">
+                        <label for="height" class="form-label">Height (উচ্চতা - ফুট ও ইঞ্চি)</label>
+                        <select id="height" wire:model.defer="height" class="form-input">
+                            <option value="">Select Height</option>
+                            @php
+                                $heightOptions = [
+                                    56 => '4\' 8" (56 in)',
+                                    57 => '4\' 9" (57 in)',
+                                    58 => '4\' 10" (58 in)',
+                                    59 => '4\' 11" (59 in)',
+                                    60 => '5\' 0" (60 in)',
+                                    61 => '5\' 1" (61 in)',
+                                    62 => '5\' 2" (62 in)',
+                                    63 => '5\' 3" (63 in)',
+                                    64 => '5\' 4" (64 in)',
+                                    65 => '5\' 5" (65 in)',
+                                    66 => '5\' 6" (66 in)',
+                                    67 => '5\' 7" (67 in)',
+                                    68 => '5\' 8" (68 in)',
+                                    69 => '5\' 9" (69 in)',
+                                    70 => '5\' 10" (70 in)',
+                                    71 => '5\' 11" (71 in)',
+                                    72 => '6\' 0" (72 in)',
+                                    73 => '6\' 1" (73 in)',
+                                    74 => '6\' 2" (74 in)',
+                                    75 => '6\' 3" (75 in)',
+                                    76 => '6\' 4" (76 in)',
+                                    77 => '6\' 5" (77 in)',
+                                    78 => '6\' 6" (78 in)',
+                                    79 => '6\' 7" (79 in)',
+                                    80 => '6\' 8" (80 in)',
+                                ];
+                            @endphp
+                            @foreach ($heightOptions as $inches => $label)
+                                <option value="{{ $inches }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
                         @error('height') <span class="form-error">{{ $message }}</span> @enderror
                     </div>
 
@@ -206,16 +241,32 @@
                 </h3>
 
                 <div class="form-group">
-                    <label for="about_me" class="form-label">Personal Statement / Bio</label>
-                    <textarea id="about_me" wire:model.defer="about_me" class="form-input" rows="5" placeholder="Share a few words about your background, personality, values, and expectations for a partner..."></textarea>
+                    <label for="about_me" class="form-label">Personal Statement / Bio (নিজের সম্পর্কে কিছু কথা)</label>
+                    <textarea id="about_me" wire:model.defer="about_me" class="form-input" rows="4" placeholder="আপনার পরিবার, ব্যক্তিত্ব, ধর্মীয় মূল্যবোধ ও নিজের সম্পর্কে কিছু কথা লিখুন..."></textarea>
                     @error('about_me') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
             </div>
 
-            {{-- Section D: Profile Photo --}}
+            {{-- Section D: Partner Preference & Interest --}}
             <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem;">
                 <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-warm); color: var(--bg-wine);">
-                    D. Profile Photo
+                    D. Partner Preference & Interest (কেমন পাত্র / পাত্রী খুঁজছেন)
+                </h3>
+
+                <div class="form-group">
+                    <label for="partner_expectation" class="form-label">Partner Preference / Expectations (প্রত্যাশিত জীবনসঙ্গী ও আগ্রহ)</label>
+                    <textarea id="partner_expectation" wire:model.defer="partner_expectation" class="form-input" rows="4" placeholder="কেমন পাত্র বা পাত্রী খুঁজছেন তা বিস্তারিত লিখুন (যেমন: শিক্ষাগত যোগ্যতা, দ্বীনদারিতা, পারিবারিক ব্যাকগ্রাউন্ড, অবস্থান, ২য় বিবাহ সংক্রান্ত প্রত্যাশা ইত্যাদি)..."></textarea>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                        এখানে আপনার কাঙ্ক্ষিত পাত্র/পাত্রীর গুণাবলি ও প্রত্যাশা লিখুন। এটি আপনার পাবলিক প্রোফাইলে সবার জন্য স্পষ্টভাবে প্রদর্শিত হবে।
+                    </span>
+                    @error('partner_expectation') <span class="form-error">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
+            {{-- Section E: Profile Photo --}}
+            <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-warm); color: var(--bg-wine);">
+                    E. Profile Photo
                 </h3>
 
                 <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
@@ -237,7 +288,7 @@
                             <label for="photo" class="form-label">Upload New Photo</label>
                             <input type="file" id="photo" wire:model="photo" class="form-input" accept="image/*">
                             <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">
-                                Formats: JPG, PNG, WEBP (Max size: 2MB)
+                                Formats: JPG, PNG, WEBP, HEIC (Max size: 10MB)
                             </span>
                             @error('photo') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
@@ -251,10 +302,10 @@
                 </div>
             </div>
 
-            {{-- Section E: Profile Visibility & Action --}}
+            {{-- Section F: Profile Visibility & Action --}}
             <div class="card" style="border-radius: 1.5rem; margin-bottom: 2.5rem;">
                 <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-warm); color: var(--bg-wine);">
-                    E. Profile Visibility
+                    F. Profile Visibility
                 </h3>
 
                 <div class="form-group" style="display: flex; align-items: center; gap: 0.75rem;">

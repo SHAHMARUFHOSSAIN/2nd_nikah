@@ -247,7 +247,7 @@
 
                 <div>
                     <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Marital Status</span>
-                    <strong style="font-size: 1rem;">{{ $profile->marital_status ?: 'Not specified' }}</strong>
+                    <strong style="font-size: 1rem;">{{ $profile->display_marital_status }}</strong>
                 </div>
 
                 <div>
@@ -284,7 +284,7 @@
         {{-- Section D: About Me --}}
         <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem;">
             <h3 style="font-size: 1.25rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-warm); color: var(--bg-wine);">
-                About Me
+                About Me (নিজের সম্পর্কে)
             </h3>
 
             @if ($profile->about_me)
@@ -294,6 +294,24 @@
             @else
                 <p style="color: var(--text-muted); font-style: italic; font-size: 0.95rem;">
                     The member has not written a personal bio statement yet.
+                </p>
+            @endif
+        </div>
+
+        {{-- Section E: Partner Preference & Interest --}}
+        <div class="card" style="border-radius: 1.5rem; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-warm); color: var(--bg-wine); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                <span>Partner Preference & Expectations</span>
+                <span style="font-size: 0.85rem; font-weight: 500; color: var(--primary);">(কেমন পাত্র / পাত্রী খুঁজছেন)</span>
+            </h3>
+
+            @if ($profile->partner_expectation)
+                <p style="color: var(--text-main); font-size: 1rem; line-height: 1.7; white-space: pre-line;">
+                    {{ $profile->partner_expectation }}
+                </p>
+            @else
+                <p style="color: var(--text-muted); font-style: italic; font-size: 0.95rem;">
+                    Specific partner expectations have not been provided yet.
                 </p>
             @endif
         </div>

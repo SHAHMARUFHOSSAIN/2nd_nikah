@@ -158,11 +158,12 @@
                 <div class="form-group mb-0">
                     <label class="form-label text-xs font-bold text-slate-700">Marital Status</label>
                     <select wire:model.live="marital_status" class="form-control text-xs p-2 rounded-lg">
-                        <option value="">Any Marital Status</option>
-                        <option value="Never Married">Never Married</option>
-                        <option value="Divorced">Divorced</option>
-                        <option value="Widowed">Widowed</option>
-                        <option value="Single Parent">Single Parent</option>
+                        <option value="">Any Marital Status (সকল)</option>
+                        <option value="Unmarried">Unmarried (অবিবাহিত)</option>
+                        <option value="Married (Seeking 2nd Marriage)">Married - Seeking 2nd Marriage (বিবাহিত - ২য় বিবাহ)</option>
+                        <option value="Divorced">Divorced (তালাকপ্রাপ্ত / ডিভোর্সড)</option>
+                        <option value="Widowed">Widowed (বিধবা / বিপত্নীক)</option>
+                        <option value="Single Parent">Single Parent (সিঙ্গেল প্যারেন্ট)</option>
                     </select>
                 </div>
 

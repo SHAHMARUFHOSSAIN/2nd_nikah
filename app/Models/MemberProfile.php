@@ -27,6 +27,7 @@ class MemberProfile extends Model
         'education',
         'occupation',
         'about_me',
+        'partner_expectation',
         'children_count',
         'profile_photo_path',
         'is_profile_complete',
@@ -83,7 +84,20 @@ class MemberProfile extends Model
     }
 
     /**
-     * Get formatted height helper (e.g., 175 cm (5' 9")).
+     * Get display marital status helper attribute (replaces "Never Married" with "Unmarried").
+     */
+    public function getDisplayMaritalStatusAttribute(): string
+    {
+        $status = $this->marital_status;
+        if ($status === 'Never Married') {
+            return 'Unmarried';
+        }
+
+        return $status ?: 'Not specified';
+    }
+
+    /**
+     * Get formatted height helper in feet & inches (e.g., 5' 6").
      */
     public function getFormattedHeightAttribute(): ?string
     {
@@ -91,11 +105,12 @@ class MemberProfile extends Model
             return null;
         }
 
-        $totalInches = (int) round($this->height / 2.54);
+        $val = (int) $this->height;
+        $totalInches = $val >= 100 ? (int) round($val / 2.54) : $val;
         $feet = (int) floor($totalInches / 12);
         $inches = $totalInches % 12;
 
-        return "{$this->height} cm ({$feet}' {$inches}\")";
+        return "{$feet}' {$inches}\"";
     }
 
     /**

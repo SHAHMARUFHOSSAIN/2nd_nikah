@@ -148,7 +148,13 @@ class Search extends Component
 
         // Marital Status Filter
         if ($this->marital_status !== '') {
-            $query->where('marital_status', $this->marital_status);
+            if ($this->marital_status === 'Unmarried') {
+                $query->whereIn('marital_status', ['Unmarried', 'Never Married']);
+            } elseif ($this->marital_status === 'Married' || $this->marital_status === 'Married (Seeking 2nd Marriage)') {
+                $query->whereIn('marital_status', ['Married', 'Married (Seeking 2nd Marriage)']);
+            } else {
+                $query->where('marital_status', $this->marital_status);
+            }
         }
 
         // City Filter (Partial match)

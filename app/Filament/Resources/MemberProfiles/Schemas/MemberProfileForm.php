@@ -31,10 +31,11 @@ class MemberProfileForm
                     ]),
                 Select::make('marital_status')
                     ->options([
-                        'Never Married' => 'Never Married',
-                        'Divorced' => 'Divorced',
-                        'Widowed' => 'Widowed',
-                        'Single Parent' => 'Single Parent',
+                        'Unmarried' => 'Unmarried (অবিবাহিত)',
+                        'Married (Seeking 2nd Marriage)' => 'Married - Seeking 2nd Marriage (বিবাহিত - ২য় বিবাহ)',
+                        'Divorced' => 'Divorced (ডিভোর্সড)',
+                        'Widowed' => 'Widowed (বিধবা / বিপত্নীক)',
+                        'Single Parent' => 'Single Parent (সিঙ্গেল প্যারেন্ট)',
                     ]),
                 Select::make('religion')
                     ->options([
@@ -55,7 +56,9 @@ class MemberProfileForm
                     ->maxLength(255),
                 TextInput::make('height')
                     ->numeric()
-                    ->suffix('cm'),
+                    ->label('Height (inches)')
+                    ->suffix('in')
+                    ->helperText("Total inches (e.g. 64 for 5'4\", 66 for 5'6\", 68 for 5'8\")"),
                 TextInput::make('education')
                     ->maxLength(255),
                 TextInput::make('occupation')
@@ -64,6 +67,10 @@ class MemberProfileForm
                     ->numeric()
                     ->default(0),
                 Textarea::make('about_me')
+                    ->maxLength(2000)
+                    ->columnSpanFull(),
+                Textarea::make('partner_expectation')
+                    ->label('Partner Preference & Interest (কেমন পাত্র / পাত্রী খুঁজছেন)')
                     ->maxLength(2000)
                     ->columnSpanFull(),
                 FileUpload::make('profile_photo_path')

@@ -55,11 +55,11 @@
                     </div>
                     <input type="text" wire:model.live="search" placeholder="Search conversations..."
                            style="padding-left: 2.25rem !important;"
-                           class="w-full text-xs sm:text-sm pr-3 py-2.5 bg-white border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition shadow-2xs text-slate-800 placeholder-slate-400">
+                           class="w-full text-base sm:text-sm pr-3 py-2.5 bg-white border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition shadow-2xs text-slate-800 placeholder-slate-400">
                 </div>
 
                 {{-- Recent Conversations Section --}}
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-2.5 sm:p-3.5 space-y-3">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-2.5 sm:p-3.5 space-y-3" wire:poll.5s>
                     
                     <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
                         <h2 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
@@ -103,7 +103,11 @@
                                             @else
                                                 <span class="text-xs">{{ mb_substr($partnerProfile?->first_name ?: $partner?->name, 0, 1) }}</span>
                                             @endif
-                                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full"></span>
+                                            @if ($partner && $partner->isOnline())
+                                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full" title="Online now"></span>
+                                            @else
+                                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-slate-300 ring-2 ring-white rounded-full" title="Offline"></span>
+                                            @endif
                                         </div>
 
                                         {{-- Partner Details --}}

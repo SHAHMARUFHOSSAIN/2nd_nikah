@@ -65,6 +65,9 @@ Route::middleware('auth')->group(function () {
 
     // Logout Route
     Route::post('/logout', function (Request $request) {
+        if ($user = Auth::user()) {
+            $user->setOffline();
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

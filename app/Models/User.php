@@ -271,4 +271,28 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(WhatsappShareRequest::class, 'receiver_id');
     }
+
+    /**
+     * Check if user is currently active/online.
+     */
+    public function isOnline(): bool
+    {
+        return \Illuminate\Support\Facades\Cache::has('user-online-' . $this->id);
+    }
+
+    /**
+     * Touch online activity timestamp in cache (expires after 3 minutes).
+     */
+    public function touchOnline(): void
+    {
+        \Illuminate\Support\Facades\Cache::put('user-online-' . $this->id, true, now()->addMinutes(3));
+    }
+
+    /**
+     * Mark user as offline explicitly (e.g. on logout).
+     */
+    public function setOffline(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget('user-online-' . $this->id);
+    }
 }

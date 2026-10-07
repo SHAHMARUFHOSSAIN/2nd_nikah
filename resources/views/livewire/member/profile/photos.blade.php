@@ -62,9 +62,9 @@
         @else
             <form wire:submit.prevent="savePhotos" class="space-y-4">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <label class="cursor-pointer inline-flex items-center gap-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition shadow-2xs">
-                        <span>📁 Choose Files</span>
-                        <input type="file" wire:model="newPhotos" multiple accept="image/jpeg,image/png,image/webp" class="hidden">
+                    <label for="photo-file-input" class="relative cursor-pointer inline-flex items-center gap-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition shadow-2xs">
+                        <span>📁 Choose / Take Photos</span>
+                        <input id="photo-file-input" type="file" wire:model="newPhotos" multiple accept="image/*" class="sr-only">
                     </label>
 
                     @if ($newPhotos)

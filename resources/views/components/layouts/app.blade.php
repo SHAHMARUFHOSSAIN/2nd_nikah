@@ -2,8 +2,14 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @php
+        if (auth()->check()) {
+            auth()->user()->touchOnline();
+        }
+    @endphp
 
     <title>{{ $title ?? \App\Models\Setting::get('site_name', '2nd Nikah') }} - {{ \App\Models\Setting::get('site_tagline', 'Every Heart Deserves a 2nd Chance') }}</title>
     <meta name="description" content="A dignified, mature matrimonial platform for individuals seeking a second chance at marriage with faith, integrity, and privacy.">

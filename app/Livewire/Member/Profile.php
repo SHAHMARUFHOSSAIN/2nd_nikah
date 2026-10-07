@@ -28,6 +28,7 @@ class Profile extends Component
     public ?string $education = '';
     public ?string $occupation = '';
     public ?string $about_me = '';
+    public ?string $partner_expectation = '';
     public int $children_count = 0;
 
     public bool $is_profile_visible = true;
@@ -40,19 +41,20 @@ class Profile extends Component
             'last_name' => ['required', 'string', 'max:100'],
             'date_of_birth' => ['required', 'date', 'before:today'],
             'gender' => ['required', 'in:male,female'],
-            'marital_status' => ['required', 'in:Never Married,Divorced,Widowed,Single Parent'],
+            'marital_status' => ['required', 'in:Unmarried,Never Married,Married,Married (Seeking 2nd Marriage),Divorced,Widowed,Single Parent'],
             'religion' => ['required', 'in:Islam,Hinduism,Christianity,Buddhism,Other'],
             'city' => ['nullable', 'string', 'max:100'],
             'country' => ['nullable', 'string', 'max:100'],
             'location' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:30'],
-            'height' => ['nullable', 'integer', 'min:50', 'max:250'],
+            'height' => ['nullable', 'integer', 'min:30', 'max:250'],
             'education' => ['nullable', 'string', 'max:255'],
             'occupation' => ['nullable', 'string', 'max:255'],
             'about_me' => ['nullable', 'string', 'max:2000'],
+            'partner_expectation' => ['nullable', 'string', 'max:2000'],
             'children_count' => ['nullable', 'integer', 'min:0', 'max:20'],
             'is_profile_visible' => ['boolean'],
-            'photo' => ['nullable', 'image', 'max:10240'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,heic,heif', 'max:10240'],
         ];
     }
 
@@ -67,17 +69,19 @@ class Profile extends Component
         $this->last_name = $profile->last_name ?? '';
         $this->date_of_birth = $profile->date_of_birth ? $profile->date_of_birth->format('Y-m-d') : '';
         $this->gender = $profile->gender ?? '';
-        $this->marital_status = $profile->marital_status ?? '';
+        $this->marital_status = ($profile->marital_status === 'Never Married') ? 'Unmarried' : ($profile->marital_status ?? '');
         $this->religion = $profile->religion ?? '';
         $this->location = $profile->location ?? '';
         $this->city = $profile->city ?? '';
         $this->country = $profile->country ?? '';
         $this->phone = $profile->phone ?? '';
 
-        $this->height = $profile->height;
+        $rawHeight = $profile->height;
+        $this->height = ($rawHeight && $rawHeight >= 100) ? (int) round($rawHeight / 2.54) : $rawHeight;
         $this->education = $profile->education ?? '';
         $this->occupation = $profile->occupation ?? '';
         $this->about_me = $profile->about_me ?? '';
+        $this->partner_expectation = $profile->partner_expectation ?? '';
         $this->children_count = $profile->children_count ?? 0;
         $this->is_profile_visible = (bool) ($profile->is_profile_visible ?? true);
     }
@@ -104,6 +108,7 @@ class Profile extends Component
             'education' => $this->education,
             'occupation' => $this->occupation,
             'about_me' => $this->about_me,
+            'partner_expectation' => $this->partner_expectation,
             'children_count' => $this->children_count,
             'is_profile_visible' => $this->is_profile_visible,
         ];

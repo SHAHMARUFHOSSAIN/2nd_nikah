@@ -25,14 +25,14 @@ class Photos extends Component
     protected function rules(): array
     {
         return [
-            'newPhotos.*' => ['image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+            'newPhotos.*' => ['image', 'mimes:jpeg,jpg,png,webp,heic,heif', 'max:10240'],
         ];
     }
 
     protected $messages = [
         'newPhotos.*.image' => 'Uploaded files must be valid images.',
-        'newPhotos.*.mimes' => 'Only JPG, PNG, and WEBP images are supported.',
-        'newPhotos.*.max' => 'Images must not exceed 5MB in size.',
+        'newPhotos.*.mimes' => 'Only JPG, PNG, WEBP, and HEIC images are supported.',
+        'newPhotos.*.max' => 'Images must not exceed 10MB in size.',
     ];
 
     public function mount(): void

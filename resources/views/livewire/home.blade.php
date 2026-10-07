@@ -117,10 +117,12 @@
                                             <div>
                                                 <label class="block text-xs font-bold text-slate-700 mb-1">Marital Status</label>
                                                 <select name="marital_status" class="w-full text-xs font-semibold rounded-xl border-slate-200 bg-slate-50/70 p-2.5 focus:border-rose-400 focus:ring-rose-400">
-                                                    <option value="">Any Status</option>
-                                                    <option value="divorced">Divorced (তালাকপ্রাপ্ত)</option>
-                                                    <option value="widowed">Widowed (বিধবা/বিপত্নীক)</option>
-                                                    <option value="single">Single (অবিবাহিত)</option>
+                                                    <option value="">Any Status (সকল)</option>
+                                                    <option value="Unmarried">Unmarried (অবিবাহিত)</option>
+                                                    <option value="Married (Seeking 2nd Marriage)">Married - Seeking 2nd Marriage (বিবাহিত - ২য় বিবাহ)</option>
+                                                    <option value="Divorced">Divorced (তালাকপ্রাপ্ত / ডিভোর্সড)</option>
+                                                    <option value="Widowed">Widowed (বিধবা / বিপত্নীক)</option>
+                                                    <option value="Single Parent">Single Parent (সন্তানসহ)</option>
                                                 </select>
                                             </div>
                                             <div>

@@ -57,11 +57,16 @@
                                 @endphp
                                 <a href="{{ route('member.messages.show', $conv->id) }}" class="group flex items-center justify-between p-2.5 rounded-xl transition-all duration-150 gap-2.5 {{ $isActiveConv ? 'bg-rose-50 border border-rose-200 shadow-2xs' : 'hover:bg-slate-50' }}">
                                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                                        <div class="w-10 h-10 rounded-full ring-2 ring-rose-100 overflow-hidden bg-slate-100 shrink-0 flex items-center justify-center font-bold text-rose-600 text-xs">
+                                        <div class="relative w-10 h-10 rounded-full ring-2 ring-rose-100 overflow-hidden bg-slate-100 shrink-0 flex items-center justify-center font-bold text-rose-600 text-xs">
                                             @if ($pProfile && $pProfile->profile_photo_path)
                                                 <img src="{{ Storage::url($pProfile->profile_photo_path) }}" alt="{{ $pProfile->full_name }}" class="w-full h-full object-cover">
                                             @else
                                                 <span>{{ mb_substr($pProfile?->first_name ?: $pUser?->name, 0, 1) }}</span>
+                                            @endif
+                                            @if ($pUser && $pUser->isOnline())
+                                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full" title="Online now"></span>
+                                            @else
+                                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-slate-300 ring-2 ring-white rounded-full" title="Offline"></span>
                                             @endif
                                         </div>
                                         <div class="min-w-0 flex-1">
@@ -110,7 +115,11 @@
                             @else
                                 <span class="text-xs sm:text-sm">{{ mb_substr($partnerProfile?->first_name ?: $partner?->name, 0, 1) }}</span>
                             @endif
-                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full"></span>
+                            @if ($partner && $partner->isOnline())
+                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 ring-2 ring-white rounded-full" title="Online now"></span>
+                            @else
+                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-slate-300 ring-2 ring-white rounded-full" title="Offline"></span>
+                            @endif
                         </div>
 
                         {{-- Member Details Header --}}
@@ -126,32 +135,67 @@
                                 @endif
                             </div>
                             <div class="flex items-center gap-1.5 text-[11px] text-slate-500 truncate mt-0.5">
+                                @if ($partner && $partner->isOnline())
+                                    <span class="text-emerald-600 font-bold inline-flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
+                                    </span>
+                                @else
+                                    <span class="text-slate-400">Offline</span>
+                                @endif
+                                <span>•</span>
                                 @if ($partnerProfile)
                                     <span>{{ $partnerProfile->age ? $partnerProfile->age . ' yrs' : '' }}</span>
                                     @if ($partnerProfile->city)
-                                        <span class="inline-flex items-center gap-0.5">
-                                            <svg class="w-3 h-3 text-slate-400 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                            {{ $partnerProfile->city }}
-                                        </span>
+                                        <span class="hidden sm:inline">• {{ $partnerProfile->city }}</span>
                                     @endif
                                 @endif
-                                <span class="text-emerald-700 font-semibold inline-flex items-center gap-0.5">
-                                    <svg class="w-3 h-3 text-emerald-600 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                    Mutual Match
-                                </span>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Actions (Profile & More Options) --}}
+                    {{-- Actions (WhatsApp CTA + Profile & More Options) --}}
                     <div class="flex items-center gap-1.5 shrink-0" x-data="{ open: false }">
+                        @php
+                            $headerPartnerPhone = $partnerProfile?->phone ?: $partner?->phone;
+                            $cleanHeaderPartnerPhone = preg_replace('/[^0-9]/', '', $headerPartnerPhone ?: '');
+                            if (str_starts_with($cleanHeaderPartnerPhone, '01') && strlen($cleanHeaderPartnerPhone) === 11) {
+                                $cleanHeaderPartnerPhone = '88' . $cleanHeaderPartnerPhone;
+                            }
+                        @endphp
+
+                        {{-- Prominent WhatsApp Action in Header --}}
+                        @if ($whatsappRequest && $whatsappRequest->isAccepted() && $cleanHeaderPartnerPhone)
+                            <a href="https://wa.me/{{ $cleanHeaderPartnerPhone }}" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 rounded-xl shadow-xs transition shrink-0 whitespace-nowrap" title="Chat on WhatsApp">
+                                <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg>
+                                <span>WhatsApp</span>
+                            </a>
+                        @elseif ($whatsappRequest && $whatsappRequest->isPending())
+                            @if ($whatsappRequest->receiver_id === auth()->id())
+                                <button wire:click="acceptWhatsApp({{ $whatsappRequest->id }})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-bold px-2 sm:px-2.5 py-1.5 rounded-xl shadow-2xs transition shrink-0">
+                                    Accept WhatsApp
+                                </button>
+                            @else
+                                <span class="bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-semibold px-2 sm:px-2.5 py-1.5 rounded-xl shrink-0">
+                                    ⏳ WhatsApp Sent
+                                </span>
+                            @endif
+                        @else
+                            @if ($isPremium)
+                                <button wire:click="requestWhatsApp" type="button" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-bold text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 rounded-xl shadow-2xs transition shrink-0" title="Request WhatsApp details">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 fill-current shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg>
+                                    <span class="hidden sm:inline">Request WhatsApp</span>
+                                    <span class="sm:hidden">WhatsApp</span>
+                                </button>
+                            @endif
+                        @endif
+
                         @if ($partnerProfile)
-                            <a href="{{ route('members.show', $partnerProfile->id) }}" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-slate-700 hover:text-rose-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-2.5 py-1 rounded-lg transition shrink-0 whitespace-nowrap">
+                            <a href="{{ route('members.show', $partnerProfile->id) }}" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-slate-700 hover:text-rose-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-2.5 py-1.5 rounded-xl transition shrink-0 whitespace-nowrap">
                                 <span>Profile</span>
                             </a>
                         @endif
 
-                        <button @click="open = !open" @click.away="open = false" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-full transition" title="More options">
+                        <button @click="open = !open" @click.away="open = false" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="More options">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/></svg>
                         </button>
                         <div x-show="open" x-transition x-cloak class="absolute right-3 top-12 w-48 bg-white border border-slate-200/90 rounded-xl shadow-xl py-1 z-50 divide-y divide-slate-100">
@@ -175,7 +219,7 @@
                 </div>
 
                 {{-- Messages Thread Body (Exclusive Scroll Area) --}}
-                <div class="flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto bg-slate-50/40 space-y-3.5 relative z-10" id="chat-messages-container">
+                <div class="flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto bg-slate-50/40 space-y-3.5 relative z-10" id="chat-messages-container" wire:poll.2s>
                     
                     @if ($messages->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400 space-y-2">
@@ -275,20 +319,50 @@
                                                         </button>
                                                     @endif
                                                 @elseif ($whatsappRequest->isAccepted())
-                                                    <div class="bg-white p-2 rounded-lg border border-emerald-300 space-y-1">
-                                                        <div class="text-xs font-bold text-emerald-900">
-                                                            WhatsApp Contact Shared
+                                                    @php
+                                                        $myNumber = auth()->user()->memberProfile?->phone ?: auth()->user()->phone;
+                                                        $partnerNumber = $partnerProfile?->phone ?: $partner?->phone;
+                                                        $cleanPartnerNumber = preg_replace('/[^0-9]/', '', $partnerNumber ?: '');
+                                                        if (str_starts_with($cleanPartnerNumber, '01') && strlen($cleanPartnerNumber) === 11) {
+                                                            $cleanPartnerNumber = '88' . $cleanPartnerNumber;
+                                                        }
+                                                    @endphp
+                                                    <div class="bg-white p-3 rounded-xl border border-emerald-300 space-y-2.5 shadow-2xs">
+                                                        <div class="flex items-center justify-between gap-2 border-b border-emerald-100 pb-1.5">
+                                                            <div class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                                                                <svg class="w-4 h-4 text-emerald-600 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.678.15-.201.301-.779.982-.955 1.183-.176.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.131-.613.136-.135.301-.351.452-.527.151-.176.201-.301.301-.502.101-.201.05-.377-.025-.527-.075-.15-.678-1.635-.93-2.238-.244-.587-.492-.507-.678-.517-.176-.01-.377-.01-.577-.01s-.527.075-.803.377c-.276.301-1.054 1.03-1.054 2.512 0 1.481 1.079 2.912 1.229 3.113.15.201 2.124 3.243 5.146 4.549.719.31 1.28.495 1.718.634.722.23 1.379.197 1.899.12.579-.086 1.785-.729 2.036-1.431.251-.703.251-1.305.176-1.431-.075-.126-.276-.201-.577-.352z"/></svg>
+                                                                <span>WhatsApp Contact Exchanged</span>
+                                                            </div>
+                                                            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Connected</span>
                                                         </div>
-                                                        <div class="text-xs text-slate-800 font-mono bg-slate-50 p-1.5 rounded border border-slate-200 flex items-center justify-between">
-                                                            <strong class="text-xs text-slate-900">
-                                                                {{ $whatsappRequest->requester_id === auth()->id() ? ($partnerProfile?->phone ?: 'Phone unavailable') : (auth()->user()->memberProfile?->phone ?: 'Phone unavailable') }}
-                                                            </strong>
-                                                            @if ($partnerProfile?->phone)
-                                                                <button @click="navigator.clipboard.writeText('{{ $partnerProfile->phone }}'); copiedToast = true; setTimeout(() => copiedToast = false, 2000)" class="text-[11px] text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 font-bold px-2 py-0.5 rounded transition">
-                                                                    Copy
-                                                                </button>
-                                                            @endif
+
+                                                        {{-- Partner's WhatsApp Number --}}
+                                                        <div class="space-y-1">
+                                                            <span class="text-[11px] font-bold text-slate-600 block">{{ $partnerProfile?->first_name ?: 'Partner' }}'s WhatsApp:</span>
+                                                            <div class="flex items-center justify-between gap-2 bg-emerald-50/70 p-2 rounded-lg border border-emerald-200">
+                                                                <span class="text-xs font-mono font-black text-emerald-950">{{ $partnerNumber ?: 'Phone unavailable' }}</span>
+                                                                <div class="flex items-center gap-1.5 shrink-0">
+                                                                    @if ($partnerNumber)
+                                                                        <button type="button" @click="navigator.clipboard.writeText('{{ $partnerNumber }}'); copiedToast = true; setTimeout(() => copiedToast = false, 2000)" class="text-[11px] bg-white border border-emerald-300 text-emerald-700 font-bold px-2 py-1 rounded hover:bg-emerald-100 transition">
+                                                                            Copy
+                                                                        </button>
+                                                                    @endif
+                                                                    @if ($cleanPartnerNumber)
+                                                                        <a href="https://wa.me/{{ $cleanPartnerNumber }}" target="_blank" class="text-[11px] bg-emerald-600 text-white font-bold px-2.5 py-1 rounded hover:bg-emerald-700 transition flex items-center gap-1">
+                                                                            <span>Open WhatsApp 💬</span>
+                                                                        </a>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
+
+                                                        {{-- User's Own Number --}}
+                                                        @if ($myNumber)
+                                                            <div class="pt-0.5 text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-100">
+                                                                <span>Your shared number:</span>
+                                                                <span class="font-mono font-semibold text-slate-700">{{ $myNumber }}</span>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 @elseif ($whatsappRequest->isRejected())
                                                     <p class="text-xs text-slate-500 italic">WhatsApp request was declined.</p>
@@ -303,7 +377,9 @@
 
                                     {{-- Message Metadata --}}
                                     <div class="mt-1 flex items-center justify-between gap-2 text-[10px] opacity-80 select-none">
-                                        <span>{{ $msg->created_at->format('g:i A') }}</span>
+                                        <span x-text="new Date('{{ $msg->created_at->toIso8601String() }}').toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })">
+                                            {{ $msg->created_at->setTimezone('Asia/Dhaka')->format('g:i A') }}
+                                        </span>
                                         
                                         @if ($isMine)
                                             <div class="flex items-center gap-0.5 font-bold">
@@ -395,7 +471,7 @@
 
                                 <div x-show="composerMenuOpen" x-transition x-cloak class="absolute bottom-12 left-0 w-52 bg-white border border-slate-200/90 rounded-2xl shadow-xl p-1.5 z-40 space-y-1">
                                     <label class="cursor-pointer flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 rounded-xl transition">
-                                        <input type="file" wire:model="attachment" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden" @change="composerMenuOpen = false">
+                                        <input type="file" wire:model="attachment" accept="image/*" class="hidden" @change="composerMenuOpen = false">
                                         <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                         <span>Attach Image (Max 5MB)</span>
                                     </label>
@@ -411,7 +487,7 @@
                                 <textarea wire:model="messageBody" rows="1"
                                           @keydown.enter.prevent="if (!$event.shiftKey) $wire.sendMessage()"
                                           placeholder="Type a message..."
-                                          class="w-full text-xs sm:text-sm px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
+                                          class="w-full text-base sm:text-sm px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
                             </div>
 
                             {{-- Send Button --}}
