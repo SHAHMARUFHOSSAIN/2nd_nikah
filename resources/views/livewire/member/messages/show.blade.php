@@ -259,7 +259,7 @@
                             <div class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} group relative">
                                 
                                 {{-- Message Bubble (Max 80% Width on Mobile) --}}
-                                <div class="max-w-[84%] sm:max-w-[78%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs transition-all relative {{ $isMine ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-tr-xs' : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-xs' }}">
+                                <div class="max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-2.5 text-[13.5px] sm:text-[15px] leading-relaxed shadow-2xs transition-all relative font-medium {{ $isMine ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-tr-xs' : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-xs' }}">
 
                                     {{-- Quoted Reply Context --}}
                                     @if ($msg->replyTo)
@@ -292,7 +292,7 @@
                                                 <img src="{{ route('member.messages.attachment', $msg->id) }}" alt="Chat attachment" class="w-full h-auto max-h-56 object-cover rounded-xl" loading="lazy">
                                             </div>
                                             @if (! empty($msg->body) && $msg->body !== 'Sent an image')
-                                                <p class="whitespace-pre-wrap break-words">{{ $msg->body }}</p>
+                                                <p class="whitespace-pre-wrap break-words font-medium text-[13.5px] sm:text-[15px] leading-relaxed mt-1">{{ $msg->body }}</p>
                                             @endif
                                         </div>
                                     @elseif ($msg->isWhatsAppRequest())
@@ -379,7 +379,7 @@
                                             @endif
                                         </div>
                                     @else
-                                        <p class="whitespace-pre-wrap break-words">{{ $msg->body }}</p>
+                                        <p class="whitespace-pre-wrap break-words font-medium text-[13.5px] sm:text-[15px] leading-relaxed tracking-normal">{{ $msg->body }}</p>
                                     @endif
 
                                     {{-- Message Metadata --}}
@@ -515,23 +515,23 @@
                                 <textarea wire:model="messageBody" rows="1"
                                           @keydown.enter.prevent="if (!$event.shiftKey) $wire.sendMessage()"
                                           placeholder="Type a message..."
-                                          class="w-full text-base sm:text-sm px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
+                                          class="w-full text-sm sm:text-base font-medium px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
                             </div>
 
-                            {{-- Send Button --}}
-                            <button type="submit" wire:loading.attr="disabled" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="btn btn-primary px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap inline-flex items-center justify-center disabled:opacity-60 cursor-pointer" title="Send message">
+                            {{-- Send Button (Targeted strictly to sendMessage to prevent jumping during wire:poll) --}}
+                            <button type="submit" wire:loading.attr="disabled" wire:target="sendMessage" style="white-space: nowrap !important; flex-shrink: 0 !important;" class="btn btn-primary px-3.5 sm:px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap inline-flex items-center justify-center disabled:opacity-60 cursor-pointer" title="Send message">
                                 {{-- Idle State --}}
-                                <span wire:loading.remove class="hidden sm:inline">Send</span>
-                                <svg wire:loading.remove class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                <span wire:loading.remove wire:target="sendMessage" class="hidden sm:inline">Send</span>
+                                <svg wire:loading.remove wire:target="sendMessage" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/>
                                 </svg>
 
-                                {{-- Sending / Loading State --}}
-                                <svg wire:loading class="w-4 h-4 shrink-0 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                                {{-- Sending / Loading State (Only shown during message transmission) --}}
+                                <svg wire:loading wire:target="sendMessage" class="w-4 h-4 shrink-0 animate-spin text-white" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                <span wire:loading class="hidden sm:inline text-xs font-bold">Sending...</span>
+                                <span wire:loading wire:target="sendMessage" class="hidden sm:inline text-xs font-bold">Sending...</span>
                             </button>
                         </form>
                     @else
