@@ -1,5 +1,10 @@
-<div class="h-full w-full flex flex-col bg-slate-100/60 overflow-hidden" x-data="{ showLightbox: false, activeImageUrl: '', copiedToast: false, composerMenuOpen: false }">
-    <div class="max-w-7xl w-full mx-auto sm:px-4 lg:px-8 h-full flex flex-col overflow-hidden p-0 sm:py-3">
+<div class="h-full w-full flex-1 min-h-0 flex flex-col bg-slate-100/60 overflow-hidden" 
+     x-data="chatRoomController()" 
+     x-init="initChat()" 
+     @message-sent.window="onMessageSent()" 
+     @messages-polled.window="onMessagesPolled()" 
+     wire:poll.3s="pollMessages">
+    <div class="max-w-7xl w-full mx-auto sm:px-4 lg:px-8 h-full flex-1 min-h-0 flex flex-col overflow-hidden p-0 sm:py-3">
 
         {{-- Toast notification for copied text --}}
         <div x-show="copiedToast" x-transition x-cloak class="fixed top-5 right-5 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2">
@@ -97,7 +102,7 @@
             </div>
 
             {{-- Right Pane: Active Chat Room --}}
-            <div class="flex-1 flex flex-col bg-white min-w-0 h-full overflow-hidden relative">
+            <div class="flex-1 min-h-0 flex flex-col bg-white min-w-0 h-full overflow-hidden relative">
 
                 {{-- Compact Mobile & Desktop Chat Room Header (Fixed Top Layer) --}}
                 <div class="px-3 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-rose-100 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs relative z-20">
@@ -226,7 +231,11 @@
                 </div>
 
                 {{-- Messages Thread Body (Exclusive Scroll Area) --}}
-                <div class="flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto bg-slate-50/40 space-y-3.5 relative z-10" id="chat-messages-container" wire:poll.2s>
+                <div class="flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto overscroll-contain bg-slate-50/40 space-y-3.5 relative z-10" 
+                     id="chat-messages-container" 
+                     x-ref="messagesContainer" 
+                     @scroll.passive="handleScroll()" 
+                     style="overflow-anchor: auto;">
                     
                     @if ($messages->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400 space-y-2">
@@ -247,7 +256,7 @@
 
                             {{-- Unread Divider Line --}}
                             @if ($isFirstUnread)
-                                <div class="flex items-center my-3">
+                                <div wire:key="unread-divider-{{ $msg->id }}" class="flex items-center my-3">
                                     <div class="flex-grow border-t border-rose-200"></div>
                                     <span class="flex-shrink mx-3 text-[10px] font-extrabold text-rose-600 bg-rose-100 border border-rose-200 px-3 py-0.5 rounded-full shadow-2xs">
                                         New Unread Messages
@@ -256,7 +265,7 @@
                                 </div>
                             @endif
 
-                            <div class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} group relative">
+                            <div wire:key="msg-{{ $msg->id }}" class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} group relative">
                                 
                                 {{-- Message Bubble (Max 80% Width on Mobile) --}}
                                 <div class="max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-2.5 text-[13.5px] sm:text-[15px] leading-relaxed shadow-2xs transition-all relative font-medium {{ $isMine ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-tr-xs' : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-xs' }}">
@@ -428,8 +437,24 @@
                     @endif
                 </div>
 
+                {{-- Scroll to bottom floating button when user has scrolled up --}}
+                <button x-show="!isAtBottom" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2 scale-90"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave-end="opacity-0 translate-y-2 scale-90"
+                        x-cloak
+                        type="button"
+                        @click="scrollToBottom(true)"
+                        class="absolute right-4 bottom-24 z-30 bg-white/95 hover:bg-rose-50 text-rose-600 shadow-xl border border-rose-200 rounded-full p-2.5 transition active:scale-95 flex items-center justify-center cursor-pointer"
+                        title="Scroll to latest messages">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                </button>
+
                 {{-- Composer Input Section (Fixed Bottom Layer) --}}
-                <div class="p-2.5 sm:p-3 bg-white border-t border-slate-100 space-y-2 shrink-0 relative z-20">
+                <div class="p-2.5 sm:p-3 bg-white border-t border-slate-100 space-y-2 shrink-0 mt-auto relative z-20 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
 
                     {{-- Quoted Reply Context --}}
                     @if ($replyToMessageId)
@@ -624,17 +649,87 @@
 </div>
 
 <script>
-    document.addEventListener('livewire:initialized', () => {
-        const container = document.getElementById('chat-messages-container');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
+    function chatRoomController() {
+        return {
+            showLightbox: false,
+            activeImageUrl: '',
+            copiedToast: false,
+            composerMenuOpen: false,
+            isAtBottom: true,
+            userIsScrolling: false,
+            scrollTimeout: null,
 
-        Livewire.hook('morph.updated', ({ component }) => {
-            const container = document.getElementById('chat-messages-container');
-            if (container) {
-                container.scrollTop = container.scrollHeight;
+            initChat() {
+                // Scroll immediately to bottom on page load
+                this.$nextTick(() => {
+                    this.scrollToBottom(false);
+                });
+
+                // Follow-up scroll once initial DOM & images finish rendering
+                setTimeout(() => {
+                    this.scrollToBottom(false);
+                }, 200);
+
+                // Observe DOM mutations inside the message thread
+                this.$nextTick(() => {
+                    const container = this.$refs.messagesContainer;
+                    if (container) {
+                        const observer = new MutationObserver(() => {
+                            if (this.isAtBottom && !this.userIsScrolling) {
+                                this.scrollToBottom(false);
+                            }
+                        });
+                        observer.observe(container, { childList: true, subtree: true });
+                    }
+                });
+            },
+
+            handleScroll() {
+                const el = this.$refs.messagesContainer;
+                if (!el) return;
+
+                // Threshold: If user is within 120px from bottom, they are considered "at bottom"
+                const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+                this.isAtBottom = distance <= 120;
+
+                this.userIsScrolling = true;
+                clearTimeout(this.scrollTimeout);
+                this.scrollTimeout = setTimeout(() => {
+                    this.userIsScrolling = false;
+                }, 350);
+            },
+
+            scrollToBottom(smooth = true) {
+                const el = this.$refs.messagesContainer;
+                if (!el) return;
+
+                if (smooth) {
+                    el.scrollTo({
+                        top: el.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    el.scrollTop = el.scrollHeight;
+                }
+                this.isAtBottom = true;
+            },
+
+            onMessageSent() {
+                // When a message is sent, smoothly scroll all the way to the bottom
+                this.$nextTick(() => {
+                    this.scrollToBottom(true);
+                });
+                setTimeout(() => {
+                    this.scrollToBottom(true);
+                }, 120);
+            },
+
+            onMessagesPolled() {
+                // When polling fetches new messages, only scroll down if the user was already at the bottom
+                if (this.isAtBottom && !this.userIsScrolling) {
+                    this.scrollToBottom(false);
+                }
             }
-        });
-    });
+        };
+    }
 </script>

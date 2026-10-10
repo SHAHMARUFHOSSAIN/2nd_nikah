@@ -201,6 +201,18 @@ class Show extends Component
         $this->messageBody = '';
         $this->attachment = null;
         $this->replyToMessageId = null;
+
+        $this->dispatch('message-sent');
+    }
+
+    public function pollMessages(): void
+    {
+        if (! Auth::check()) {
+            return;
+        }
+
+        $this->conversation->markAsReadFor(Auth::id());
+        $this->dispatch('messages-polled');
     }
 
     public function deleteMessage(int $messageId): void
@@ -286,6 +298,7 @@ class Show extends Component
             'last_message_at' => $msg->created_at,
         ]);
 
+        $this->dispatch('message-sent');
         $this->successMessage = 'WhatsApp contact request sent to ' . ($partner->memberProfile?->full_name ?: $partner->name) . '.';
     }
 
@@ -321,6 +334,7 @@ class Show extends Component
             'last_message_at' => $msg->created_at,
         ]);
 
+        $this->dispatch('message-sent');
         $this->successMessage = 'WhatsApp contact exchange accepted!';
     }
 

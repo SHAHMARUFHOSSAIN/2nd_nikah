@@ -30,7 +30,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body x-data="{ mobileMenuOpen: false }" @keydown.window.escape="mobileMenuOpen = false" class="bg-slate-50/70 text-slate-800 font-sans antialiased min-h-screen flex flex-col {{ request()->routeIs('member.messages.*') ? 'h-screen overflow-hidden' : '' }}">
+<body x-data="{ mobileMenuOpen: false }" @keydown.window.escape="mobileMenuOpen = false" class="bg-slate-50/70 text-slate-800 font-sans antialiased min-h-[100dvh] flex flex-col {{ request()->routeIs('member.messages.*') ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : '' }}">
     
     {{-- Top Sticky Header --}}
     <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100/80 shadow-2xs">
@@ -218,7 +218,7 @@
     </div>
 
     {{-- Main Content --}}
-    <main class="main-content flex-1 w-full {{ request()->routeIs('member.messages.*') ? 'h-[calc(100dvh-64px)] overflow-hidden flex flex-col' : 'pb-20 md:pb-8' }}">
+    <main class="main-content flex-1 min-h-0 w-full {{ request()->routeIs('member.messages.*') ? 'h-[calc(100dvh-64px)] max-h-[calc(100dvh-64px)] overflow-hidden flex flex-col' : 'pb-20 md:pb-8' }}">
         {{ $slot }}
     </main>
 
