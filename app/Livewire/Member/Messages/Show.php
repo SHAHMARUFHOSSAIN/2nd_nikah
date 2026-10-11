@@ -140,11 +140,11 @@ class Show extends Component
         // Validation for attachment if present
         if ($this->attachment) {
             $this->validate([
-                'attachment' => 'image|max:5120|mimes:jpg,jpeg,png,webp',
+                'attachment' => 'image|max:5120|mimes:jpg,jpeg,png,webp,heic,heif',
             ], [
                 'attachment.image' => 'The attachment must be a valid image file.',
                 'attachment.max' => 'The attachment size must not exceed 5 MB.',
-                'attachment.mimes' => 'Allowed image formats are JPG, JPEG, PNG, and WEBP.',
+                'attachment.mimes' => 'Allowed image formats are JPG, JPEG, PNG, WEBP, and HEIC.',
             ]);
         }
 
@@ -211,7 +211,9 @@ class Show extends Component
             return;
         }
 
-        $this->conversation->markAsReadFor(Auth::id());
+        $user = Auth::user();
+        $user->touchOnline();
+        $this->conversation->markAsReadFor($user->id);
         $this->dispatch('messages-polled');
     }
 

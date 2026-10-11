@@ -235,7 +235,7 @@
                      id="chat-messages-container" 
                      x-ref="messagesContainer" 
                      @scroll.passive="handleScroll()" 
-                     style="overflow-anchor: auto;">
+                     style="overflow-anchor: auto; -webkit-overflow-scrolling: touch;">
                     
                     @if ($messages->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400 space-y-2">
@@ -265,7 +265,7 @@
                                 </div>
                             @endif
 
-                            <div wire:key="msg-{{ $msg->id }}" class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} group relative">
+                            <div wire:key="msg-{{ $msg->id }}" data-chat-msg="true" class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} group relative">
                                 
                                 {{-- Message Bubble (Max 80% Width on Mobile) --}}
                                 <div class="max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-2.5 text-[13.5px] sm:text-[15px] leading-relaxed shadow-2xs transition-all relative font-medium {{ $isMine ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-tr-xs' : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-xs' }}">
@@ -524,7 +524,7 @@
 
                                 <div x-show="composerMenuOpen" x-transition x-cloak class="absolute bottom-12 left-0 w-52 bg-white border border-slate-200/90 rounded-2xl shadow-xl p-1.5 z-40 space-y-1">
                                     <label class="cursor-pointer flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 rounded-xl transition">
-                                        <input type="file" wire:model="attachment" accept="image/*" class="hidden" @change="composerMenuOpen = false">
+                                        <input type="file" wire:model="attachment" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*" class="hidden" @change="composerMenuOpen = false">
                                         <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                         <span>Attach Image (Max 5MB)</span>
                                     </label>
@@ -538,9 +538,11 @@
                             {{-- Text Area Input --}}
                             <div class="flex-1 min-w-0">
                                 <textarea wire:model="messageBody" rows="1"
+                                          @focus="onFocusInput()"
                                           @keydown.enter.prevent="if (!$event.shiftKey) $wire.sendMessage()"
                                           placeholder="Type a message..."
-                                          class="w-full text-sm sm:text-base font-medium px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
+                                          enterkeyhint="send"
+                                          class="w-full text-base font-medium px-3.5 py-2.5 bg-slate-50 border border-slate-200/90 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none resize-none max-h-24 transition text-slate-800 placeholder-slate-400"></textarea>
                             </div>
 
                             {{-- Send Button (Targeted strictly to sendMessage to prevent jumping during wire:poll) --}}
@@ -658,11 +660,16 @@
             isAtBottom: true,
             userIsScrolling: false,
             scrollTimeout: null,
+            lastMsgCount: 0,
 
             initChat() {
                 // Scroll immediately to bottom on page load
                 this.$nextTick(() => {
                     this.scrollToBottom(false);
+                    const el = this.$refs.messagesContainer;
+                    if (el) {
+                        this.lastMsgCount = el.querySelectorAll('[data-chat-msg]').length;
+                    }
                 });
 
                 // Follow-up scroll once initial DOM & images finish rendering
@@ -682,6 +689,34 @@
                         observer.observe(container, { childList: true, subtree: true });
                     }
                 });
+            },
+
+            playIncomingSound() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return;
+                    const ctx = new AudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.09);
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.09);
+                } catch (e) {
+                    // Silently ignore if blocked by browser policy
+                }
+            },
+
+            onFocusInput() {
+                // Keep composer and messages visible when virtual keyboard opens
+                setTimeout(() => {
+                    this.scrollToBottom(true);
+                }, 280);
             },
 
             handleScroll() {
@@ -718,6 +753,10 @@
                 // When a message is sent, smoothly scroll all the way to the bottom
                 this.$nextTick(() => {
                     this.scrollToBottom(true);
+                    const el = this.$refs.messagesContainer;
+                    if (el) {
+                        this.lastMsgCount = el.querySelectorAll('[data-chat-msg]').length;
+                    }
                 });
                 setTimeout(() => {
                     this.scrollToBottom(true);
@@ -725,7 +764,20 @@
             },
 
             onMessagesPolled() {
-                // When polling fetches new messages, only scroll down if the user was already at the bottom
+                const el = this.$refs.messagesContainer;
+                if (el) {
+                    const currentCount = el.querySelectorAll('[data-chat-msg]').length;
+                    if (this.lastMsgCount > 0 && currentCount > this.lastMsgCount) {
+                        // A new message has arrived; check if from partner
+                        const lastMsg = el.querySelector('[data-chat-msg]:last-child');
+                        if (lastMsg && !lastMsg.classList.contains('items-end')) {
+                            this.playIncomingSound();
+                        }
+                    }
+                    this.lastMsgCount = currentCount;
+                }
+
+                // When polling fetches new messages, only scroll down if user was already at bottom
                 if (this.isAtBottom && !this.userIsScrolling) {
                     this.scrollToBottom(false);
                 }
