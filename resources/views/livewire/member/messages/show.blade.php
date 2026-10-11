@@ -1,4 +1,4 @@
-<div class="h-full w-full flex-1 min-h-0 flex flex-col bg-slate-100/60 overflow-hidden" 
+<div class="chat-room-screen fixed inset-0 z-30 md:static md:inset-auto md:h-full w-full flex-1 min-h-0 flex flex-col bg-white md:bg-slate-100/60 overflow-hidden overscroll-none" 
      x-data="chatRoomController()" 
      x-init="initChat()" 
      @message-sent.window="onMessageSent()" 
@@ -14,20 +14,22 @@
 
         {{-- Flash Error Notice --}}
         @if ($errorMessage)
-            <div class="mb-2 bg-red-50 border-l-4 border-red-500 p-3 rounded-r-xl shadow-2xs flex items-center justify-between text-red-700 text-xs sm:text-sm shrink-0">
+            <div class="fixed top-3 inset-x-3 sm:inset-x-auto sm:right-5 z-50 bg-red-50 border-l-4 border-red-500 p-3 rounded-xl shadow-xl flex items-center justify-between text-red-700 text-xs sm:text-sm">
                 <div class="flex items-center gap-2">
                     <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                     <span>{{ $errorMessage }}</span>
                 </div>
+                <button wire:click="$set('errorMessage', null)" class="text-red-500 hover:text-red-700 font-bold ml-2 cursor-pointer">&times;</button>
             </div>
         @endif
 
         @if ($successMessage)
-            <div class="mb-2 bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-xl shadow-2xs flex items-center justify-between text-emerald-800 text-xs sm:text-sm shrink-0">
+            <div class="fixed top-3 inset-x-3 sm:inset-x-auto sm:right-5 z-50 bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-xl shadow-xl flex items-center justify-between text-emerald-800 text-xs sm:text-sm">
                 <div class="flex items-center gap-2">
                     <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                     <span>{{ $successMessage }}</span>
                 </div>
+                <button wire:click="$set('successMessage', null)" class="text-emerald-500 hover:text-emerald-700 font-bold ml-2 cursor-pointer">&times;</button>
             </div>
         @endif
 
@@ -105,7 +107,7 @@
             <div class="flex-1 min-h-0 flex flex-col bg-white min-w-0 h-full overflow-hidden relative">
 
                 {{-- Compact Mobile & Desktop Chat Room Header (Fixed Top Layer) --}}
-                <div class="px-3 sm:px-5 py-2.5 sm:py-3 pt-[max(0.625rem,env(safe-area-inset-top,0px))] bg-white border-b border-rose-100 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs relative z-20">
+                <div class="chat-room-header px-3 sm:px-5 py-2.5 sm:py-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] bg-white border-b border-rose-100 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs sticky top-0 z-30">
                     
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         {{-- Back Button --}}
@@ -235,11 +237,11 @@
                 </div>
 
                 {{-- Messages Thread Body (Exclusive Scroll Area) --}}
-                <div class="flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto overscroll-contain bg-slate-50/40 space-y-3.5 relative z-10" 
+                <div class="chat-room-messages flex-1 min-h-0 p-3.5 sm:p-5 overflow-y-auto overscroll-contain bg-slate-50/40 space-y-3.5 relative z-10" 
                      id="chat-messages-container" 
                      x-ref="messagesContainer" 
                      @scroll.passive="handleScroll()" 
-                     style="overflow-anchor: auto; -webkit-overflow-scrolling: touch;">
+                     style="overflow-anchor: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; overscroll-behavior-y: contain; touch-action: pan-y;">
                     
                     @if ($messages->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400 space-y-2">
@@ -458,7 +460,7 @@
                 </button>
 
                 {{-- Composer Input Section (Fixed Bottom Layer) --}}
-                <div class="p-2.5 sm:p-3 bg-white border-t border-slate-100 space-y-2 shrink-0 mt-auto relative z-20 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+                <div class="chat-room-composer p-2.5 sm:p-3 bg-white border-t border-slate-100 space-y-2 shrink-0 mt-auto sticky bottom-0 z-30 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
 
                     {{-- Quoted Reply Context --}}
                     @if ($replyToMessageId)

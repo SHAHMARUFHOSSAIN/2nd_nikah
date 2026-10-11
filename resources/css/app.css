@@ -578,6 +578,58 @@ button:disabled {
 
     .chat-main-content {
         padding-bottom: 0 !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .chat-room-screen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        background: #FFFFFF !important;
+        z-index: 45 !important;
+    }
+
+    .chat-room-header {
+        position: sticky !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        flex-shrink: 0 !important;
+        z-index: 40 !important;
+        background: #FFFFFF !important;
+        padding-top: max(0.75rem, env(safe-area-inset-top, 0px)) !important;
+    }
+
+    .chat-room-messages {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        overscroll-behavior-y: contain !important;
+        touch-action: pan-y !important;
+    }
+
+    .chat-room-composer {
+        position: sticky !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        flex-shrink: 0 !important;
+        z-index: 40 !important;
+        background: #FFFFFF !important;
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
     }
 
     .site-header {

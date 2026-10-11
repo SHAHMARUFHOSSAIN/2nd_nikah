@@ -33,7 +33,7 @@
 <body x-data="{ mobileMenuOpen: false }" @keydown.window.escape="mobileMenuOpen = false" class="bg-slate-50/70 text-slate-800 font-sans antialiased min-h-[100dvh] flex flex-col {{ request()->routeIs('member.messages.*') ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : '' }}">
     
     {{-- Top Sticky Header (Hidden on mobile for active chat room so partner profile name & avatar are never covered) --}}
-    <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100/80 shadow-2xs {{ request()->routeIs('member.messages.show') ? 'hidden md:block' : '' }}">
+    <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100/80 shadow-2xs {{ request()->routeIs('member.messages.show') ? '!hidden md:!block' : '' }}">
         <div class="header-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             
             {{-- Brand Logo --}}
