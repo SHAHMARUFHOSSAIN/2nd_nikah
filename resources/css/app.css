@@ -572,8 +572,12 @@ button:disabled {
 }
 
 @media (max-width: 767.98px) {
-    .main-content {
+    .main-content:not(.chat-main-content) {
         padding-bottom: 5.5rem !important;
+    }
+
+    .chat-main-content {
+        padding-bottom: 0 !important;
     }
 
     .site-header {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ request()->routeIs('member.messages.*') ? 'h-[100dvh] overflow-hidden' : '' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -32,8 +32,8 @@
 </head>
 <body x-data="{ mobileMenuOpen: false }" @keydown.window.escape="mobileMenuOpen = false" class="bg-slate-50/70 text-slate-800 font-sans antialiased min-h-[100dvh] flex flex-col {{ request()->routeIs('member.messages.*') ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : '' }}">
     
-    {{-- Top Sticky Header --}}
-    <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100/80 shadow-2xs">
+    {{-- Top Sticky Header (Hidden on mobile for active chat room so partner profile name & avatar are never covered) --}}
+    <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100/80 shadow-2xs {{ request()->routeIs('member.messages.show') ? 'hidden md:block' : '' }}">
         <div class="header-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             
             {{-- Brand Logo --}}
@@ -218,7 +218,7 @@
     </div>
 
     {{-- Main Content --}}
-    <main class="main-content flex-1 min-h-0 w-full {{ request()->routeIs('member.messages.*') ? 'h-[calc(100dvh-64px)] max-h-[calc(100dvh-64px)] overflow-hidden flex flex-col' : 'pb-20 md:pb-8' }}">
+    <main class="main-content flex-1 min-h-0 w-full {{ request()->routeIs('member.messages.show') ? 'chat-main-content h-[100dvh] max-h-[100dvh] md:h-[calc(100dvh-64px)] md:max-h-[calc(100dvh-64px)] overflow-hidden flex flex-col p-0 m-0' : (request()->routeIs('member.messages.*') ? 'chat-main-content h-[calc(100dvh-64px)] max-h-[calc(100dvh-64px)] overflow-hidden flex flex-col p-0 m-0' : 'pb-20 md:pb-8') }}">
         {{ $slot }}
     </main>
 

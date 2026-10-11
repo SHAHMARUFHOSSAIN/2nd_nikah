@@ -105,7 +105,7 @@
             <div class="flex-1 min-h-0 flex flex-col bg-white min-w-0 h-full overflow-hidden relative">
 
                 {{-- Compact Mobile & Desktop Chat Room Header (Fixed Top Layer) --}}
-                <div class="px-3 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-rose-100 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs relative z-20">
+                <div class="px-3 sm:px-5 py-2.5 sm:py-3 pt-[max(0.625rem,env(safe-area-inset-top,0px))] bg-white border-b border-rose-100 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs relative z-20">
                     
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         {{-- Back Button --}}
@@ -210,6 +210,10 @@
                                     <span>View Profile</span>
                                 </a>
                             @endif
+                            <a href="{{ route('home') }}" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                                <span>Back to Home</span>
+                            </a>
                             <button wire:click="confirmReport" @click="open = false" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-50 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                 <span>Report Member</span>
@@ -663,6 +667,11 @@
             lastMsgCount: 0,
 
             initChat() {
+                // Ensure page window is reset to top so header is never scrolled
+                window.scrollTo(0, 0);
+                if (document.documentElement) document.documentElement.scrollTop = 0;
+                if (document.body) document.body.scrollTop = 0;
+
                 // Scroll immediately to bottom on page load
                 this.$nextTick(() => {
                     this.scrollToBottom(false);
